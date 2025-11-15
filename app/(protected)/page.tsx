@@ -1,3 +1,5 @@
+import DashBoard from "@/frontend/dashBoard/DashBoard";
+
 export default function HomePage() {
-  return <div>홈/대시보드</div>;
+  return <DashBoard />;
 }

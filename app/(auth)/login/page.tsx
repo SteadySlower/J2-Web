@@ -1,4 +1,5 @@
-export default function LoginPage() {
-  return <div>로그인</div>;
-}
+import LoginPage from "@/frontend/auth/pages/auth/login";
 
+export default function Page() {
+  return <LoginPage />;
+}
