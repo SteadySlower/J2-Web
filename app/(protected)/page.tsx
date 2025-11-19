@@ -1,4 +1,4 @@
-import DashBoard from "@/frontend/dashBoard/DashBoard";
+import DashBoard from "@/frontend/dashBoard/pages/DashBoard";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
