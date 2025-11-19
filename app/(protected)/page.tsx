@@ -1,6 +1,6 @@
-import LandingPage from "@/frontend/landing-page/LandingPage";
 import DashBoard from "@/frontend/dashBoard/DashBoard";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -12,5 +12,5 @@ export default async function Home() {
     return <DashBoard user={session.user} />;
   }
 
-  return <LandingPage />;
+  redirect("/landing");
 }
