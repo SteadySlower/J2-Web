@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import SideBar from "@/frontend/dashBoard/components/SideBar";
 
 export default async function ProtectedLayout({
   children,
@@ -15,5 +16,10 @@ export default async function ProtectedLayout({
     redirect("/login");
   }
 
-  return <>{children}</>;
+  return (
+    <div style={{ display: "flex", minHeight: "100vh" }}>
+      <SideBar />
+      <main style={{ flex: 1 }}>{children}</main>
+    </div>
+  );
 }
