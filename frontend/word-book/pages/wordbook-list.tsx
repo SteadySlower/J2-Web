@@ -7,6 +7,11 @@ import { z } from "zod";
 import BookList from "@/frontend/core/components/book-list/list";
 import PlusButton from "@/frontend/core/components/book-list/plus-button";
 import Modal from "@/frontend/core/components/modal/Modal";
+import Form from "@/frontend/core/components/form/form";
+import Input from "@/frontend/core/components/form/input";
+import Checkbox from "@/frontend/core/components/form/checkbox";
+import SubmitButton from "@/frontend/core/components/form/submit-button";
+import CancelButton from "@/frontend/core/components/form/cancel-button";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchWordBooks } from "@/lib/api/word-books/get-all-books";
 import { createWordBook } from "@/lib/api/word-books/create-book";
@@ -75,41 +80,18 @@ export default function WordBookList() {
       <Modal isOpen={isModalOpen} onClose={handleClose}>
         <div>
           <h2>단어장 생성</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div style={{ marginBottom: "16px" }}>
-              <label
-                htmlFor="title"
-                style={{ display: "block", marginBottom: "8px" }}
-              >
-                제목
-              </label>
-              <input
-                id="title"
-                type="text"
-                {...register("title")}
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: errors.title ? "1px solid red" : "1px solid #ccc",
-                  borderRadius: "4px",
-                }}
-              />
-              {errors.title && (
-                <div
-                  style={{ color: "red", marginTop: "4px", fontSize: "14px" }}
-                >
-                  {errors.title.message}
-                </div>
-              )}
-            </div>
-            <div style={{ marginBottom: "16px" }}>
-              <label
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                <input type="checkbox" {...register("showFront")} />
-                일본어 앞면
-              </label>
-            </div>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Input
+              label="제목"
+              register={register("title")}
+              error={errors.title}
+              type="text"
+            />
+            <Checkbox
+              label="일본어 앞면"
+              register={register("showFront")}
+              error={errors.showFront}
+            />
             {createMutation.isError && (
               <div style={{ color: "red", marginBottom: "16px" }}>
                 {(createMutation.error as Error).message}
@@ -122,36 +104,15 @@ export default function WordBookList() {
                 justifyContent: "flex-end",
               }}
             >
-              <button
-                type="button"
-                onClick={handleClose}
-                style={{
-                  padding: "8px 16px",
-                  border: "1px solid #ccc",
-                  borderRadius: "4px",
-                  backgroundColor: "white",
-                  cursor: "pointer",
-                }}
+              <CancelButton onClick={handleClose} />
+              <SubmitButton
+                isLoading={createMutation.isPending}
+                loadingText="생성 중..."
               >
-                취소
-              </button>
-              <button
-                type="submit"
-                disabled={createMutation.isPending}
-                style={{
-                  padding: "8px 16px",
-                  border: "none",
-                  borderRadius: "4px",
-                  backgroundColor: "#000000",
-                  color: "#ffffff",
-                  cursor: createMutation.isPending ? "not-allowed" : "pointer",
-                  opacity: createMutation.isPending ? 0.5 : 1,
-                }}
-              >
-                {createMutation.isPending ? "생성 중..." : "생성"}
-              </button>
+                생성
+              </SubmitButton>
             </div>
-          </form>
+          </Form>
         </div>
       </Modal>
     </>
