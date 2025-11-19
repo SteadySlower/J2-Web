@@ -12,8 +12,10 @@ type WordBookApiItem = {
 };
 
 type WordBookBookListItem = {
+  id: string;
   title: string;
   createdAt: DateTime;
+  href: string;
 };
 
 async function fetchWordBooks(): Promise<WordBookBookListItem[]> {
@@ -44,8 +46,10 @@ async function fetchWordBooks(): Promise<WordBookBookListItem[]> {
   const result: { data: WordBookApiItem[] } = await response.json();
 
   return result.data.map((book) => ({
+    id: book.id,
     title: book.title,
     createdAt: DateTime.fromISO(book.createdAt),
+    href: `/word-books/${book.id}`,
   }));
 }
 
