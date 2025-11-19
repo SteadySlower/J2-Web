@@ -1,6 +1,7 @@
 "use client";
 
 import BookList from "@/frontend/core/components/book-list/list";
+import PlusButton from "@/frontend/core/components/book-list/plus-button";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWordBooks } from "@/lib/api/word-books/get-all-books";
 
@@ -20,5 +21,10 @@ export default function WordBookList() {
     );
   }
 
-  return <BookList books={data ?? []} />;
+  return (
+    <>
+      <BookList books={data ?? []} />
+      <PlusButton onClick={() => {}} />
+    </>
+  );
 }
