@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { createClient } from "@/lib/supabase/client";
+import { getAuthToken } from "@/lib/api/utils/auth";
 
 type WordBookResponse = {
   id: string;
@@ -20,18 +20,11 @@ export async function fetchWordBooks(): Promise<WordBookListItem[]> {
     throw new Error("API base URL이 설정되지 않았습니다.");
   }
 
-  const supabase = createClient();
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    throw new Error("로그인이 필요합니다.");
-  }
+  const token = await getAuthToken();
 
   const response = await fetch(`${apiBaseUrl}/word-books`, {
     headers: {
-      Authorization: `Bearer ${session.access_token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
 
