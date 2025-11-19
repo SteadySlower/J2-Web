@@ -1,4 +1,5 @@
-export default function WordBooksPage() {
-  return <div>단어장 목록</div>;
-}
+import WordBookList from "@/frontend/word-book/pages/wordbook-list";
 
+export default function Page() {
+  return <WordBookList />;
+}
