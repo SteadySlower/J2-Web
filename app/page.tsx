@@ -8,10 +8,9 @@ export default async function Home() {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session) {
-    return <DashBoard />;
+  if (session?.user) {
+    return <DashBoard user={session.user} />;
   }
 
   return <LandingPage />;
 }
-
