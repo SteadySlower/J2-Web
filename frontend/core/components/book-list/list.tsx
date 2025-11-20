@@ -16,22 +16,16 @@ type BookListProps = {
 export default function BookList({ books, bookTypeLabel }: BookListProps) {
   if (books.length === 0) {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "40px",
-          color: "#666",
-        }}
-      >
-        {`첫번째 ${bookTypeLabel}를 추가해주세요`}
+      <div className="flex items-center justify-center py-20 px-10">
+        <p className="text-muted-foreground text-lg">
+          첫번째 {bookTypeLabel}를 추가해주세요
+        </p>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {books.map((book) => (
         <BookCard
           key={book.id}

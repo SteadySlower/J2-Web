@@ -1,5 +1,11 @@
 import { DateTime } from "luxon";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/frontend/core/components/ui/card";
 
 type BookCardProps = {
   title: string;
@@ -12,12 +18,16 @@ export default function BookCard({ title, createdAt, href }: BookCardProps) {
   const daysDiff = Math.floor(now.diff(createdAt, "days").days);
   const daysAgo = daysDiff === 0 ? "오늘" : `${daysDiff}일전`;
 
-  const content = (
-    <>
-      <h3>{title}</h3>
-      <p>{daysAgo}</p>
-    </>
+  return (
+    <Link href={href} className="block">
+      <Card className="hover:shadow-md transition-shadow cursor-pointer">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">{daysAgo}</p>
+        </CardContent>
+      </Card>
+    </Link>
   );
-
-  return <Link href={href}>{content}</Link>;
 }
