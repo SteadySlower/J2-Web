@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 import Modal from "@/frontend/core/components/modal/Modal";
 import Form from "@/frontend/core/components/form/form";
@@ -12,6 +13,7 @@ import SubmitButton from "@/frontend/core/components/form/submit-button";
 import CancelButton from "@/frontend/core/components/form/cancel-button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createWordBook } from "@/lib/api/word-books/create-book";
+import type { WordBookListItem } from "@/lib/api/word-books/get-all-books";
 
 const wordBookSchema = z.object({
   title: z.string().min(1, "제목은 필수입니다"),
@@ -45,13 +47,58 @@ export default function CreateWordBookModal({
 
   const createMutation = useMutation({
     mutationFn: createWordBook,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["word-books"] });
+    onMutate: async (newBook) => {
+      // 진행 중인 쿼리 취소
+      await queryClient.cancelQueries({ queryKey: ["word-books"] });
+
+      // 이전 데이터 백업
+      const previousBooks = queryClient.getQueryData<WordBookListItem[]>([
+        "word-books",
+      ]);
+
+      // 낙관적 업데이트: 임시 데이터 추가
+      const optimisticBook: WordBookListItem = {
+        id: `temp-${Date.now()}`,
+        title: newBook.title,
+        createdAt: DateTime.now(),
+        href: `/word-books/temp-${Date.now()}`,
+      };
+
+      queryClient.setQueryData<WordBookListItem[]>(
+        ["word-books"],
+        (old = []) => [optimisticBook, ...old]
+      );
+
+      // 롤백을 위한 컨텍스트 반환
+      return { previousBooks };
+    },
+    onSuccess: (data) => {
+      // 서버 응답으로 실제 데이터로 교체
+      queryClient.setQueryData<WordBookListItem[]>(
+        ["word-books"],
+        (old = []) => {
+          // 임시 데이터 제거하고 실제 데이터 추가
+          const filtered = old.filter((book) => !book.id.startsWith("temp-"));
+          return [
+            {
+              id: data.id,
+              title: data.title,
+              createdAt: DateTime.fromISO(data.createdAt),
+              href: `/word-books/${data.id}`,
+            },
+            ...filtered,
+          ];
+        }
+      );
       toast.success("단어장이 생성되었습니다!");
       onClose();
       reset();
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _newBook, context) => {
+      // 롤백: 이전 데이터로 복원
+      if (context?.previousBooks) {
+        queryClient.setQueryData(["word-books"], context.previousBooks);
+      }
       toast.error(error.message || "단어장 생성에 실패했습니다.");
     },
   });
