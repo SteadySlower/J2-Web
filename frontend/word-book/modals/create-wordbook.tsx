@@ -5,7 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
-import Modal from "@/frontend/core/components/modal/Modal";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/frontend/core/components/ui/dialog";
 import Form from "@/frontend/core/components/form/form";
 import Input from "@/frontend/core/components/form/input";
 import Checkbox from "@/frontend/core/components/form/checkbox";
@@ -114,9 +119,11 @@ export default function CreateWordBookModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
-      <div>
-        <h2>단어장 생성</h2>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>단어장 생성</DialogTitle>
+        </DialogHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Input
             label="제목"
@@ -150,7 +157,7 @@ export default function CreateWordBookModal({
             </SubmitButton>
           </div>
         </Form>
-      </div>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }
