@@ -1,5 +1,8 @@
 import { type InputHTMLAttributes, type ReactNode } from "react";
 import { type UseFormRegisterReturn, type FieldError } from "react-hook-form";
+import { Input as ShadcnInput } from "@/frontend/core/components/ui/input";
+import { Label } from "@/frontend/core/components/ui/label";
+import { cn } from "@/lib/utils";
 
 type InputProps = {
   label: string;
@@ -13,30 +16,25 @@ export default function Input({
   error,
   register,
   children,
+  className,
   ...props
 }: InputProps) {
   const id = register.name;
 
   return (
-    <div style={{ marginBottom: "16px" }}>
-      <label htmlFor={id} style={{ display: "block", marginBottom: "8px" }}>
-        {label}
-      </label>
-      <input
+    <div className="mb-4">
+      <Label htmlFor={id}>{label}</Label>
+      <ShadcnInput
         id={id}
         {...register}
         {...props}
-        style={{
-          width: "100%",
-          padding: "8px",
-          border: error ? "1px solid red" : "1px solid #ccc",
-          borderRadius: "4px",
-        }}
+        className={cn(
+          error && "border-destructive focus-visible:ring-destructive",
+          className
+        )}
       />
       {error && (
-        <div style={{ color: "red", marginTop: "4px", fontSize: "14px" }}>
-          {error.message}
-        </div>
+        <div className="text-sm text-destructive mt-1">{error.message}</div>
       )}
       {children}
     </div>

@@ -1,4 +1,5 @@
 import { type ButtonHTMLAttributes } from "react";
+import { Button } from "@/frontend/core/components/ui/button";
 
 type CancelButtonProps = {
   children?: React.ReactNode;
@@ -6,21 +7,12 @@ type CancelButtonProps = {
 
 export default function CancelButton({
   children = "취소",
+  className,
   ...props
 }: CancelButtonProps) {
   return (
-    <button
-      type="button"
-      style={{
-        padding: "8px 16px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        backgroundColor: "white",
-        cursor: "pointer",
-      }}
-      {...props}
-    >
+    <Button type="button" variant="outline" className={className} {...props}>
       {children}
-    </button>
+    </Button>
   );
 }

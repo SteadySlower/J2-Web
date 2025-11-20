@@ -137,17 +137,11 @@ export default function CreateWordBookModal({
             error={errors.showFront}
           />
           {createMutation.isError && (
-            <div style={{ color: "red", marginBottom: "16px" }}>
+            <div className="text-destructive mb-4">
               {(createMutation.error as Error).message}
             </div>
           )}
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              justifyContent: "flex-end",
-            }}
-          >
+          <div className="flex gap-2 justify-end">
             <CancelButton onClick={handleClose} />
             <SubmitButton
               isLoading={createMutation.isPending}

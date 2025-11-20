@@ -8,6 +8,14 @@
   --accent: #f4f4f5;
   --accent-foreground: #171717;
   --ring: #171717;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #171717;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
 }
 
 @theme inline {

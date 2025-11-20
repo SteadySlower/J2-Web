@@ -1,4 +1,6 @@
 import { type ButtonHTMLAttributes } from "react";
+import { Button } from "@/frontend/core/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 type SubmitButtonProps = {
   isLoading?: boolean;
@@ -10,24 +12,18 @@ export default function SubmitButton({
   isLoading = false,
   loadingText = "처리 중...",
   children,
+  className,
   ...props
 }: SubmitButtonProps) {
   return (
-    <button
+    <Button
       type="submit"
       disabled={isLoading}
-      style={{
-        padding: "8px 16px",
-        border: "none",
-        borderRadius: "4px",
-        backgroundColor: "#000000",
-        color: "#ffffff",
-        cursor: isLoading ? "not-allowed" : "pointer",
-        opacity: isLoading ? 0.5 : 1,
-      }}
+      className={className}
       {...props}
     >
+      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       {isLoading ? loadingText : children}
-    </button>
+    </Button>
   );
 }
