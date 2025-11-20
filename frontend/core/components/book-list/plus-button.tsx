@@ -1,27 +1,18 @@
+import { Button } from "@/frontend/core/components/ui/button";
+import { Plus } from "lucide-react";
+
 type PlusButtonProps = {
   onClick: () => void;
 };
 
 export default function PlusButton({ onClick }: PlusButtonProps) {
   return (
-    <button
+    <Button
       onClick={onClick}
-      style={{
-        width: "30px",
-        height: "30px",
-        borderRadius: "50%",
-        backgroundColor: "#000000",
-        color: "#ffffff",
-        border: "none",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        fontSize: "20px",
-        lineHeight: "1",
-      }}
+      size="icon"
+      className="h-8 w-8 rounded-full bg-black hover:bg-black/90"
     >
-      +
-    </button>
+      <Plus className="h-4 w-4 text-white" />
+    </Button>
   );
 }
