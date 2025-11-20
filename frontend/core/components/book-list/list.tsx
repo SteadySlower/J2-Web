@@ -10,9 +10,26 @@ type Book = {
 
 type BookListProps = {
   books: Book[];
+  bookTypeLabel: string;
 };
 
-export default function BookList({ books }: BookListProps) {
+export default function BookList({ books, bookTypeLabel }: BookListProps) {
+  if (books.length === 0) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "40px",
+          color: "#666",
+        }}
+      >
+        {`첫번째 ${bookTypeLabel}를 추가해주세요`}
+      </div>
+    );
+  }
+
   return (
     <div>
       {books.map((book) => (

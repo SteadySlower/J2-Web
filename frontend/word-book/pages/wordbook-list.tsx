@@ -27,7 +27,7 @@ export default function WordBookList() {
 
   return (
     <>
-      <BookList books={data ?? []} />
+      <BookList books={data ?? []} bookTypeLabel="단어장" />
       <PlusButton onClick={() => setIsModalOpen(true)} />
       <CreateWordBookModal
         isOpen={isModalOpen}
