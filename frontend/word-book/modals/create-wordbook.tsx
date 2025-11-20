@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import toast from "react-hot-toast";
 import Modal from "@/frontend/core/components/modal/Modal";
 import Form from "@/frontend/core/components/form/form";
 import Input from "@/frontend/core/components/form/input";
@@ -46,8 +47,12 @@ export default function CreateWordBookModal({
     mutationFn: createWordBook,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["word-books"] });
+      toast.success("단어장이 생성되었습니다!");
       onClose();
       reset();
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "단어장 생성에 실패했습니다.");
     },
   });
 
