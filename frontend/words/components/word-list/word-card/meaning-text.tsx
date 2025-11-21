@@ -4,18 +4,13 @@ import { getTextSize } from "./utils";
 type MeaningTextProps = {
   text: string;
   isRevealed: boolean;
-  onReveal: () => void;
 };
 
-export default function MeaningText({
-  text,
-  isRevealed,
-  onReveal,
-}: MeaningTextProps) {
+export default function MeaningText({ text, isRevealed }: MeaningTextProps) {
   return (
     <div className="flex-1 p-6">
       <p className={cn(getTextSize(text), "text-black")}>
-        <span className="relative inline-block" onClick={onReveal}>
+        <span className="relative inline-block">
           <span className="relative z-10">{text}</span>
           <span
             className={cn(

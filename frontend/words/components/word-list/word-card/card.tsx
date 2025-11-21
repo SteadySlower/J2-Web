@@ -7,6 +7,7 @@ import JapaneseText from "./japanese-text";
 import GraduationButton from "./graduation-button";
 import MeaningText from "./meaning-text";
 import KanjiList from "./kanji-list";
+import RevealButton from "./reveal-button";
 
 type WordCardProps = {
   word: Word;
@@ -24,16 +25,15 @@ export default function WordCard({ word, wordbookId }: WordCardProps) {
     <Card className="hover:shadow-md transition-shadow cursor-pointer relative flex flex-col">
       <div className="flex relative items-center">
         <JapaneseText text={word.japanese} />
-        <GraduationButton
-          wordId={word.id}
-          status={word.status}
-          wordbookId={wordbookId}
-        />
-        <MeaningText
-          text={word.meaning}
-          isRevealed={isRevealed}
-          onReveal={handleReveal}
-        />
+        <MeaningText text={word.meaning} isRevealed={isRevealed} />
+        <div className="flex flex-col gap-2 px-2">
+          <RevealButton isRevealed={isRevealed} onReveal={handleReveal} />
+          <GraduationButton
+            wordId={word.id}
+            status={word.status}
+            wordbookId={wordbookId}
+          />
+        </div>
       </div>
       {word.kanjis.length > 0 && (
         <KanjiList kanjis={word.kanjis} isExpanded={isRevealed} />
