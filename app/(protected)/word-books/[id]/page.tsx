@@ -1,8 +1,10 @@
-export default function WordBookDetailPage({
+import WordBookDetail from "@/frontend/word-book/pages/wordbook-detail";
+
+export default async function WordBookDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  return <div>단어장 상세</div>;
+  const { id } = await params;
+  return <WordBookDetail id={id} />;
 }
-
