@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import WordList from "@/frontend/core/components/word-list/list";
 import PlusButton from "@/frontend/core/components/plus-button";
+import CreateWordModal from "@/frontend/word-book/modals/create-word";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
 
@@ -10,6 +12,8 @@ type WordBookDetailProps = {
 };
 
 export default function WordBookDetail({ id }: WordBookDetailProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["word-books", id],
     queryFn: () => getBookDetail(id),
@@ -31,7 +35,12 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     <>
       <h1 className="text-2xl font-bold p-4">{data.title}</h1>
       <WordList words={data.words} />
-      <PlusButton onClick={() => {}} />
+      <PlusButton onClick={() => setIsModalOpen(true)} />
+      <CreateWordModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        bookId={id}
+      />
     </>
   );
 }
