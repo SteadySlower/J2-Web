@@ -5,6 +5,7 @@ import { GraduationCap } from "lucide-react";
 import type { Word } from "@/lib/types/word";
 import type { Kanji } from "@/lib/types/kanji";
 import { Card } from "@/frontend/core/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const getTextSize = (text: string) => {
   const length = text.length;
@@ -21,7 +22,7 @@ type JapaneseTextProps = {
 function JapaneseText({ text }: JapaneseTextProps) {
   return (
     <div className="flex-1 p-6 flex items-center justify-center">
-      <p className={`${getTextSize(text)} font-semibold`}>{text}</p>
+      <p className={cn(getTextSize(text), "font-semibold")}>{text}</p>
     </div>
   );
 }
@@ -39,9 +40,10 @@ function GraduationButton({ status }: GraduationButtonProps) {
       }}
     >
       <GraduationCap
-        className={`w-8 h-8 ${
+        className={cn(
+          "w-8 h-8",
           status === "learned" ? "text-green-500" : "text-gray-300"
-        }`}
+        )}
       />
     </button>
   );
@@ -56,15 +58,16 @@ type MeaningTextProps = {
 function MeaningText({ text, isRevealed, onReveal }: MeaningTextProps) {
   return (
     <div className="flex-1 p-6">
-      <p className={`${getTextSize(text)} text-black`}>
+      <p className={cn(getTextSize(text), "text-black")}>
         <span className="relative inline-block" onClick={onReveal}>
           <span className="relative z-10">{text}</span>
           <span
-            className={`absolute inset-0 bg-black transition-all duration-300 ease-in-out ${
+            className={cn(
+              "absolute inset-0 bg-black transition-all duration-300 ease-in-out",
               isRevealed
                 ? "clip-path-[inset(0_0_0_100%)]"
                 : "clip-path-[inset(0_0_0_0%)]"
-            }`}
+            )}
             style={{
               clipPath: isRevealed ? "inset(0 0 0 100%)" : "inset(0 0 0 0%)",
             }}
@@ -98,9 +101,10 @@ type KanjiListProps = {
 function KanjiList({ kanjis, isExpanded }: KanjiListProps) {
   return (
     <div
-      className={`grid transition-all duration-300 ease-in-out ${
+      className={cn(
+        "grid transition-all duration-300 ease-in-out",
         isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-      }`}
+      )}
     >
       <div className="overflow-hidden relative">
         <div className="p-6 px-12">
