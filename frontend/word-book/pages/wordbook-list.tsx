@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import BookList from "@/frontend/core/components/book-list/list";
-import PlusButton from "@/frontend/core/components/book-list/plus-button";
+import PlusButton from "@/frontend/core/components/plus-button";
 import CreateWordBookModal from "@/frontend/word-book/modals/create-wordbook";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWordBooks } from "@/lib/api/word-books/get-all-books";

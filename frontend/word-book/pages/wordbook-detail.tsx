@@ -1,6 +1,7 @@
 "use client";
 
 import WordList from "@/frontend/core/components/word-list/list";
+import PlusButton from "@/frontend/core/components/plus-button";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
 
@@ -30,6 +31,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     <>
       <h1 className="text-2xl font-bold p-4">{data.title}</h1>
       <WordList words={data.words} />
+      <PlusButton onClick={() => {}} />
     </>
   );
 }
