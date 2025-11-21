@@ -19,26 +19,34 @@ export default function WordCard(word: Word) {
       <CardHeader>
         <p className="text-2xl font-semibold text-center">{word.japanese}</p>
       </CardHeader>
-      {isExpanded && (
-        <CardContent>
-          <p className="text-sm text-muted-foreground text-center mb-2">
-            {word.pronunciation}
-          </p>
-          <p className="text-base text-center mb-4">{word.meaning}</p>
-          {word.kanjis.length > 0 && (
-            <div className="flex flex-wrap gap-2 justify-center">
-              {word.kanjis.map((kanji) => (
-                <span
-                  key={kanji.id}
-                  className="text-xl font-semibold border rounded px-2 py-1"
-                >
-                  {kanji.character}
-                </span>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      )}
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          isExpanded
+            ? "grid-rows-[1fr] opacity-100"
+            : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <CardContent>
+            <p className="text-sm text-muted-foreground text-center mb-2">
+              {word.pronunciation}
+            </p>
+            <p className="text-base text-center mb-4">{word.meaning}</p>
+            {word.kanjis.length > 0 && (
+              <div className="flex flex-wrap gap-2 justify-center">
+                {word.kanjis.map((kanji) => (
+                  <span
+                    key={kanji.id}
+                    className="text-xl font-semibold border rounded px-2 py-1"
+                  >
+                    {kanji.character}
+                  </span>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </div>
+      </div>
     </Card>
   );
 }
