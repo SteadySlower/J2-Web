@@ -1,4 +1,4 @@
-import WordCard from "./card";
+import WordCard from "./word-card/card";
 import type { Word } from "@/lib/types/word";
 
 type WordListProps = {
