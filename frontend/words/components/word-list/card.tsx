@@ -2,50 +2,39 @@
 
 import { useState } from "react";
 import type { Word } from "@/lib/types/word";
-import {
-  Card,
-  CardHeader,
-  CardContent,
-} from "@/frontend/core/components/ui/card";
+import { Card } from "@/frontend/core/components/ui/card";
 
 export default function WordCard(word: Word) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isRevealed, setIsRevealed] = useState(false);
+
+  const handleClick = () => {
+    setIsRevealed(!isRevealed);
+  };
 
   return (
     <Card
-      className="hover:shadow-md transition-shadow cursor-pointer"
-      onClick={() => setIsExpanded(!isExpanded)}
+      className="hover:shadow-md transition-shadow cursor-pointer relative flex"
+      onClick={handleClick}
     >
-      <CardHeader>
-        <p className="text-2xl font-semibold text-center">{word.japanese}</p>
-      </CardHeader>
-      <div
-        className={`grid transition-all duration-300 ease-in-out ${
-          isExpanded
-            ? "grid-rows-[1fr] opacity-100"
-            : "grid-rows-[0fr] opacity-0"
-        }`}
-      >
-        <div className="overflow-hidden">
-          <CardContent>
-            <p className="text-sm text-muted-foreground text-center mb-2">
-              {word.pronunciation}
-            </p>
-            <p className="text-base text-center mb-4">{word.meaning}</p>
-            {word.kanjis.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center">
-                {word.kanjis.map((kanji) => (
-                  <span
-                    key={kanji.id}
-                    className="text-xl font-semibold border rounded px-2 py-1"
-                  >
-                    {kanji.character}
-                  </span>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </div>
+      <div className="flex-1 p-6 flex items-center justify-center border-r">
+        <p className="text-2xl font-semibold">{word.japanese}</p>
+      </div>
+      <div className="flex-2 p-6">
+        <p className="text-base">
+          <span className="relative inline-block">
+            <span className="relative z-10">{word.meaning}</span>
+            <span
+              className={`absolute inset-0 bg-black transition-all duration-300 ease-in-out ${
+                isRevealed
+                  ? "clip-path-[inset(0_0_0_100%)]"
+                  : "clip-path-[inset(0_0_0_0%)]"
+              }`}
+              style={{
+                clipPath: isRevealed ? "inset(0 0 0 100%)" : "inset(0 0 0 0%)",
+              }}
+            />
+          </span>
+        </p>
       </div>
     </Card>
   );

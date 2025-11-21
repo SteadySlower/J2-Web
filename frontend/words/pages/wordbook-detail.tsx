@@ -33,7 +33,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
 
   return (
     <>
-      <h1 className="text-2xl font-bold p-4">{data.title}</h1>
+      <h1 className="text-center text-2xl font-bold p-4">{data.title}</h1>
       <WordList words={data.words} />
       <PlusButton onClick={() => setIsModalOpen(true)} />
       <CreateWordModal
