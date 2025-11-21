@@ -1,9 +1,12 @@
+import { z } from "zod";
 import { getAuthToken } from "@/lib/api/utils/auth";
 
-type CreateWordBookRequest = {
-  title: string;
-  showFront?: boolean;
-};
+export const createWordBookSchema = z.object({
+  title: z.string().min(1, "제목은 필수입니다"),
+  showFront: z.boolean(),
+});
+
+export type CreateWordBookRequest = z.infer<typeof createWordBookSchema>;
 
 type CreateWordBookResponse = {
   id: string;

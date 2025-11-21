@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 import {
@@ -17,15 +16,14 @@ import Checkbox from "@/frontend/core/components/form/checkbox";
 import SubmitButton from "@/frontend/core/components/form/submit-button";
 import CancelButton from "@/frontend/core/components/form/cancel-button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createWordBook } from "@/lib/api/word-books/create-book";
-import type { WordBookListItem } from "@/lib/api/word-books/get-all-books";
+import {
+  createWordBook,
+  createWordBookSchema,
+  type CreateWordBookRequest,
+} from "@/lib/api/word-books/create-book";
+import type { WordBookListItem } from "@/lib/types/word-books";
 
-const wordBookSchema = z.object({
-  title: z.string().min(1, "제목은 필수입니다"),
-  showFront: z.boolean(),
-});
-
-type WordBookFormData = z.infer<typeof wordBookSchema>;
+type WordBookFormData = CreateWordBookRequest;
 
 type CreateWordBookModalProps = {
   isOpen: boolean;
@@ -44,7 +42,7 @@ export default function CreateWordBookModal({
     formState: { errors },
     reset,
   } = useForm<WordBookFormData>({
-    resolver: zodResolver(wordBookSchema),
+    resolver: zodResolver(createWordBookSchema),
     defaultValues: {
       showFront: true,
     },

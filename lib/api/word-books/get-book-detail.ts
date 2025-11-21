@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
+import type { WordBookDetail } from "@/lib/types/word-books";
 
 type KanjiResponse = {
   id: string;
@@ -29,36 +30,6 @@ type WordBookDetailResponse = {
   created_at: string;
   updated_at: string;
   words: WordResponse[];
-};
-
-export type Kanji = {
-  id: string;
-  character: string;
-  meaning: string;
-  onReading: string | null;
-  kunReading: string | null;
-  status: "learning" | "learned";
-};
-
-export type Word = {
-  id: string;
-  japanese: string;
-  meaning: string;
-  pronunciation: string;
-  status: "learning" | "learned";
-  createdAt: DateTime;
-  updatedAt: DateTime;
-  kanjis: Kanji[];
-};
-
-export type WordBookDetail = {
-  id: string;
-  title: string;
-  status: "studying" | "studied";
-  showFront: boolean;
-  createdAt: DateTime;
-  updatedAt: DateTime;
-  words: Word[];
 };
 
 export async function getBookDetail(id: string): Promise<WordBookDetail> {

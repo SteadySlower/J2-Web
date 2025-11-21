@@ -1,18 +1,12 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
+import type { WordBookListItem } from "@/lib/types/word-books";
 
 type WordBookResponse = {
   id: string;
   title: string;
   createdAt: string;
 }[];
-
-export type WordBookListItem = {
-  id: string;
-  title: string;
-  createdAt: DateTime;
-  href: string;
-};
 
 export async function fetchWordBooks(): Promise<WordBookListItem[]> {
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
