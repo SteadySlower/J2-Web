@@ -22,11 +22,15 @@ export default function WordCard({ word, wordbookId }: WordCardProps) {
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow cursor-pointer relative flex flex-col">
-      <div className="flex relative items-center">
+    <Card className="hover:shadow-md transition-shadow cursor-pointer">
+      <div className="flex items-stretch relative pr-6">
         <JapaneseText text={word.japanese} />
-        <MeaningText text={word.meaning} isRevealed={isRevealed} />
-        <div className="flex flex-col gap-2 px-2">
+        <MeaningText
+          text={word.meaning}
+          isRevealed={isRevealed}
+          onReveal={handleReveal}
+        />
+        <div className="flex flex-col gap-2 py-6 px-2 justify-start">
           <RevealButton isRevealed={isRevealed} onReveal={handleReveal} />
           <GraduationButton
             wordId={word.id}
