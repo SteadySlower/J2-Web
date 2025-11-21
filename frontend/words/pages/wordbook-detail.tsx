@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import WordList from "@/frontend/core/components/word-list/list";
+import WordList from "@/frontend/words/components/word-list/list";
 import PlusButton from "@/frontend/core/components/plus-button";
-import CreateWordModal from "@/frontend/word-book/modals/create-word";
+import CreateWordModal from "@/frontend/words/modals/create-word";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
 

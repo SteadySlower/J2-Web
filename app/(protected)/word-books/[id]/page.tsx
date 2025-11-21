@@ -1,4 +1,4 @@
-import WordBookDetail from "@/frontend/word-book/pages/wordbook-detail";
+import WordBookDetail from "@/frontend/words/pages/wordbook-detail";
 
 export default async function WordBookDetailPage({
   params,
