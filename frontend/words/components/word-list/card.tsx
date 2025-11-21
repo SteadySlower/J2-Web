@@ -6,6 +6,9 @@ import type { Word } from "@/lib/types/word";
 import type { Kanji } from "@/lib/types/kanji";
 import { Card } from "@/frontend/core/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toggleWordStatus } from "@/lib/api/words/toggle-status";
+import type { WordBookDetail } from "@/lib/types/word-books";
 
 const getTextSize = (text: string) => {
   const length = text.length;
@@ -28,16 +31,60 @@ function JapaneseText({ text }: JapaneseTextProps) {
 }
 
 type GraduationButtonProps = {
+  wordId: string;
   status: "learning" | "learned";
+  wordbookId: string;
 };
 
-function GraduationButton({ status }: GraduationButtonProps) {
+function GraduationButton({
+  wordId,
+  status,
+  wordbookId,
+}: GraduationButtonProps) {
+  const queryClient = useQueryClient();
+
+  const toggleMutation = useMutation({
+    mutationFn: (newStatus: "learning" | "learned") =>
+      toggleWordStatus(wordId, newStatus),
+    onMutate: async (newStatus) => {
+      await queryClient.cancelQueries({ queryKey: ["word-books", wordbookId] });
+
+      const previousData = queryClient.getQueryData<WordBookDetail>([
+        "word-books",
+        wordbookId,
+      ]);
+
+      if (previousData) {
+        queryClient.setQueryData<WordBookDetail>(["word-books", wordbookId], {
+          ...previousData,
+          words: previousData.words.map((word) =>
+            word.id === wordId ? { ...word, status: newStatus } : word
+          ),
+        });
+      }
+
+      return { previousData };
+    },
+    onError: (_error, _newStatus, context) => {
+      if (context?.previousData) {
+        queryClient.setQueryData(
+          ["word-books", wordbookId],
+          context.previousData
+        );
+      }
+    },
+  });
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newStatus = status === "learning" ? "learned" : "learning";
+    toggleMutation.mutate(newStatus);
+  };
+
   return (
     <button
       className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
+      onClick={handleClick}
     >
       <GraduationCap
         className={cn(
@@ -119,7 +166,12 @@ function KanjiList({ kanjis, isExpanded }: KanjiListProps) {
   );
 }
 
-export default function WordCard(word: Word) {
+type WordCardProps = {
+  word: Word;
+  wordbookId: string;
+};
+
+export default function WordCard({ word, wordbookId }: WordCardProps) {
   const [isRevealed, setIsRevealed] = useState(false);
 
   const handleReveal = () => {
@@ -130,7 +182,11 @@ export default function WordCard(word: Word) {
     <Card className="hover:shadow-md transition-shadow cursor-pointer relative flex flex-col">
       <div className="flex relative items-center">
         <JapaneseText text={word.japanese} />
-        <GraduationButton status={word.status} />
+        <GraduationButton
+          wordId={word.id}
+          status={word.status}
+          wordbookId={wordbookId}
+        />
         <MeaningText
           text={word.meaning}
           isRevealed={isRevealed}
