@@ -53,24 +53,6 @@ function MeaningText({ text, isRevealed, onReveal }: MeaningTextProps) {
   );
 }
 
-type KanjiButtonProps = {
-  variant: "black" | "white";
-  onClick: (e: React.MouseEvent) => void;
-};
-
-function KanjiButton({ variant, onClick }: KanjiButtonProps) {
-  const className =
-    variant === "black"
-      ? "absolute bottom-1 right-1 w-6 h-6 bg-black text-white flex items-center justify-center text-sm rounded-full z-10"
-      : "absolute bottom-1 right-1 w-6 h-6 bg-white text-black border border-black flex items-center justify-center text-sm rounded-full z-10";
-
-  return (
-    <button className={className} onClick={onClick}>
-      漢
-    </button>
-  );
-}
-
 type KanjiItemProps = {
   kanji: Kanji;
 };
@@ -89,10 +71,9 @@ function KanjiItem({ kanji }: KanjiItemProps) {
 type KanjiListProps = {
   kanjis: Kanji[];
   isExpanded: boolean;
-  onToggle: (e: React.MouseEvent) => void;
 };
 
-function KanjiList({ kanjis, isExpanded, onToggle }: KanjiListProps) {
+function KanjiList({ kanjis, isExpanded }: KanjiListProps) {
   return (
     <div
       className={`grid transition-all duration-300 ease-in-out ${
@@ -100,7 +81,6 @@ function KanjiList({ kanjis, isExpanded, onToggle }: KanjiListProps) {
       }`}
     >
       <div className="overflow-hidden relative">
-        {isExpanded && <KanjiButton variant="white" onClick={onToggle} />}
         <div className="p-6 px-12">
           <div className="flex flex-wrap justify-center gap-2">
             {kanjis.map((kanji) => (
@@ -115,18 +95,9 @@ function KanjiList({ kanjis, isExpanded, onToggle }: KanjiListProps) {
 
 export default function WordCard(word: Word) {
   const [isRevealed, setIsRevealed] = useState(false);
-  const [isKanjisExpanded, setIsKanjisExpanded] = useState(false);
 
   const handleReveal = () => {
     setIsRevealed(!isRevealed);
-  };
-
-  const handleKanjisClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsKanjisExpanded(!isKanjisExpanded);
-    if (isKanjisExpanded) {
-      setIsRevealed(false);
-    }
   };
 
   return (
@@ -138,16 +109,9 @@ export default function WordCard(word: Word) {
           isRevealed={isRevealed}
           onReveal={handleReveal}
         />
-        {word.kanjis.length > 0 && isRevealed && !isKanjisExpanded && (
-          <KanjiButton variant="black" onClick={handleKanjisClick} />
-        )}
       </div>
       {word.kanjis.length > 0 && (
-        <KanjiList
-          kanjis={word.kanjis}
-          isExpanded={isKanjisExpanded}
-          onToggle={handleKanjisClick}
-        />
+        <KanjiList kanjis={word.kanjis} isExpanded={isRevealed} />
       )}
     </Card>
   );
