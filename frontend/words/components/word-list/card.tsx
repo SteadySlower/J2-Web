@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { GraduationCap } from "lucide-react";
 import type { Word } from "@/lib/types/word";
 import type { Kanji } from "@/lib/types/kanji";
 import { Card } from "@/frontend/core/components/ui/card";
@@ -22,6 +23,27 @@ function JapaneseText({ text }: JapaneseTextProps) {
     <div className="flex-1 p-6 flex items-center justify-center">
       <p className={`${getTextSize(text)} font-semibold`}>{text}</p>
     </div>
+  );
+}
+
+type GraduationButtonProps = {
+  status: "learning" | "learned";
+};
+
+function GraduationButton({ status }: GraduationButtonProps) {
+  return (
+    <button
+      className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <GraduationCap
+        className={`w-8 h-8 ${
+          status === "learned" ? "text-green-500" : "text-gray-300"
+        }`}
+      />
+    </button>
   );
 }
 
@@ -102,8 +124,9 @@ export default function WordCard(word: Word) {
 
   return (
     <Card className="hover:shadow-md transition-shadow cursor-pointer relative flex flex-col">
-      <div className="flex relative">
+      <div className="flex relative items-center">
         <JapaneseText text={word.japanese} />
+        <GraduationButton status={word.status} />
         <MeaningText
           text={word.meaning}
           isRevealed={isRevealed}
