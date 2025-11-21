@@ -57,10 +57,13 @@ export default function GraduationButton({
     toggleMutation.mutate(newStatus);
   };
 
+  const tooltipText = status === "learning" ? "단어 졸업" : "졸업 취소";
+
   return (
     <button
       className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
       onClick={handleClick}
+      title={tooltipText}
     >
       <GraduationCap
         className={cn(
@@ -71,4 +74,3 @@ export default function GraduationButton({
     </button>
   );
 }
-
