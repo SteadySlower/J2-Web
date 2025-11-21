@@ -36,6 +36,16 @@ export default function WordCard(word: Word) {
           </span>
         </p>
       </div>
+      {word.kanjis.length > 0 && (
+        <button
+          className="absolute bottom-1 right-1 w-6 h-6 bg-black text-white flex items-center justify-center text-sm rounded-full"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          漢
+        </button>
+      )}
     </Card>
   );
 }
