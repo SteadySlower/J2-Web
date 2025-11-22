@@ -3,10 +3,9 @@ import type { Word } from "@/lib/types/word";
 
 type WordListProps = {
   words: Word[];
-  wordbookId: string;
 };
 
-export default function WordList({ words, wordbookId }: WordListProps) {
+export default function WordList({ words }: WordListProps) {
   if (words.length === 0) {
     return (
       <div className="flex items-center justify-center py-20 px-10">
@@ -21,7 +20,7 @@ export default function WordList({ words, wordbookId }: WordListProps) {
     <div className="flex flex-col items-center gap-4 p-4">
       {words.map((word) => (
         <div key={word.id} className="w-full max-w-[800px]">
-          <WordCard word={word} wordbookId={wordbookId} />
+          <WordCard word={word} />
         </div>
       ))}
     </div>

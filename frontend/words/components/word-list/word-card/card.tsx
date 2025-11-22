@@ -12,10 +12,9 @@ import EditButton from "./edit-button";
 
 type WordCardProps = {
   word: Word;
-  wordbookId: string;
 };
 
-export default function WordCard({ word, wordbookId }: WordCardProps) {
+export default function WordCard({ word }: WordCardProps) {
   const [isRevealed, setIsRevealed] = useState(false);
 
   const handleReveal = () => {
@@ -33,11 +32,7 @@ export default function WordCard({ word, wordbookId }: WordCardProps) {
         />
         <div className="flex flex-col gap-2 py-6 px-2 justify-start">
           <RevealButton isRevealed={isRevealed} onReveal={handleReveal} />
-          <GraduationButton
-            wordId={word.id}
-            status={word.status}
-            wordbookId={wordbookId}
-          />
+          <GraduationButton wordId={word.id} status={word.status} />
           {isRevealed && <EditButton />}
         </div>
       </div>

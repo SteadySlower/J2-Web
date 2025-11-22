@@ -3,20 +3,21 @@
 import { GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { toggleWordStatus } from "@/lib/api/words/toggle-status";
 import type { WordBookDetail } from "@/lib/types/word-books";
 
 type GraduationButtonProps = {
   wordId: string;
   status: "learning" | "learned";
-  wordbookId: string;
 };
 
 export default function GraduationButton({
   wordId,
   status,
-  wordbookId,
 }: GraduationButtonProps) {
+  const params = useParams();
+  const wordbookId = params.id as string;
   const queryClient = useQueryClient();
 
   const toggleMutation = useMutation({
