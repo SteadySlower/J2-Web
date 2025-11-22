@@ -1,4 +1,8 @@
-import WordCard from "./word-card/card";
+"use client";
+
+import { useState } from "react";
+import WordCard from "./card";
+import EditWordModal from "@/frontend/words/modals/edit-word";
 import type { Word } from "@/lib/types/word";
 
 type WordListProps = {
@@ -12,6 +16,16 @@ export default function WordList({
   shuffledWordIds,
   isFilterGraduated,
 }: WordListProps) {
+  const [toEditWord, setToEditWord] = useState<Word | null>(null);
+
+  const handleEdit = (word: Word) => {
+    setToEditWord(word);
+  };
+
+  const handleCloseModal = () => {
+    setToEditWord(null);
+  };
+
   // 필터링 적용
   const filteredWords = isFilterGraduated
     ? words.filter((word) => word.status !== "learned")
@@ -41,10 +55,19 @@ export default function WordList({
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 px-16">
-      {displayWords.map((word) => (
-        <WordCard key={word.id} word={word} />
-      ))}
-    </div>
+    <>
+      <div className="flex flex-col items-center gap-4 p-4 px-16">
+        {displayWords.map((word) => (
+          <WordCard key={word.id} word={word} onEdit={handleEdit} />
+        ))}
+      </div>
+      {toEditWord && (
+        <EditWordModal
+          isOpen={toEditWord !== null}
+          onClose={handleCloseModal}
+          word={toEditWord}
+        />
+      )}
+    </>
   );
 }

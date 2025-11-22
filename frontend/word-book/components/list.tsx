@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import WordBookCard from "./card";
+import EditWordBookModal from "@/frontend/word-book/modals/edit-wordbook";
 import type { WordBook } from "@/lib/types/word-books";
 
 type WordBookListProps = {
@@ -6,6 +10,16 @@ type WordBookListProps = {
 };
 
 export default function WordBookList({ wordbooks }: WordBookListProps) {
+  const [toEditWordbook, setToEditWordbook] = useState<WordBook | null>(null);
+
+  const handleEdit = (wordbook: WordBook) => {
+    setToEditWordbook(wordbook);
+  };
+
+  const handleCloseModal = () => {
+    setToEditWordbook(null);
+  };
+
   if (wordbooks.length === 0) {
     return (
       <div className="flex items-center justify-center py-20 px-10">
@@ -17,10 +31,23 @@ export default function WordBookList({ wordbooks }: WordBookListProps) {
   }
 
   return (
-    <div className="max-w-[900px] mx-auto flex flex-col gap-4 p-4">
-      {wordbooks.map((wordbook) => (
-        <WordBookCard key={wordbook.id} wordbook={wordbook} />
-      ))}
-    </div>
+    <>
+      <div className="max-w-[900px] mx-auto flex flex-col gap-4 p-4">
+        {wordbooks.map((wordbook) => (
+          <WordBookCard
+            key={wordbook.id}
+            wordbook={wordbook}
+            onEdit={handleEdit}
+          />
+        ))}
+      </div>
+      {toEditWordbook && (
+        <EditWordBookModal
+          isOpen={toEditWordbook !== null}
+          onClose={handleCloseModal}
+          wordbook={toEditWordbook}
+        />
+      )}
+    </>
   );
 }
