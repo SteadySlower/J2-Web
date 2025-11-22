@@ -15,7 +15,7 @@ export default function EditButton({ onClick }: EditButtonProps) {
     >
       <Edit
         className={cn(
-          "w-8 h-8 text-gray-300 group-hover:text-black transition-colors"
+          "w-8 h-8 text-gray-300 hover:text-black transition-colors"
         )}
       />
     </button>

@@ -8,7 +8,7 @@ import GraduationButton from "./graduation-button";
 import MeaningText from "./meaning-text";
 import KanjiList from "./kanji-list";
 import RevealButton from "./reveal-button";
-import EditButton from "./edit-button";
+import EditButton from "../../../../core/components/edit-button";
 import EditWordModal from "@/frontend/words/modals/edit-word";
 
 type WordCardProps = {

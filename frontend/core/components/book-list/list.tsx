@@ -25,7 +25,7 @@ export default function BookList({ books, bookTypeLabel }: BookListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div className="max-w-[900px] mx-auto flex flex-col gap-4 p-4">
       {books.map((book) => (
         <BookCard
           key={book.id}
