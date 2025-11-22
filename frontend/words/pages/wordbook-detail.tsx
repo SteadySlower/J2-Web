@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import WordList from "@/frontend/words/components/word-list/list";
 import PlusButton from "@/frontend/core/components/plus-button";
 import CreateWordModal from "@/frontend/words/modals/create-word";
@@ -15,7 +16,20 @@ type WordBookDetailProps = {
 
 export default function WordBookDetail({ id }: WordBookDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFilterGraduated, setIsFilterGraduated] = useState(false);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const isFilterGraduated = searchParams.get("filterGraduated") === "true";
+
+  const handleFilterChange = (checked: boolean) => {
+    const params = new URLSearchParams(searchParams);
+    if (checked) {
+      params.set("filterGraduated", "true");
+    } else {
+      params.delete("filterGraduated");
+    }
+    router.push(`/word-books/${id}?${params.toString()}`, { scroll: false });
+  };
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["word-books", id],
@@ -45,7 +59,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         <Switch
           id="graduation-word-filter"
           checked={isFilterGraduated}
-          onCheckedChange={setIsFilterGraduated}
+          onCheckedChange={handleFilterChange}
         />
         <Label htmlFor="graduation-word-filter">졸업 단어 필터링</Label>
       </div>
