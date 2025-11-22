@@ -96,7 +96,10 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         isFilterGraduated={isFilterGraduated}
       />
       <div className="sticky bottom-6 z-50 flex justify-end">
-        <PlusButton onClick={() => setIsModalOpen(true)} />
+        <PlusButton
+          tooltipText="단어 추가"
+          onClick={() => setIsModalOpen(true)}
+        />
       </div>
       <CreateWordModal
         isOpen={isModalOpen}
