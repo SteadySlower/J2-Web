@@ -23,6 +23,7 @@ import type { WordBookDetail } from "@/lib/types/word-books";
 import type { Word } from "@/lib/types/word";
 import WordFormFields from "@/frontend/words/components/word-form-fields";
 import { useParams } from "next/navigation";
+import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
 
 type WordFormData = UpdateWordRequest;
 
@@ -97,25 +98,7 @@ export default function EditWordModal({
           return {
             ...old,
             words: old.words.map((w) =>
-              w.id === word.id
-                ? {
-                    id: data.id,
-                    japanese: data.japanese,
-                    meaning: data.meaning,
-                    pronunciation: data.pronunciation,
-                    status: data.status,
-                    createdAt: DateTime.fromISO(data.created_at),
-                    updatedAt: DateTime.fromISO(data.updated_at),
-                    kanjis: data.kanjis.map((kanji) => ({
-                      id: kanji.id,
-                      character: kanji.character,
-                      meaning: kanji.meaning,
-                      onReading: kanji.on_reading,
-                      kunReading: kanji.kun_reading,
-                      status: kanji.status,
-                    })),
-                  }
-                : w
+              w.id === word.id ? mapWordResponseToWord(data) : w
             ),
           };
         }

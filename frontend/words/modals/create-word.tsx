@@ -22,6 +22,7 @@ import {
 } from "@/lib/api/words/create-word";
 import type { WordBookDetail } from "@/lib/types/word-books";
 import type { Word } from "@/lib/types/word";
+import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
 
 type WordFormData = CreateWordRequest;
 
@@ -102,26 +103,7 @@ export default function CreateWordModal({
             );
             return {
               ...old,
-              words: [
-                {
-                  id: data.id,
-                  japanese: data.japanese,
-                  meaning: data.meaning,
-                  pronunciation: data.pronunciation,
-                  status: data.status,
-                  createdAt: DateTime.fromISO(data.created_at),
-                  updatedAt: DateTime.fromISO(data.updated_at),
-                  kanjis: data.kanjis.map((kanji) => ({
-                    id: kanji.id,
-                    character: kanji.character,
-                    meaning: kanji.meaning,
-                    onReading: kanji.on_reading,
-                    kunReading: kanji.kun_reading,
-                    status: kanji.status,
-                  })),
-                },
-                ...filtered,
-              ],
+              words: [mapWordResponseToWord(data), ...filtered],
             };
           }
         );

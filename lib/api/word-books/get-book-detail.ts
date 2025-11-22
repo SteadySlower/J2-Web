@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
 import type { WordBookDetail } from "@/lib/types/word-books";
 import type { KanjiResponse } from "@/lib/api/types/kanji";
+import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
 
 type WordResponse = {
   id: string;
@@ -57,22 +58,6 @@ export async function getBookDetail(id: string): Promise<WordBookDetail> {
     showFront: result.data.showFront,
     createdAt: DateTime.fromISO(result.data.created_at),
     updatedAt: DateTime.fromISO(result.data.updated_at),
-    words: result.data.words.map((word) => ({
-      id: word.id,
-      japanese: word.japanese,
-      meaning: word.meaning,
-      pronunciation: word.pronunciation,
-      status: word.status,
-      createdAt: DateTime.fromISO(word.created_at),
-      updatedAt: DateTime.fromISO(word.updated_at),
-      kanjis: word.kanjis.map((kanji) => ({
-        id: kanji.id,
-        character: kanji.character,
-        meaning: kanji.meaning,
-        onReading: kanji.on_reading,
-        kunReading: kanji.kun_reading,
-        status: kanji.status,
-      })),
-    })),
+    words: result.data.words.map(mapWordResponseToWord),
   };
 }
