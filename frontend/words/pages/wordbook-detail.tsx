@@ -15,6 +15,7 @@ type WordBookDetailProps = {
 
 export default function WordBookDetail({ id }: WordBookDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFilterGraduated, setIsFilterGraduated] = useState(false);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["word-books", id],
@@ -33,14 +34,22 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     return <div>단어장을 찾을 수 없습니다.</div>;
   }
 
+  const filteredWords = isFilterGraduated
+    ? data.words.filter((word) => word.status !== "learned")
+    : data.words;
+
   return (
     <div className="mx-auto max-w-[800px]">
       <h1 className="text-center text-2xl font-bold p-4">{data.title}</h1>
       <div className="flex items-center justify-end gap-2 px-4 pb-4">
-        <Switch id="graduation-word-filter" />
+        <Switch
+          id="graduation-word-filter"
+          checked={isFilterGraduated}
+          onCheckedChange={setIsFilterGraduated}
+        />
         <Label htmlFor="graduation-word-filter">졸업 단어 필터링</Label>
       </div>
-      <WordList words={data.words} />
+      <WordList words={filteredWords} />
       <PlusButton onClick={() => setIsModalOpen(true)} />
       <CreateWordModal
         isOpen={isModalOpen}
