@@ -30,11 +30,13 @@ type WordFormData = CreateWordRequest;
 type CreateWordModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onCreated: (id: string) => void;
 };
 
 export default function CreateWordModal({
   isOpen,
   onClose,
+  onCreated,
 }: CreateWordModalProps) {
   const params = useParams();
   const bookId = params.id as string;
@@ -110,6 +112,7 @@ export default function CreateWordModal({
         );
       }
       toast.success("단어가 생성되었습니다!");
+      onCreated(data.id);
       onClose();
       reset();
     },
