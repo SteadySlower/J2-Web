@@ -6,6 +6,8 @@ import PlusButton from "@/frontend/core/components/plus-button";
 import CreateWordModal from "@/frontend/words/modals/create-word";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
+import { Switch } from "@/frontend/core/components/ui/switch";
+import { Label } from "@/frontend/core/components/ui/label";
 
 type WordBookDetailProps = {
   id: string;
@@ -32,8 +34,12 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
   }
 
   return (
-    <>
+    <div className="mx-auto max-w-[800px]">
       <h1 className="text-center text-2xl font-bold p-4">{data.title}</h1>
+      <div className="flex items-center justify-end gap-2 px-4 pb-4">
+        <Switch id="graduation-word-filter" />
+        <Label htmlFor="graduation-word-filter">졸업 단어 필터링</Label>
+      </div>
       <WordList words={data.words} />
       <PlusButton onClick={() => setIsModalOpen(true)} />
       <CreateWordModal
@@ -41,6 +47,6 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         onClose={() => setIsModalOpen(false)}
         bookId={id}
       />
-    </>
+    </div>
   );
 }

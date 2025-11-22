@@ -25,7 +25,7 @@ export default function WordCard({ word }: WordCardProps) {
 
   return (
     <>
-      <Card className="hover:shadow-md transition-shadow cursor-pointer">
+      <Card className="w-full hover:shadow-md transition-shadow cursor-pointer">
         <div className="flex items-stretch relative pr-6">
           <JapaneseText text={word.japanese} />
           <MeaningText
