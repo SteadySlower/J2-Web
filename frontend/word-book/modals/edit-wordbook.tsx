@@ -16,23 +16,25 @@ import CancelButton from "@/frontend/core/components/form/cancel-button";
 import WordBookFormFields from "@/frontend/word-book/components/wordbook-form-fields";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  createWordBook,
-  createWordBookSchema,
-  type CreateWordBookRequest,
-} from "@/lib/api/word-books/create-book";
+  updateWordBook,
+  updateWordBookSchema,
+  type UpdateWordBookRequest,
+} from "@/lib/api/word-books/update-book";
 import type { WordBook } from "@/lib/types/word-books";
 
-type WordBookFormData = CreateWordBookRequest;
+type WordBookFormData = UpdateWordBookRequest;
 
-type CreateWordBookModalProps = {
+type EditWordBookModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  wordbook: WordBook;
 };
 
-export default function CreateWordBookModal({
+export default function EditWordBookModal({
   isOpen,
   onClose,
-}: CreateWordBookModalProps) {
+  wordbook,
+}: EditWordBookModalProps) {
   const queryClient = useQueryClient();
 
   const {
@@ -41,15 +43,17 @@ export default function CreateWordBookModal({
     formState: { errors },
     reset,
   } = useForm<WordBookFormData>({
-    resolver: zodResolver(createWordBookSchema),
+    resolver: zodResolver(updateWordBookSchema),
     defaultValues: {
-      showFront: true,
+      title: wordbook.title,
+      showFront: wordbook.showFront,
     },
   });
 
-  const createMutation = useMutation({
-    mutationFn: createWordBook,
-    onMutate: async (newBook) => {
+  const updateMutation = useMutation({
+    mutationFn: (data: UpdateWordBookRequest) =>
+      updateWordBook(wordbook.id, data),
+    onMutate: async (updatedData) => {
       // 진행 중인 쿼리 취소
       await queryClient.cancelQueries({ queryKey: ["word-books"] });
 
@@ -58,84 +62,86 @@ export default function CreateWordBookModal({
         "word-books",
       ]);
 
-      // 낙관적 업데이트: 임시 데이터 추가
-      const optimisticBook: WordBook = {
-        id: `temp-${Date.now()}`,
-        title: newBook.title,
-        status: "studying",
-        showFront: newBook.showFront ?? true,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      };
-
-      queryClient.setQueryData<WordBook[]>(["word-books"], (old = []) => [
-        optimisticBook,
-        ...old,
-      ]);
+      // 낙관적 업데이트: 기존 단어장 업데이트
+      if (previousBooks) {
+        queryClient.setQueryData<WordBook[]>(
+          ["word-books"],
+          previousBooks.map((book) =>
+            book.id === wordbook.id
+              ? {
+                  ...book,
+                  title: updatedData.title ?? book.title,
+                  showFront: updatedData.showFront ?? book.showFront,
+                  updatedAt: DateTime.now(),
+                }
+              : book
+          )
+        );
+      }
 
       // 롤백을 위한 컨텍스트 반환
       return { previousBooks };
     },
     onSuccess: (data) => {
       // 서버 응답으로 실제 데이터로 교체
-      queryClient.setQueryData<WordBook[]>(["word-books"], (old = []) => {
-        // 임시 데이터 제거하고 실제 데이터 추가
-        const filtered = old.filter((book) => !book.id.startsWith("temp-"));
-        return [
-          {
-            id: data.id,
-            title: data.title,
-            status: data.status as "studying" | "studied",
-            showFront: data.showFront,
-            createdAt: DateTime.fromISO(data.createdAt),
-            updatedAt: DateTime.fromISO(data.updatedAt),
-          },
-          ...filtered,
-        ];
-      });
-      toast.success("단어장이 생성되었습니다!");
+      queryClient.setQueryData<WordBook[]>(["word-books"], (old = []) =>
+        old.map((book) =>
+          book.id === wordbook.id
+            ? {
+                ...book,
+                title: data.title,
+                showFront: data.showFront,
+                updatedAt: DateTime.fromISO(data.updatedAt),
+              }
+            : book
+        )
+      );
+      toast.success("단어장이 수정되었습니다!");
       onClose();
       reset();
     },
-    onError: (error: Error, _newBook, context) => {
+    onError: (error: Error, _updatedData, context) => {
       // 롤백: 이전 데이터로 복원
       if (context?.previousBooks) {
         queryClient.setQueryData(["word-books"], context.previousBooks);
       }
-      toast.error(error.message || "단어장 생성에 실패했습니다.");
+      toast.error(error.message || "단어장 수정에 실패했습니다.");
     },
   });
 
   const onSubmit = (data: WordBookFormData) => {
-    createMutation.mutate(data);
+    updateMutation.mutate(data);
   };
 
   const handleClose = () => {
     onClose();
-    reset();
-    createMutation.reset();
+    reset({
+      title: wordbook.title,
+      showFront: wordbook.showFront,
+    });
+    updateMutation.reset();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>단어장 생성</DialogTitle>
+          <DialogTitle>단어장 수정</DialogTitle>
         </DialogHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <WordBookFormFields register={register} errors={errors} />
-          {createMutation.isError && (
+          {updateMutation.isError && (
             <div className="text-destructive mb-4">
-              {(createMutation.error as Error).message}
+              {(updateMutation.error as Error).message}
             </div>
           )}
           <div className="flex gap-2 justify-end">
             <CancelButton onClick={handleClose} />
             <SubmitButton
-              isLoading={createMutation.isPending}
-              loadingText="생성 중..."
+              isLoading={updateMutation.isPending}
+              loadingText="수정 중..."
             >
-              생성
+              수정
             </SubmitButton>
           </div>
         </Form>

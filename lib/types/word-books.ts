@@ -1,11 +1,13 @@
 import { DateTime } from "luxon";
 import type { Word } from "./word";
 
-export type WordBookListItem = {
+export type WordBook = {
   id: string;
   title: string;
+  status: "studying" | "studied";
+  showFront: boolean;
   createdAt: DateTime;
-  href: string;
+  updatedAt: DateTime;
 };
 
 export type WordBookDetail = {
