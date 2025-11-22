@@ -10,9 +10,9 @@ export default function PlusButton({ onClick }: PlusButtonProps) {
     <Button
       onClick={onClick}
       size="icon"
-      className="h-8 w-8 rounded-full bg-black hover:bg-black/90"
+      className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-black hover:bg-black/90 shadow-lg"
     >
-      <Plus className="h-4 w-4 text-white" />
+      <Plus className="h-5 w-5 text-white" />
     </Button>
   );
 }
