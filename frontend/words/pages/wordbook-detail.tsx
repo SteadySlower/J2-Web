@@ -3,14 +3,10 @@
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import WordList from "@/frontend/words/components/word-list/list";
-import PlusButton from "@/frontend/core/components/plus-button";
 import CreateWordModal from "@/frontend/words/modals/create-word";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
-import { Switch } from "@/frontend/core/components/ui/switch";
-import { Label } from "@/frontend/core/components/ui/label";
-import { Shuffle } from "lucide-react";
-import { Button } from "@/frontend/core/components/ui/button";
+import FloatingButtons from "@/frontend/words/components/floating-buttons";
 
 type WordBookDetailProps = {
   id: string;
@@ -36,9 +32,10 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     });
   };
 
-  const handleFilterChange = (checked: boolean) => {
+  const handleFilterChange = () => {
     const params = new URLSearchParams(searchParams);
-    if (checked) {
+    const changedFilter = !isFilterGraduated;
+    if (changedFilter) {
       params.set("filterGraduated", "true");
     } else {
       params.delete("filterGraduated");
@@ -69,38 +66,18 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
 
   return (
     <div className="mx-auto max-w-[900px]">
-      <h1 className="text-center text-2xl font-bold p-4">{data.title}</h1>
-      <div className="flex items-center justify-end gap-2 px-4 pb-4">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            className="h-8 gap-2 transition-transform hover:scale-105"
-            onClick={handleShuffle}
-          >
-            <Shuffle className="h-4 w-4" />
-            <span>순서 섞기</span>
-          </Button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Switch
-            id="graduation-word-filter"
-            checked={isFilterGraduated}
-            onCheckedChange={handleFilterChange}
-          />
-          <Label htmlFor="graduation-word-filter">졸업 단어 필터링</Label>
-        </div>
-      </div>
+      <h1 className="h-16 text-center text-2xl font-bold p-4">{data.title}</h1>
       <WordList
         words={data.words}
         shuffledWordIds={shuffledWordIds}
         isFilterGraduated={isFilterGraduated}
       />
-      <div className="sticky bottom-6 z-50 flex justify-end">
-        <PlusButton
-          tooltipText="단어 추가"
-          onClick={() => setIsModalOpen(true)}
-        />
-      </div>
+      <FloatingButtons
+        isFilterGraduated={isFilterGraduated}
+        onFilterChange={handleFilterChange}
+        onShuffle={handleShuffle}
+        onAddWord={() => setIsModalOpen(true)}
+      />
       <CreateWordModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

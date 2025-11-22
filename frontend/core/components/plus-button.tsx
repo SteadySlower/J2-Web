@@ -17,7 +17,7 @@ export default function PlusButton({ tooltipText, onClick }: PlusButtonProps) {
     <Button
       onClick={onClick}
       size="icon"
-      className="h-12 w-12 rounded-full bg-black hover:bg-black/90 shadow-lg"
+      className="h-12 w-12 rounded-full bg-red-400 hover:bg-red-400/90 shadow-lg"
     >
       <Plus className="h-5 w-5 text-white" />
     </Button>
@@ -27,7 +27,7 @@ export default function PlusButton({ tooltipText, onClick }: PlusButtonProps) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>{button}</TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent side="right">
           <p>{tooltipText}</p>
           <TooltipArrow />
         </TooltipContent>
