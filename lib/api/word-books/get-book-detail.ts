@@ -1,15 +1,7 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
 import type { WordBookDetail } from "@/lib/types/word-books";
-
-type KanjiResponse = {
-  id: string;
-  character: string;
-  meaning: string;
-  on_reading: string | null;
-  kun_reading: string | null;
-  status: "learning" | "learned";
-};
+import type { KanjiResponse } from "@/lib/api/types/kanji";
 
 type WordResponse = {
   id: string;

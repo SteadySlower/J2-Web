@@ -11,9 +11,9 @@ import {
   DialogTitle,
 } from "@/frontend/core/components/ui/dialog";
 import Form from "@/frontend/core/components/form/form";
-import Input from "@/frontend/core/components/form/input";
 import SubmitButton from "@/frontend/core/components/form/submit-button";
 import CancelButton from "@/frontend/core/components/form/cancel-button";
+import WordFormFields from "@/frontend/words/components/word-form-fields";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createWord,
@@ -111,7 +111,14 @@ export default function CreateWordModal({
                   status: data.status,
                   createdAt: DateTime.fromISO(data.created_at),
                   updatedAt: DateTime.fromISO(data.updated_at),
-                  kanjis: [],
+                  kanjis: data.kanjis.map((kanji) => ({
+                    id: kanji.id,
+                    character: kanji.character,
+                    meaning: kanji.meaning,
+                    onReading: kanji.on_reading,
+                    kunReading: kanji.kun_reading,
+                    status: kanji.status,
+                  })),
                 },
                 ...filtered,
               ],
@@ -152,24 +159,7 @@ export default function CreateWordModal({
           <DialogTitle>단어 추가</DialogTitle>
         </DialogHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            label="일본어"
-            register={register("japanese")}
-            error={errors.japanese}
-            type="text"
-          />
-          <Input
-            label="의미"
-            register={register("meaning")}
-            error={errors.meaning}
-            type="text"
-          />
-          <Input
-            label="발음"
-            register={register("pronunciation")}
-            error={errors.pronunciation}
-            type="text"
-          />
+          <WordFormFields register={register} errors={errors} />
           {createMutation.isError && (
             <div className="text-destructive mb-4">
               {(createMutation.error as Error).message}
