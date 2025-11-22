@@ -41,7 +41,7 @@ export default function WordList({
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4">
+    <div className="flex flex-col items-center gap-4 p-4 px-16">
       {displayWords.map((word) => (
         <WordCard key={word.id} word={word} />
       ))}

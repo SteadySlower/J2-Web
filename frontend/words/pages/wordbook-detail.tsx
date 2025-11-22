@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import WordList from "@/frontend/words/components/word-list/list";
 import PlusButton from "@/frontend/core/components/plus-button";
@@ -68,7 +68,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
   }
 
   return (
-    <div className="mx-auto max-w-[800px]">
+    <div className="mx-auto max-w-[900px]">
       <h1 className="text-center text-2xl font-bold p-4">{data.title}</h1>
       <div className="flex items-center justify-end gap-2 px-4 pb-4">
         <div className="flex items-center gap-2">
@@ -95,7 +95,9 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         shuffledWordIds={shuffledWordIds}
         isFilterGraduated={isFilterGraduated}
       />
-      <PlusButton onClick={() => setIsModalOpen(true)} />
+      <div className="sticky bottom-6 z-50 flex justify-end">
+        <PlusButton onClick={() => setIsModalOpen(true)} />
+      </div>
       <CreateWordModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
