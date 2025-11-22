@@ -8,6 +8,7 @@ import GraduationButton from "./graduation-button";
 import MeaningText from "./meaning-text";
 import KanjiList from "./kanji-list";
 import RevealButton from "./reveal-button";
+import EditButton from "./edit-button";
 
 type WordCardProps = {
   word: Word;
@@ -37,6 +38,7 @@ export default function WordCard({ word, wordbookId }: WordCardProps) {
             status={word.status}
             wordbookId={wordbookId}
           />
+          {isRevealed && <EditButton />}
         </div>
       </div>
       {word.kanjis.length > 0 && (
