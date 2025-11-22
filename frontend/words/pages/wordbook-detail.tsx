@@ -43,7 +43,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     } else {
       params.delete("filterGraduated");
     }
-    router.push(`/word-books/${id}?${params.toString()}`, { scroll: false });
+    router.replace(`/word-books/${id}?${params.toString()}`, { scroll: false });
   };
 
   const handleShuffle = () => {
