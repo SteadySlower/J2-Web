@@ -23,20 +23,21 @@ import {
 import type { WordBookDetail } from "@/lib/types/word-books";
 import type { Word } from "@/lib/types/word";
 import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
+import { useParams } from "next/navigation";
 
 type WordFormData = CreateWordRequest;
 
 type CreateWordModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  bookId: string;
 };
 
 export default function CreateWordModal({
   isOpen,
   onClose,
-  bookId,
 }: CreateWordModalProps) {
+  const params = useParams();
+  const bookId = params.id as string;
   const queryClient = useQueryClient();
 
   const {

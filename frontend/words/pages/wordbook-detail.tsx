@@ -54,7 +54,6 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
       <CreateWordModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        bookId={id}
       />
     </div>
   );
