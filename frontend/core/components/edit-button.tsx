@@ -25,7 +25,11 @@ export default function EditButton({
 
   const button = (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        onClick();
+      }}
       className={cn(
         "w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform group cursor-pointer",
         showButton ? "opacity-100" : "opacity-0 pointer-events-none"

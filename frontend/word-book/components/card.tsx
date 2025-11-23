@@ -29,7 +29,13 @@ export default function WordBookCard({ wordbook, onEdit }: WordBookCardProps) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <Card className="hover:shadow-md transition-shadow cursor-pointer relative">
-        <div className="absolute top-3 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+        <div
+          className="absolute top-3 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
           <EditButton
             showButton={isHovered}
             hoverColor="black"
