@@ -4,11 +4,13 @@ import { useState } from "react";
 import type { Word } from "@/lib/types/word";
 import { Card } from "@/frontend/core/components/ui/card";
 import JapaneseText from "./word-card/japanese-text";
-import StatusButton from "./word-card/status-button";
+import CheckButton from "./word-card/check-button";
 import MeaningText from "./word-card/meaning-text";
 import EditButton from "../../../core/components/edit-button";
 import KanjiButton from "./word-card/kanji-button";
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import { useToggleWordStatus } from "@/frontend/words/hooks/useToggleWordStatus";
 
 type WordCardProps = {
   word: Word;
@@ -21,10 +23,21 @@ export default function WordCard({
   onEdit,
   onShowKanjis,
 }: WordCardProps) {
+  const params = useParams();
+  const wordbookId = params.id as string;
   const [isRevealed, setIsRevealed] = useState(false);
+
+  const toggleMutation = useToggleWordStatus({
+    wordId: word.id,
+    bookId: wordbookId,
+  });
 
   const handleReveal = () => {
     setIsRevealed(!isRevealed);
+  };
+
+  const handleToggleStatus = () => {
+    toggleMutation.mutate(word.status === "learning" ? "learned" : "learning");
   };
 
   return (
@@ -37,7 +50,13 @@ export default function WordCard({
           onReveal={handleReveal}
         />
         <div className="flex flex-col gap-2 py-6 px-2 justify-center">
-          <StatusButton wordId={word.id} status={word.status} />
+          <CheckButton
+            tooptipText={word.status === "learning" ? "완료 체크" : "체크 취소"}
+            onClick={handleToggleStatus}
+            className={cn(
+              word.status === "learned" ? "text-green-500" : "text-gray-300"
+            )}
+          />
           <EditButton
             className={cn(
               isRevealed ? "opacity-100" : "opacity-0 pointer-events-none",
