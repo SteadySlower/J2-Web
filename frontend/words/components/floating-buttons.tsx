@@ -1,6 +1,7 @@
 import PlusButton from "@/frontend/core/components/plus-button";
-import StatusFilterButton from "@/frontend/words/components/status-filter-button";
+import CheckFilterButton from "@/frontend/words/components/check-filter-button";
 import ShuffleButton from "@/frontend/words/components/shuffle-button";
+import { cn } from "@/lib/utils";
 
 type FloatingButtonsProps = {
   isFilterGraduated: boolean;
@@ -17,9 +18,14 @@ export default function FloatingButtons({
 }: FloatingButtonsProps) {
   return (
     <div className="fixed top-20 z-50 flex flex-col items-end justify-end gap-2">
-      <StatusFilterButton
-        isFiltered={isFilterGraduated}
+      <CheckFilterButton
+        tooltipText={isFilterGraduated ? "체크 필터 끄기" : "체크 필터 켜기"}
         onClick={onFilterChange}
+        className={cn(
+          isFilterGraduated
+            ? "bg-green-500 hover:bg-green-600"
+            : "bg-gray-400 hover:bg-gray-500"
+        )}
       />
       <ShuffleButton onClick={onShuffle} />
       <PlusButton tooltipText="단어 추가" onClick={onAddWord} />

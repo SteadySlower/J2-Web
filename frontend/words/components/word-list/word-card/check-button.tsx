@@ -2,8 +2,6 @@
 
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useParams } from "next/navigation";
-import { useToggleWordStatus } from "@/frontend/words/hooks/useToggleWordStatus";
 import {
   Tooltip,
   TooltipArrow,

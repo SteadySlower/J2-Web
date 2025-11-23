@@ -6,27 +6,24 @@ import {
   TooltipTrigger,
 } from "@/frontend/core/components/ui/tooltip";
 import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-type StatusFilterButtonProps = {
-  isFiltered: boolean;
+type CheckFilterButtonProps = {
+  tooltipText: string;
   onClick: () => void;
+  className?: string;
 };
 
-export default function StatusFilterButton({
-  isFiltered,
+export default function CheckFilterButton({
+  tooltipText,
   onClick,
-}: StatusFilterButtonProps) {
-  const bgColor = isFiltered
-    ? "bg-green-500 hover:bg-green-600"
-    : "bg-gray-400 hover:bg-gray-500";
-
-  const tooltipText = isFiltered ? "체크 필터 끄기" : "체크 필터 켜기";
-
+  className,
+}: CheckFilterButtonProps) {
   const button = (
     <Button
       onClick={onClick}
       size="icon"
-      className={`h-12 w-12 rounded-full ${bgColor} shadow-lg`}
+      className={cn(`h-12 w-12 rounded-full shadow-lg`, className)}
     >
       <Check className="h-5 w-5 text-white" />
     </Button>
