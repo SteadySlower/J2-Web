@@ -1,5 +1,11 @@
 "use client";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/frontend/core/components/ui/tooltip";
 
 type KanjiButtonProps = {
   showButton: boolean;
@@ -7,7 +13,7 @@ type KanjiButtonProps = {
 };
 
 export default function KanjiButton({ showButton, onClick }: KanjiButtonProps) {
-  return (
+  const button = (
     <button
       className={cn(
         "w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer",
@@ -31,5 +37,15 @@ export default function KanjiButton({ showButton, onClick }: KanjiButtonProps) {
         漢
       </span>
     </button>
+  );
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{button}</TooltipTrigger>
+      <TooltipContent side="right">
+        <p>한자 보기</p>
+        <TooltipArrow />
+      </TooltipContent>
+    </Tooltip>
   );
 }

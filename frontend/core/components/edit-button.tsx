@@ -2,6 +2,12 @@
 
 import { Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipArrow,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/frontend/core/components/ui/tooltip";
 
 type EditButtonProps = {
   showButton: boolean;
@@ -16,7 +22,8 @@ export default function EditButton({
 }: EditButtonProps) {
   const hoverColorClass =
     hoverColor === "yellow" ? "hover:text-yellow-500" : "hover:text-black";
-  return (
+
+  const button = (
     <button
       onClick={onClick}
       className={cn(
@@ -38,5 +45,15 @@ export default function EditButton({
         }
       />
     </button>
+  );
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{button}</TooltipTrigger>
+      <TooltipContent side="right">
+        <p>수정 하기</p>
+        <TooltipArrow />
+      </TooltipContent>
+    </Tooltip>
   );
 }
