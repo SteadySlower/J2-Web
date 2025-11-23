@@ -4,6 +4,7 @@ import { useState } from "react";
 import WordCard from "./card";
 import EditWordModal from "@/frontend/words/modals/edit-word";
 import type { Word } from "@/lib/types/word";
+import KanjisModal from "@/frontend/words/modals/kanjis";
 
 type WordListProps = {
   words: Word[];
@@ -17,6 +18,7 @@ export default function WordList({
   isFilterGraduated,
 }: WordListProps) {
   const [toEditWord, setToEditWord] = useState<Word | null>(null);
+  const [wordToShowKanjis, setWordToShowKanjis] = useState<Word | null>(null);
 
   const handleEdit = (word: Word) => {
     setToEditWord(word);
@@ -24,6 +26,14 @@ export default function WordList({
 
   const handleCloseModal = () => {
     setToEditWord(null);
+  };
+
+  const handleShowKanjis = (word: Word) => {
+    setWordToShowKanjis(word);
+  };
+
+  const handleCloseKanjis = () => {
+    setWordToShowKanjis(null);
   };
 
   // 필터링 적용
@@ -58,7 +68,12 @@ export default function WordList({
     <>
       <div className="flex flex-col items-center gap-4 p-4 px-16">
         {displayWords.map((word) => (
-          <WordCard key={word.id} word={word} onEdit={handleEdit} />
+          <WordCard
+            key={word.id}
+            word={word}
+            onEdit={handleEdit}
+            onShowKanjis={handleShowKanjis}
+          />
         ))}
       </div>
       {toEditWord && (
@@ -66,6 +81,13 @@ export default function WordList({
           isOpen={toEditWord !== null}
           onClose={handleCloseModal}
           word={toEditWord}
+        />
+      )}
+      {wordToShowKanjis && (
+        <KanjisModal
+          isOpen={wordToShowKanjis !== null}
+          onClose={handleCloseKanjis}
+          word={wordToShowKanjis}
         />
       )}
     </>
