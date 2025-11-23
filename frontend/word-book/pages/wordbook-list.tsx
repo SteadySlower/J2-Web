@@ -26,15 +26,16 @@ export default function WordBookListPage() {
   }
 
   return (
-    <>
+    <div className="max-w-[900px] mx-auto">
+      <h1 className="h-16 text-center text-2xl font-bold pt-4">단어장 목록</h1>
       <WordBookList wordbooks={data ?? []} />
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed top-20 z-50">
         <PlusButton onClick={() => setIsCreateModalOpen(true)} />
       </div>
       <CreateWordBookModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
       />
-    </>
+    </div>
   );
 }

@@ -32,7 +32,7 @@ export default function WordBookList({ wordbooks }: WordBookListProps) {
 
   return (
     <>
-      <div className="max-w-[900px] mx-auto flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4 p-4 px-16">
         {wordbooks.map((wordbook) => (
           <WordBookCard
             key={wordbook.id}
