@@ -9,6 +9,7 @@ import {
 import EditButton from "@/frontend/core/components/edit-button";
 import type { WordBook } from "@/lib/types/word-books";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 type WordBookCardProps = {
   wordbook: WordBook;
@@ -37,8 +38,10 @@ export default function WordBookCard({ wordbook, onEdit }: WordBookCardProps) {
           }}
         >
           <EditButton
-            showButton={isHovered}
-            hoverColor="black"
+            className={cn(
+              isHovered ? "opacity-100" : "opacity-0 pointer-events-none",
+              "hover:text-black"
+            )}
             onClick={() => onEdit(wordbook)}
           />
         </div>

@@ -8,6 +8,7 @@ import StatusButton from "./word-card/status-button";
 import MeaningText from "./word-card/meaning-text";
 import EditButton from "../../../core/components/edit-button";
 import KanjiButton from "./word-card/kanji-button";
+import { cn } from "@/lib/utils";
 
 type WordCardProps = {
   word: Word;
@@ -38,8 +39,10 @@ export default function WordCard({
         <div className="flex flex-col gap-2 py-6 px-2 justify-center">
           <StatusButton wordId={word.id} status={word.status} />
           <EditButton
-            showButton={isRevealed}
-            hoverColor="yellow"
+            className={cn(
+              isRevealed ? "opacity-100" : "opacity-0 pointer-events-none",
+              "hover:text-yellow-500"
+            )}
             onClick={() => onEdit(word)}
           />
           <KanjiButton

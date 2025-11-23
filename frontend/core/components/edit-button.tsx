@@ -10,19 +10,11 @@ import {
 } from "@/frontend/core/components/ui/tooltip";
 
 type EditButtonProps = {
-  showButton: boolean;
-  hoverColor: "yellow" | "black";
   onClick: () => void;
+  className?: string;
 };
 
-export default function EditButton({
-  showButton,
-  hoverColor = "black",
-  onClick,
-}: EditButtonProps) {
-  const hoverColorClass =
-    hoverColor === "yellow" ? "hover:text-yellow-500" : "hover:text-black";
-
+export default function EditButton({ onClick, className }: EditButtonProps) {
   const button = (
     <button
       onClick={(e) => {
@@ -31,23 +23,11 @@ export default function EditButton({
         onClick();
       }}
       className={cn(
-        "w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform group cursor-pointer",
-        showButton ? "opacity-100" : "opacity-0 pointer-events-none"
+        "w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform group cursor-pointer text-gray-300",
+        className
       )}
     >
-      <Edit
-        className={cn(
-          "w-8 h-8 text-gray-300 transition-colors",
-          showButton && `${hoverColorClass} transition-colors`
-        )}
-        style={
-          showButton
-            ? {
-                animation: "fadeInUp 0.5s ease-out",
-              }
-            : undefined
-        }
-      />
+      <Edit className="w-8 h-8" />
     </button>
   );
 
