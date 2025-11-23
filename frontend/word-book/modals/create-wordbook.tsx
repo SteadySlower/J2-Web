@@ -38,6 +38,7 @@ export default function CreateWordBookModal({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset,
   } = useForm<WordBookFormData>({
@@ -123,7 +124,11 @@ export default function CreateWordBookModal({
           <DialogTitle>단어장 생성</DialogTitle>
         </DialogHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <WordBookFormFields register={register} errors={errors} />
+          <WordBookFormFields
+            register={register}
+            control={control}
+            errors={errors}
+          />
           {createMutation.isError && (
             <div className="text-destructive mb-4">
               {(createMutation.error as Error).message}

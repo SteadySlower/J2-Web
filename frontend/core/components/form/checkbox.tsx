@@ -1,37 +1,40 @@
-import { useState } from "react";
-import { type UseFormRegisterReturn, type FieldError } from "react-hook-form";
+import {
+  type Control,
+  type FieldValues,
+  type FieldError,
+  Controller,
+  type Path,
+} from "react-hook-form";
 import { Checkbox as ShadcnCheckbox } from "@/frontend/core/components/ui/checkbox";
 import { Label } from "@/frontend/core/components/ui/label";
 
-type CheckboxProps = {
+type CheckboxProps<T extends FieldValues> = {
+  name: Path<T>;
   label: string;
   error?: FieldError;
-  register: UseFormRegisterReturn;
+  control: Control<T>;
 };
 
-export default function Checkbox({ label, error, register }: CheckboxProps) {
-  const id = register.name;
-  const { onChange, name, ref } = register;
-  const [checked, setChecked] = useState(false);
-
+export default function Checkbox<T extends FieldValues>({
+  label,
+  error,
+  control,
+  name,
+}: CheckboxProps<T>) {
   return (
     <div className="mb-4">
       <div className="flex items-center space-x-2">
-        <ShadcnCheckbox
-          id={id}
+        <Controller
+          control={control}
           name={name}
-          ref={ref}
-          checked={checked}
-          onCheckedChange={(isChecked) => {
-            const newChecked = !!isChecked;
-            setChecked(newChecked);
-            const event = {
-              target: { name, value: newChecked, checked: newChecked },
-            } as unknown as React.ChangeEvent<HTMLInputElement>;
-            onChange(event);
-          }}
+          render={({ field }) => (
+            <ShadcnCheckbox
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          )}
         />
-        <Label htmlFor={id} className="cursor-pointer">
+        <Label htmlFor={name} className="cursor-pointer">
           {label}
         </Label>
       </div>

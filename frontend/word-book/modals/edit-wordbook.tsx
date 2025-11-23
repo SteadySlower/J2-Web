@@ -42,6 +42,7 @@ export default function EditWordBookModal({
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm<WordBookFormData>({
     resolver: zodResolver(updateWordBookSchema),
     defaultValues: {
@@ -129,7 +130,11 @@ export default function EditWordBookModal({
           <DialogTitle>단어장 수정</DialogTitle>
         </DialogHeader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <WordBookFormFields register={register} errors={errors} />
+          <WordBookFormFields
+            register={register}
+            control={control}
+            errors={errors}
+          />
           {updateMutation.isError && (
             <div className="text-destructive mb-4">
               {(updateMutation.error as Error).message}

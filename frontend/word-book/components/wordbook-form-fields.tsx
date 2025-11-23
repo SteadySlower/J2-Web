@@ -8,15 +8,18 @@ import type {
   FieldValues,
   Path,
   FieldError,
+  Control,
 } from "react-hook-form";
 
 type WordBookFormFieldsProps<T extends FieldValues> = {
   register: UseFormRegister<T>;
+  control: Control<T>;
   errors: FieldErrors<T>;
 };
 
 export default function WordBookFormFields<T extends FieldValues>({
   register,
+  control,
   errors,
 }: WordBookFormFieldsProps<T>) {
   return (
@@ -29,7 +32,8 @@ export default function WordBookFormFields<T extends FieldValues>({
       />
       <Checkbox
         label="일본어 앞면"
-        register={register("showFront" as Path<T>)}
+        name={"showFront" as Path<T>}
+        control={control}
         error={errors.showFront as FieldError | undefined}
       />
     </>
