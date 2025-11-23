@@ -15,6 +15,7 @@ import SubmitButton from "@/frontend/core/components/form/submit-button";
 import CancelButton from "@/frontend/core/components/form/cancel-button";
 import WordBookFormFields from "@/frontend/word-book/components/wordbook-form-fields";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import DeleteButton from "@/frontend/core/components/delete-button";
 import {
   updateWordBook,
   updateWordBookSchema,
@@ -150,6 +151,9 @@ export default function EditWordBookModal({
             </SubmitButton>
           </div>
         </Form>
+        <div className="absolute bottom-7 left-4">
+          <DeleteButton onClick={() => {}} />
+        </div>
       </DialogContent>
     </Dialog>
   );
