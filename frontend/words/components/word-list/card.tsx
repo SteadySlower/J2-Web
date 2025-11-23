@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { Word } from "@/lib/types/word";
 import { Card } from "@/frontend/core/components/ui/card";
 import JapaneseText from "./word-card/japanese-text";
-import GraduationButton from "./word-card/graduation-button";
+import StatusButton from "./word-card/status-button";
 import MeaningText from "./word-card/meaning-text";
 import EditButton from "../../../core/components/edit-button";
 import KanjiButton from "./word-card/kanji-button";
@@ -36,7 +36,7 @@ export default function WordCard({
           onReveal={handleReveal}
         />
         <div className="flex flex-col gap-2 py-6 px-2 justify-center">
-          <GraduationButton wordId={word.id} status={word.status} />
+          <StatusButton wordId={word.id} status={word.status} />
           <EditButton
             showButton={isRevealed}
             hoverColor="yellow"

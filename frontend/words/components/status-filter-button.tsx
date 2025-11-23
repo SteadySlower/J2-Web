@@ -5,22 +5,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/frontend/core/components/ui/tooltip";
-import { GraduationCap } from "lucide-react";
+import { Check } from "lucide-react";
 
-type GraduationButtonProps = {
+type StatusFilterButtonProps = {
   isFiltered: boolean;
   onClick: () => void;
 };
 
-export default function GraduationButton({
+export default function StatusFilterButton({
   isFiltered,
   onClick,
-}: GraduationButtonProps) {
+}: StatusFilterButtonProps) {
   const bgColor = isFiltered
     ? "bg-green-500 hover:bg-green-600"
     : "bg-gray-400 hover:bg-gray-500";
 
-  const tooltipText = isFiltered ? "졸업 필터 끄기" : "졸업 필터 켜기";
+  const tooltipText = isFiltered ? "체크 필터 끄기" : "체크 필터 켜기";
 
   const button = (
     <Button
@@ -28,7 +28,7 @@ export default function GraduationButton({
       size="icon"
       className={`h-12 w-12 rounded-full ${bgColor} shadow-lg`}
     >
-      <GraduationCap className="h-5 w-5 text-white" />
+      <Check className="h-5 w-5 text-white" />
     </Button>
   );
 

@@ -1,5 +1,5 @@
 import PlusButton from "@/frontend/core/components/plus-button";
-import GraduationButton from "@/frontend/words/components/graduation-button";
+import StatusFilterButton from "@/frontend/words/components/status-filter-button";
 import ShuffleButton from "@/frontend/words/components/shuffle-button";
 
 type FloatingButtonsProps = {
@@ -17,7 +17,7 @@ export default function FloatingButtons({
 }: FloatingButtonsProps) {
   return (
     <div className="fixed top-20 z-50 flex flex-col items-end justify-end gap-2">
-      <GraduationButton
+      <StatusFilterButton
         isFiltered={isFilterGraduated}
         onClick={onFilterChange}
       />
