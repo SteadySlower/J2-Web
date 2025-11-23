@@ -28,17 +28,24 @@ export default function WordCard({
 
   return (
     <Card className="w-full hover:shadow-md transition-shadow">
-      <div className="flex pr-6">
+      <div className="flex pr-6 items-stretch">
         <JapaneseText text={word.japanese} />
         <MeaningText
           text={word.meaning}
           isRevealed={isRevealed}
           onReveal={handleReveal}
         />
-        <div className="flex flex-col gap-2 py-6 px-2 justify-start">
-          <KanjiButton onClick={() => onShowKanjis(word)} />
+        <div className="flex flex-col gap-2 py-6 px-2 justify-center">
           <GraduationButton wordId={word.id} status={word.status} />
-          {isRevealed && <EditButton onClick={() => onEdit(word)} />}
+          <EditButton
+            showButton={isRevealed}
+            hoverColor="yellow"
+            onClick={() => onEdit(word)}
+          />
+          <KanjiButton
+            showButton={isRevealed && word.kanjis.length > 0}
+            onClick={() => onShowKanjis(word)}
+          />
         </div>
       </div>
     </Card>
