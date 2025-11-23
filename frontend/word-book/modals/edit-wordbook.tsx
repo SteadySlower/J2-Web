@@ -9,16 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/frontend/core/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/frontend/core/components/ui/alert-dialog";
+import ConfirmAlertDialog from "@/frontend/core/components/alert-dialog";
 import Form from "@/frontend/core/components/form/form";
 import SubmitButton from "@/frontend/core/components/form/submit-button";
 import CancelButton from "@/frontend/core/components/form/cancel-button";
@@ -122,26 +113,14 @@ export default function EditWordBookModal({
           </div>
         </DialogContent>
       </Dialog>
-      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>단어장 삭제</AlertDialogTitle>
-            <AlertDialogDescription>
-              단어장 및 단어장 안에 있는 단어들이 전부 삭제 됩니다. 이 작업은
-              되돌릴 수 없습니다.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>취소</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => deleteMutation.mutate()}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              삭제
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmAlertDialog
+        title="단어장 삭제"
+        description="단어장 및 단어장 안에 있는 단어들이 전부 삭제 됩니다. 이 작업은 되돌릴 수 없습니다."
+        actionButtonLabel="삭제"
+        open={showDeleteConfirm}
+        onOpenChange={setShowDeleteConfirm}
+        onActionButtonClicked={() => deleteMutation.mutate()}
+      />
     </>
   );
 }
