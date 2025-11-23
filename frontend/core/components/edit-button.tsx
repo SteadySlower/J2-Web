@@ -11,7 +11,7 @@ export default function EditButton({ onClick }: EditButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform group"
+      className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform group cursor-pointer"
     >
       <Edit
         className={cn(

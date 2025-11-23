@@ -62,7 +62,7 @@ export default function GraduationButton({
 
   return (
     <button
-      className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
+      className="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer"
       onClick={handleClick}
       title={tooltipText}
     >
