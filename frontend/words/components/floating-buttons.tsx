@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 type FloatingButtonsProps = {
   isFilterGraduated: boolean;
   showFront: boolean;
+  onToggleShowFront: () => void;
   onFilterChange: () => void;
   onShuffle: () => void;
   onAddWord: () => void;
@@ -15,6 +16,7 @@ type FloatingButtonsProps = {
 export default function FloatingButtons({
   isFilterGraduated,
   showFront,
+  onToggleShowFront,
   onFilterChange,
   onShuffle,
   onAddWord,
@@ -33,7 +35,7 @@ export default function FloatingButtons({
       <ShowFrontButton
         showFront={showFront}
         tooltipText={showFront ? "한국어 제시어 보기" : "일본어 제시어 보기"}
-        onClick={() => {}}
+        onClick={onToggleShowFront}
       />
       <ShuffleButton onClick={onShuffle} />
       <PlusButton tooltipText="단어 추가" onClick={onAddWord} />

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import WordList from "@/frontend/words/components/word-list/list";
 import CreateWordModal from "@/frontend/words/modals/create-word";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
 import FloatingButtons from "@/frontend/words/components/floating-buttons";
+import { useToggleShowFront } from "@/frontend/words/hooks/useToggleShowFront";
 
 type WordBookDetailProps = {
   id: string;
@@ -24,6 +25,15 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     queryKey: ["word-books", id],
     queryFn: () => getBookDetail(id),
   });
+
+  const toggleShowFrontMutation = useToggleShowFront({
+    wordbookId: id,
+  });
+
+  const handleToggleShowFront = () => {
+    if (!data) return;
+    toggleShowFrontMutation.mutate(!data.showFront);
+  };
 
   const handleWordCreated = (id: string) => {
     setShuffledWordIds((prev) => {
@@ -76,6 +86,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
       <FloatingButtons
         isFilterGraduated={isFilterGraduated}
         showFront={data.showFront}
+        onToggleShowFront={handleToggleShowFront}
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
         onAddWord={() => setIsModalOpen(true)}

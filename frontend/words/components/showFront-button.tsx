@@ -29,8 +29,21 @@ export default function ShowFrontButton({
         className
       )}
     >
-      <span className="text-white text-xl font-bold">
-        {showFront ? "日" : "韓"}
+      <span
+        key={showFront ? "front" : "back"}
+        className={cn(
+          "inline-block text-white text-xl font-bold",
+          showFront && "fade-in-up"
+        )}
+        style={
+          showFront
+            ? {
+                animation: "fadeInUp 0.5s ease-out",
+              }
+            : undefined
+        }
+      >
+        {showFront ? "韓" : "日"}
       </span>
     </Button>
   );
