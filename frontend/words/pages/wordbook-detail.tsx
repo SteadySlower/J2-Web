@@ -75,6 +75,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
       />
       <FloatingButtons
         isFilterGraduated={isFilterGraduated}
+        showFront={data.showFront}
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
         onAddWord={() => setIsModalOpen(true)}
