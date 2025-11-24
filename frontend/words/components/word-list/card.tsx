@@ -13,12 +13,14 @@ import { useParams } from "next/navigation";
 import { useToggleWordStatus } from "@/frontend/words/hooks/useToggleWordStatus";
 
 type WordCardProps = {
+  showFront: boolean;
   word: Word;
   onEdit: (word: Word) => void;
   onShowKanjis: (word: Word) => void;
 };
 
 export default function WordCard({
+  showFront,
   word,
   onEdit,
   onShowKanjis,
@@ -43,9 +45,9 @@ export default function WordCard({
   return (
     <Card className="w-full hover:shadow-md transition-shadow">
       <div className="flex pr-6 items-stretch">
-        <LeftText text={word.japanese} />
+        <LeftText text={showFront ? word.japanese : word.meaning} />
         <RightText
-          text={word.meaning}
+          text={showFront ? word.meaning : word.japanese}
           isRevealed={isRevealed}
           onReveal={handleReveal}
         />

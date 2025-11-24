@@ -7,12 +7,14 @@ import type { Word } from "@/lib/types/word";
 import KanjisModal from "@/frontend/words/modals/kanjis";
 
 type WordListProps = {
+  showFront: boolean;
   words: Word[];
   shuffledWordIds: string[];
   isFilterGraduated: boolean;
 };
 
 export default function WordList({
+  showFront,
   words,
   shuffledWordIds,
   isFilterGraduated,
@@ -70,6 +72,7 @@ export default function WordList({
         {displayWords.map((word) => (
           <WordCard
             key={word.id}
+            showFront={showFront}
             word={word}
             onEdit={handleEdit}
             onShowKanjis={handleShowKanjis}

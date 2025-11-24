@@ -25,26 +25,6 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     queryFn: () => getBookDetail(id),
   });
 
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-
-    const currentShowFront = searchParams.get("showFront");
-    const wordbookShowFront = data.showFront.toString();
-
-    if (currentShowFront === wordbookShowFront) {
-      return;
-    }
-
-    const params = new URLSearchParams(searchParams);
-    params.set("showFront", wordbookShowFront);
-
-    router.replace(`/word-books/${id}?${params.toString()}`, {
-      scroll: false,
-    });
-  }, [data, id, router, searchParams]);
-
   const handleWordCreated = (id: string) => {
     setShuffledWordIds((prev) => {
       if (prev.length === 0) return prev;
@@ -88,6 +68,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     <div className="mx-auto max-w-[900px]">
       <h1 className="h-16 text-center text-2xl font-bold p-4">{data.title}</h1>
       <WordList
+        showFront={data.showFront}
         words={data.words}
         shuffledWordIds={shuffledWordIds}
         isFilterGraduated={isFilterGraduated}
