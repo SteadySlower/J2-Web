@@ -6,6 +6,7 @@ type SubmitButtonProps = {
   isLoading?: boolean;
   loadingText?: string;
   children: React.ReactNode;
+  disabled?: boolean;
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type" | "disabled">;
 
 export default function SubmitButton({
@@ -13,12 +14,13 @@ export default function SubmitButton({
   loadingText = "처리 중...",
   children,
   className,
+  disabled = false,
   ...props
 }: SubmitButtonProps) {
   return (
     <Button
       type="submit"
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       className={className}
       {...props}
     >

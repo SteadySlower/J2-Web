@@ -44,7 +44,7 @@ export default function EditWordModal({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     reset,
   } = useForm<WordFormData>({
     resolver: zodResolver(updateWordSchema),
@@ -73,6 +73,9 @@ export default function EditWordModal({
   });
 
   const onSubmit = (data: WordFormData) => {
+    if (!isDirty) {
+      return;
+    }
     updateMutation.mutate(data);
   };
 
@@ -104,6 +107,7 @@ export default function EditWordModal({
               <CancelButton onClick={handleClose} />
               <SubmitButton
                 isLoading={updateMutation.isPending}
+                disabled={!isDirty}
                 loadingText="수정 중..."
               >
                 수정

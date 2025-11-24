@@ -41,7 +41,7 @@ export default function EditWordBookModal({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     reset,
     control,
   } = useForm<WordBookFormData>({
@@ -68,6 +68,9 @@ export default function EditWordBookModal({
   });
 
   const onSubmit = (data: WordBookFormData) => {
+    if (!isDirty) {
+      return;
+    }
     updateMutation.mutate(data);
   };
 
@@ -102,6 +105,7 @@ export default function EditWordBookModal({
               <CancelButton onClick={handleClose} />
               <SubmitButton
                 isLoading={updateMutation.isPending}
+                disabled={!isDirty}
                 loadingText="수정 중..."
               >
                 수정
