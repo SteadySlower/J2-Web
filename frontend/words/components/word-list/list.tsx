@@ -8,16 +8,20 @@ import KanjisModal from "@/frontend/words/modals/kanjis";
 
 type WordListProps = {
   showFront: boolean;
+  revealedMap: Record<string, boolean>;
   words: Word[];
   shuffledWordIds: string[];
   isFilterGraduated: boolean;
+  onToggleReveal: (wordId: string) => void;
 };
 
 export default function WordList({
   showFront,
+  revealedMap,
   words,
   shuffledWordIds,
   isFilterGraduated,
+  onToggleReveal,
 }: WordListProps) {
   const [toEditWord, setToEditWord] = useState<Word | null>(null);
   const [wordToShowKanjis, setWordToShowKanjis] = useState<Word | null>(null);
@@ -73,9 +77,11 @@ export default function WordList({
           <WordCard
             key={word.id}
             showFront={showFront}
+            isRevealed={revealedMap[word.id] || false}
             word={word}
             onEdit={handleEdit}
             onShowKanjis={handleShowKanjis}
+            onToggleReveal={onToggleReveal}
           />
         ))}
       </div>

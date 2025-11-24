@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import type { Word } from "@/lib/types/word";
 import { Card } from "@/frontend/core/components/ui/card";
 import LeftText from "./word-card/left-text";
@@ -15,19 +14,22 @@ import { useToggleWordStatus } from "@/frontend/words/hooks/useToggleWordStatus"
 type WordCardProps = {
   showFront: boolean;
   word: Word;
+  isRevealed: boolean;
+  onToggleReveal: (wordId: string) => void;
   onEdit: (word: Word) => void;
   onShowKanjis: (word: Word) => void;
 };
 
 export default function WordCard({
   showFront,
+  isRevealed,
+  onToggleReveal,
   word,
   onEdit,
   onShowKanjis,
 }: WordCardProps) {
   const params = useParams();
   const wordbookId = params.id as string;
-  const [isRevealed, setIsRevealed] = useState(false);
 
   const toggleMutation = useToggleWordStatus({
     wordId: word.id,
@@ -35,7 +37,7 @@ export default function WordCard({
   });
 
   const handleReveal = () => {
-    setIsRevealed(!isRevealed);
+    onToggleReveal(word.id);
   };
 
   const handleToggleStatus = () => {

@@ -16,6 +16,7 @@ type WordBookDetailProps = {
 export default function WordBookDetail({ id }: WordBookDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shuffledWordIds, setShuffledWordIds] = useState<string[]>([]);
+  const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({});
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -28,11 +29,21 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
 
   const toggleShowFrontMutation = useToggleShowFront({
     wordbookId: id,
+    onSuccess: () => {
+      setRevealedMap({});
+    },
   });
 
   const handleToggleShowFront = () => {
     if (!data) return;
     toggleShowFrontMutation.mutate(!data.showFront);
+  };
+
+  const handleToggleReveal = (wordId: string) => {
+    setRevealedMap((prev) => ({
+      ...prev,
+      [wordId]: !prev[wordId],
+    }));
   };
 
   const handleWordCreated = (id: string) => {
@@ -50,6 +61,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     } else {
       params.delete("filterGraduated");
     }
+    setRevealedMap({});
     router.replace(`/word-books/${id}?${params.toString()}`, { scroll: false });
   };
 
@@ -79,9 +91,11 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
       <h1 className="h-16 text-center text-2xl font-bold p-4">{data.title}</h1>
       <WordList
         showFront={data.showFront}
+        revealedMap={revealedMap}
         words={data.words}
         shuffledWordIds={shuffledWordIds}
         isFilterGraduated={isFilterGraduated}
+        onToggleReveal={handleToggleReveal}
       />
       <FloatingButtons
         isFilterGraduated={isFilterGraduated}
