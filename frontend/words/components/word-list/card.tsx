@@ -3,9 +3,9 @@
 import { useState } from "react";
 import type { Word } from "@/lib/types/word";
 import { Card } from "@/frontend/core/components/ui/card";
-import JapaneseText from "./word-card/japanese-text";
+import LeftText from "./word-card/left-text";
 import CheckButton from "./word-card/check-button";
-import MeaningText from "./word-card/meaning-text";
+import RightText from "./word-card/right-text";
 import EditButton from "../../../core/components/edit-button";
 import KanjiButton from "./word-card/kanji-button";
 import { cn } from "@/lib/utils";
@@ -43,8 +43,8 @@ export default function WordCard({
   return (
     <Card className="w-full hover:shadow-md transition-shadow">
       <div className="flex pr-6 items-stretch">
-        <JapaneseText text={word.japanese} />
-        <MeaningText
+        <LeftText text={word.japanese} />
+        <RightText
           text={word.meaning}
           isRevealed={isRevealed}
           onReveal={handleReveal}

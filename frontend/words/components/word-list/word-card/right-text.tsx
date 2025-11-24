@@ -1,17 +1,17 @@
 import { cn } from "@/lib/utils";
 import { getTextSize } from "./utils";
 
-type MeaningTextProps = {
+type RightTextProps = {
   text: string;
   isRevealed: boolean;
   onReveal: () => void;
 };
 
-export default function MeaningText({
+export default function RightText({
   text,
   isRevealed,
   onReveal,
-}: MeaningTextProps) {
+}: RightTextProps) {
   return (
     <div className="flex-1 p-6">
       <div
