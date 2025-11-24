@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import WordList from "@/frontend/words/components/word-list/list";
 import CreateWordModal from "@/frontend/words/modals/create-word";
@@ -24,6 +24,26 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     queryKey: ["word-books", id],
     queryFn: () => getBookDetail(id),
   });
+
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    const currentShowFront = searchParams.get("showFront");
+    const wordbookShowFront = data.showFront.toString();
+
+    if (currentShowFront === wordbookShowFront) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+    params.set("showFront", wordbookShowFront);
+
+    router.replace(`/word-books/${id}?${params.toString()}`, {
+      scroll: false,
+    });
+  }, [data, id, router, searchParams]);
 
   const handleWordCreated = (id: string) => {
     setShuffledWordIds((prev) => {
