@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Input from "@/frontend/core/components/form/input";
+import { Button } from "@/frontend/core/components/ui/button";
 
 type FormValues = {
   text: string;
@@ -76,7 +77,29 @@ export default function CreateAi() {
         error={errors.text}
         placeholder="한글 혹은 일본어를 입력하세요"
       />
-      <div className="text-sm text-muted-foreground">mode: {mode ?? "-"}</div>
+      <div className="flex gap-2 justify-end">
+        <Button
+          variant="default"
+          size="sm"
+          disabled={mode === null || mode === "Korean"}
+        >
+          일본어로 검색
+        </Button>
+        <Button
+          variant="default"
+          size="sm"
+          disabled={mode === null || mode === "Japanese"}
+        >
+          한국어로 검색
+        </Button>
+        <Button
+          variant="default"
+          size="sm"
+          disabled={mode === null || mode === "Japanese"}
+        >
+          발음으로 검색
+        </Button>
+      </div>
     </div>
   );
 }
