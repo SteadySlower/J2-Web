@@ -18,19 +18,19 @@ type CreateWordMutation = UseMutationResult<
   unknown
 >;
 
-type CreateSelfProps = {
+type WordInputProps = {
   form: UseFormReturn<WordFormData>;
   createMutation: CreateWordMutation;
   onSubmit: (data: WordFormData) => void;
   onClose: () => void;
 };
 
-export default function CreateSelf({
+export default function WordInput({
   form,
   createMutation,
   onSubmit,
   onClose,
-}: CreateSelfProps) {
+}: WordInputProps) {
   const {
     register,
     handleSubmit,

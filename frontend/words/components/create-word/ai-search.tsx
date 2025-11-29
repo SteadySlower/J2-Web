@@ -34,11 +34,11 @@ function getLanguageFlags(value: string) {
   return { isOnlyKorean, isOnlyJapanese };
 }
 
-interface CreateAiProps {
+interface AiSearchProps {
   onSelected: (result: DictionaryEntryResponse) => void;
 };
 
-export default function CreateAi({ onSelected }: CreateAiProps) {
+export default function AiSearch({ onSelected }: AiSearchProps) {
   const [searchMode, setSearchMode] = useState<SearchMode>("Japanese");
   const [searchQuery, setSearchQuery] = useState<string>("");
 

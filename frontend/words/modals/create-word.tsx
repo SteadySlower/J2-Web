@@ -22,8 +22,8 @@ import {
 } from "@/lib/api/words/create-word";
 import { useCreateWord } from "@/frontend/words/hooks/useCreateWord";
 import { useParams } from "next/navigation";
-import CreateSelf from "@/frontend/words/components/create-word/create-self";
-import CreateAi from "@/frontend/words/components/create-word/create-ai";
+import WordInput from "@/frontend/words/components/create-word/word-input";
+import AiSearch from "@/frontend/words/components/create-word/ai-search";
 import type { DictionaryEntryResponse } from "@/lib/api/types/dictionary";
 type WordFormData = CreateWordRequest;
 
@@ -105,14 +105,14 @@ export default function CreateWordModal({
           </Tooltip>
         </DialogHeader>
         {activeTab === "self" ? (
-          <CreateSelf
+          <WordInput
             form={form}
             createMutation={createMutation}
             onSubmit={onSubmit}
             onClose={handleClose}
           />
         ) : (
-          <CreateAi onSelected={onSelected} />
+          <AiSearch onSelected={onSelected} />
         )}
       </DialogContent>
     </Dialog>
