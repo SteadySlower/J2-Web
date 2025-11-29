@@ -70,10 +70,10 @@ export default function CreateWordModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent>
-        <DialogHeader>
+        <DialogHeader className="h-3">
           <DialogTitle>단어 추가</DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="self" className="mt-4">
+        <Tabs defaultValue="self">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="self">직접 추가</TabsTrigger>
             <TabsTrigger value="ai">AI로 추가</TabsTrigger>
