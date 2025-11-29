@@ -22,7 +22,7 @@ export default function Input({
   const id = register.name;
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 flex flex-col gap-2">
       <Label htmlFor={id}>{label}</Label>
       <ShadcnInput
         id={id}
