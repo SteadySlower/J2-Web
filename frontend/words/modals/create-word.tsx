@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -22,7 +23,7 @@ import { useCreateWord } from "@/frontend/words/hooks/useCreateWord";
 import { useParams } from "next/navigation";
 import CreateSelf from "@/frontend/words/components/create-word/create-self";
 import CreateAi from "@/frontend/words/components/create-word/create-ai";
-
+import type { DictionaryEntryResponse } from "@/lib/api/types/dictionary";
 type WordFormData = CreateWordRequest;
 
 type CreateWordModalProps = {
@@ -38,6 +39,7 @@ export default function CreateWordModal({
 }: CreateWordModalProps) {
   const params = useParams();
   const bookId = params.id as string;
+  const [activeTab, setActiveTab] = useState<"self" | "ai">("self");
 
   const form = useForm<WordFormData>({
     resolver: zodResolver(createWordSchema),
@@ -57,6 +59,13 @@ export default function CreateWordModal({
     },
   });
 
+  const onSelected = (result: DictionaryEntryResponse) => {
+    form.setValue("japanese", result.japanese);
+    form.setValue("meaning", result.meaning);
+    form.setValue("pronunciation", result.pronunciation);
+    setActiveTab("self");
+  };
+
   const onSubmit = (data: WordFormData) => {
     createMutation.mutate(data);
   };
@@ -73,7 +82,10 @@ export default function CreateWordModal({
         <DialogHeader className="h-3">
           <DialogTitle>단어 추가</DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="self">
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as "self" | "ai")}
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="self">직접 추가</TabsTrigger>
             <TabsTrigger value="ai">AI로 추가</TabsTrigger>
@@ -87,7 +99,7 @@ export default function CreateWordModal({
             />
           </TabsContent>
           <TabsContent value="ai">
-            <CreateAi />
+            <CreateAi onSelected={onSelected} />
           </TabsContent>
         </Tabs>
       </DialogContent>

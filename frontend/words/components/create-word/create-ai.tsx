@@ -17,6 +17,7 @@ import { useSearchDictionaryByJp } from "@/frontend/dictionary/hooks/useSearchDi
 import { useSearchDictionaryByMeaning } from "@/frontend/dictionary/hooks/useSearchDictionaryByMeaning";
 import { useSearchDictionaryBySound } from "@/frontend/dictionary/hooks/useSearchDictionaryBySound";
 import SearchResults from "@/frontend/words/components/create-word/search-results";
+import type { DictionaryEntryResponse } from "@/lib/api/types/dictionary";
 
 type FormValues = {
   text: string;
@@ -33,7 +34,11 @@ function getLanguageFlags(value: string) {
   return { isOnlyKorean, isOnlyJapanese };
 }
 
-export default function CreateAi() {
+interface CreateAiProps {
+  onSelected: (result: DictionaryEntryResponse) => void;
+};
+
+export default function CreateAi({ onSelected }: CreateAiProps) {
   const [searchMode, setSearchMode] = useState<SearchMode>("Japanese");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -149,7 +154,7 @@ export default function CreateAi() {
         {isLoading && (
           <div className="text-sm text-muted-foreground">검색 중...</div>
         )}
-        <SearchResults results={searchResults} />
+        <SearchResults results={searchResults} onSelected={onSelected} />
       </div>
     </Form>
   );

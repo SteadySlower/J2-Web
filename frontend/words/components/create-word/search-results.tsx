@@ -11,9 +11,10 @@ import {
 
 type SearchResultsProps = {
   results: DictionaryEntryResponse[];
+  onSelected: (result: DictionaryEntryResponse) => void;
 };
 
-export default function SearchResults({ results }: SearchResultsProps) {
+export default function SearchResults({ results, onSelected }: SearchResultsProps) {
   if (results.length === 0) {
     return null;
   }
@@ -26,7 +27,8 @@ export default function SearchResults({ results }: SearchResultsProps) {
             key={index}
             variant="outline"
             size="sm"
-            className="min-w-[200px] shrink-0"
+            className="min-w-[200px] shrink-0 cursor-pointer"
+            onClick={() => onSelected(result)}
           >
             <ItemContent>
               <ItemTitle>
