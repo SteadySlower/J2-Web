@@ -9,12 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/frontend/core/components/ui/dialog";
+import { Button } from "@/frontend/core/components/ui/button";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/frontend/core/components/ui/tabs";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/frontend/core/components/ui/tooltip";
+import { Sparkles, Undo2 } from "lucide-react";
 import {
   createWordSchema,
   type CreateWordRequest,
@@ -78,30 +79,41 @@ export default function CreateWordModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogContent>
-        <DialogHeader className="h-3">
+      <DialogContent className="min-h-96">
+        <DialogHeader className="h-3 flex flex-row items-center justify-between">
           <DialogTitle>단어 추가</DialogTitle>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() =>
+                  setActiveTab(activeTab === "self" ? "ai" : "self")
+                }
+                className="mr-4"
+              >
+                {activeTab === "ai" ? (
+                  <Undo2 className="h-5 w-5" />
+                ) : (
+                  <Sparkles className="h-5 w-5" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{activeTab === "ai" ? "입력으로" : "AI 검색"}</p>
+            </TooltipContent>
+          </Tooltip>
         </DialogHeader>
-        <Tabs
-          value={activeTab}
-          onValueChange={(v) => setActiveTab(v as "self" | "ai")}
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="self">직접 추가</TabsTrigger>
-            <TabsTrigger value="ai">AI로 추가</TabsTrigger>
-          </TabsList>
-          <TabsContent value="self">
-            <CreateSelf
-              form={form}
-              createMutation={createMutation}
-              onSubmit={onSubmit}
-              onClose={handleClose}
-            />
-          </TabsContent>
-          <TabsContent value="ai">
-            <CreateAi onSelected={onSelected} />
-          </TabsContent>
-        </Tabs>
+        {activeTab === "self" ? (
+          <CreateSelf
+            form={form}
+            createMutation={createMutation}
+            onSubmit={onSubmit}
+            onClose={handleClose}
+          />
+        ) : (
+          <CreateAi onSelected={onSelected} />
+        )}
       </DialogContent>
     </Dialog>
   );
