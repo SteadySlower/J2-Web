@@ -8,16 +8,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/frontend/core/components/ui/dialog";
-import Form from "@/frontend/core/components/form/form";
-import SubmitButton from "@/frontend/core/components/form/submit-button";
-import CancelButton from "@/frontend/core/components/form/cancel-button";
-import WordFormFields from "@/frontend/words/components/word-form-fields";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/frontend/core/components/ui/tabs";
 import {
   createWordSchema,
   type CreateWordRequest,
 } from "@/lib/api/words/create-word";
 import { useCreateWord } from "@/frontend/words/hooks/useCreateWord";
 import { useParams } from "next/navigation";
+import CreateSelf from "@/frontend/words/components/create-word/create-self";
+import CreateAi from "@/frontend/words/components/create-word/create-ai";
 
 type WordFormData = CreateWordRequest;
 
@@ -35,17 +39,14 @@ export default function CreateWordModal({
   const params = useParams();
   const bookId = params.id as string;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<WordFormData>({
+  const form = useForm<WordFormData>({
     resolver: zodResolver(createWordSchema),
     defaultValues: {
       bookId,
     },
   });
+
+  const { reset } = form;
 
   const createMutation = useCreateWord({
     bookId,
@@ -72,23 +73,23 @@ export default function CreateWordModal({
         <DialogHeader>
           <DialogTitle>단어 추가</DialogTitle>
         </DialogHeader>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <WordFormFields register={register} errors={errors} />
-          {createMutation.isError && (
-            <div className="text-destructive mb-4">
-              {(createMutation.error as Error).message}
-            </div>
-          )}
-          <div className="flex gap-2 justify-end">
-            <CancelButton onClick={handleClose} />
-            <SubmitButton
-              isLoading={createMutation.isPending}
-              loadingText="생성 중..."
-            >
-              생성
-            </SubmitButton>
-          </div>
-        </Form>
+        <Tabs defaultValue="self" className="mt-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="self">직접 추가</TabsTrigger>
+            <TabsTrigger value="ai">AI로 추가</TabsTrigger>
+          </TabsList>
+          <TabsContent value="self">
+            <CreateSelf
+              form={form}
+              createMutation={createMutation}
+              onSubmit={onSubmit}
+              onClose={handleClose}
+            />
+          </TabsContent>
+          <TabsContent value="ai">
+            <CreateAi />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );

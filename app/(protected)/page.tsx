@@ -8,6 +8,8 @@ export default async function Home() {
     data: { session },
   } = await supabase.auth.getSession();
 
+  console.log(session?.access_token);
+
   if (session?.user) {
     return <DashBoard user={session.user} />;
   }
