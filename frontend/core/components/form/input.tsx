@@ -34,7 +34,9 @@ export default function Input({
         )}
       />
       {error && (
-        <div className="text-sm text-destructive mt-1">{error.message}</div>
+        <div className="text-sm text-destructive text-red-500 mt-1">
+          {error.message}
+        </div>
       )}
       {children}
     </div>
