@@ -2,12 +2,22 @@
 
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Search } from "lucide-react";
 import Input from "@/frontend/core/components/form/input";
 import { Button } from "@/frontend/core/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/frontend/core/components/ui/select";
 
 type FormValues = {
   text: string;
 };
+
+type SearchMode = "Japanese" | "Korean" | "Pronunciation";
 
 function getLanguageFlags(value: string) {
   const isOnlyKorean =
@@ -19,7 +29,15 @@ function getLanguageFlags(value: string) {
 }
 
 export default function CreateAi() {
-  const [value, setValue] = useState("");
+  const [searchMode, setSearchMode] = useState<SearchMode>("Japanese");
+  const label = useMemo(() => {
+    return searchMode === "Japanese"
+      ? "일본어"
+      : searchMode === "Korean"
+      ? "한국어"
+      : "일본어 발음 (한글로)";
+  }, [searchMode]);
+
   const {
     register,
     formState: { errors },
@@ -30,28 +48,23 @@ export default function CreateAi() {
     },
   });
 
-  const mode: "Korean" | "Japanese" | null = useMemo(() => {
-    if (!value) {
-      return null;
-    }
-
-    const { isOnlyKorean, isOnlyJapanese } = getLanguageFlags(value);
-
-    if (isOnlyKorean) {
-      return "Korean";
-    }
-
-    if (isOnlyJapanese) {
-      return "Japanese";
-    }
-
-    return null;
-  }, [value]);
-
   return (
-    <div className="flex flex-col gap-4 py-10">
+    <div className="flex flex-col gap-4 pt-4">
+      <Select
+        value={searchMode}
+        onValueChange={(v) => setSearchMode(v as SearchMode)}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="검색 모드 선택" />
+        </SelectTrigger>
+        <SelectContent className="z-100 bg-background">
+          <SelectItem value="Japanese">일본어로 검색</SelectItem>
+          <SelectItem value="Korean">한국어로 검색</SelectItem>
+          <SelectItem value="Pronunciation">발음으로 검색</SelectItem>
+        </SelectContent>
+      </Select>
       <Input
-        label="일본어, 한국어, 혹은 일본어 발음 (한글로) 검색하세요."
+        label={label}
         register={register("text", {
           validate: (v) => {
             const inputValue = v || "";
@@ -63,43 +76,25 @@ export default function CreateAi() {
             const { isOnlyKorean, isOnlyJapanese } =
               getLanguageFlags(inputValue);
 
-            if (!isOnlyKorean && !isOnlyJapanese && inputValue.length > 0) {
-              return "한글 혹은 일본어 중에 한가지만 입력해주세요.";
+            if (searchMode === "Japanese") {
+              if (!isOnlyJapanese && inputValue.length > 0) {
+                return "일본어만 입력해주세요.";
+              }
+            } else {
+              if (!isOnlyKorean && inputValue.length > 0) {
+                return "한글만 입력해주세요.";
+              }
             }
 
             return true;
           },
-          onChange: (event) => {
-            const nextValue = event.target.value;
-            setValue(nextValue);
-          },
         })}
         error={errors.text}
-        placeholder="한글 혹은 일본어를 입력하세요"
       />
-      <div className="flex gap-2 justify-end">
-        <Button
-          variant="default"
-          size="sm"
-          disabled={mode === null || mode === "Korean"}
-        >
-          일본어로 검색
-        </Button>
-        <Button
-          variant="default"
-          size="sm"
-          disabled={mode === null || mode === "Japanese"}
-        >
-          한국어로 검색
-        </Button>
-        <Button
-          variant="default"
-          size="sm"
-          disabled={mode === null || mode === "Japanese"}
-        >
-          발음으로 검색
-        </Button>
-      </div>
+      <Button variant="default" size="sm" type="submit">
+        <Search className="h-4 w-4 mr-2" />
+        검색
+      </Button>
     </div>
   );
 }
