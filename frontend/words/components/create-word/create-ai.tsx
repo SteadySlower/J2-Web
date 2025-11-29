@@ -91,10 +91,16 @@ export default function CreateAi() {
         })}
         error={errors.text}
       />
-      <Button variant="default" size="sm" type="submit">
-        <Search className="h-4 w-4 mr-2" />
-        검색
-      </Button>
+      <div className="flex justify-end">
+        <Button
+          variant="default"
+          size="icon"
+          type="submit"
+          className="w-12 h-10"
+        >
+          <Search className="h-5 w-5" />
+        </Button>
+      </div>
     </div>
   );
 }
