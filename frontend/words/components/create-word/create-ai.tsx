@@ -13,6 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/frontend/core/components/ui/select";
+import { useSearchDictionaryByJp } from "@/frontend/dictionary/hooks/useSearchDictionaryByJp";
+import { useSearchDictionaryByMeaning } from "@/frontend/dictionary/hooks/useSearchDictionaryByMeaning";
+import { useSearchDictionaryBySound } from "@/frontend/dictionary/hooks/useSearchDictionaryBySound";
+import SearchResults from "@/frontend/words/components/create-word/search-results";
 
 type FormValues = {
   text: string;
@@ -31,6 +35,7 @@ function getLanguageFlags(value: string) {
 
 export default function CreateAi() {
   const [searchMode, setSearchMode] = useState<SearchMode>("Japanese");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const {
     register,
@@ -43,6 +48,33 @@ export default function CreateAi() {
       text: "",
     },
   });
+
+  const jpQuery = useSearchDictionaryByJp(
+    searchQuery,
+    searchMode === "Japanese" && !!searchQuery
+  );
+  const meaningQuery = useSearchDictionaryByMeaning(
+    searchQuery,
+    searchMode === "Korean" && !!searchQuery
+  );
+  const soundQuery = useSearchDictionaryBySound(
+    searchQuery,
+    searchMode === "Pronunciation" && !!searchQuery
+  );
+
+  const searchResults =
+    searchMode === "Japanese"
+      ? jpQuery.data || []
+      : searchMode === "Korean"
+      ? meaningQuery.data || []
+      : soundQuery.data || [];
+
+  const isLoading =
+    searchMode === "Japanese"
+      ? jpQuery.isLoading
+      : searchMode === "Korean"
+      ? meaningQuery.isLoading
+      : soundQuery.isLoading;
 
   const validateText = useMemo(
     () => (v: string) => {
@@ -74,8 +106,7 @@ export default function CreateAi() {
   }, [searchMode, trigger]);
 
   const onSubmit = (data: FormValues) => {
-    // TODO: 검색 로직 구현
-    console.log("검색:", { searchMode, query: data.text });
+    setSearchQuery(data.text);
   };
 
   return (
@@ -85,6 +116,7 @@ export default function CreateAi() {
           value={searchMode}
           onValueChange={(v) => {
             setSearchMode(v as SearchMode);
+            setSearchQuery("");
           }}
         >
           <SelectTrigger className="w-[180px]">
@@ -109,11 +141,15 @@ export default function CreateAi() {
             size="icon"
             type="submit"
             className="w-12 h-10"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
           >
             <Search className="h-5 w-5" />
           </Button>
         </div>
+        {isLoading && (
+          <div className="text-sm text-muted-foreground">검색 중...</div>
+        )}
+        <SearchResults results={searchResults} />
       </div>
     </Form>
   );
