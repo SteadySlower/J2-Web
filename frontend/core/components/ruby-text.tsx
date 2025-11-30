@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 
 type RubySegment =
   | { type: "okurigana"; base: string; rt: string }
@@ -17,7 +17,10 @@ function parseRubyString(input: string): RubySegment[] {
     if (match.index > currentIndex) {
       const text = input.slice(currentIndex, match.index);
       if (text) {
-        segments.push({ type: "text", text });
+        // 1글자씩 segment로 추가
+        for (const char of text) {
+          segments.push({ type: "text", text: char });
+        }
       }
     }
 
@@ -35,7 +38,10 @@ function parseRubyString(input: string): RubySegment[] {
   if (currentIndex < input.length) {
     const text = input.slice(currentIndex);
     if (text) {
-      segments.push({ type: "text", text });
+      // 1글자씩 segment로 추가
+      for (const char of text) {
+        segments.push({ type: "text", text: char });
+      }
     }
   }
 
@@ -44,23 +50,18 @@ function parseRubyString(input: string): RubySegment[] {
 
 function RubyItem({ base, rt }: { base: string; rt: string }) {
   return (
-    <span className="relative inline-block text-center">
-      <span className="inline-block">{base}</span>
-      <span className="absolute -top-[0.3em] left-1/2 -translate-x-1/2 text-[0.5em] leading-none whitespace-nowrap pointer-events-none">
-        {rt}
-      </span>
+    <span className="inline-flex flex-col items-center leading-tight">
+      <span className="text-[0.5em] leading-none whitespace-nowrap">{rt}</span>
+      <span className="whitespace-nowrap">{base}</span>
     </span>
   );
 }
 
 export default function RubyText({ rubyString }: { rubyString: string }) {
-  const segments = parseRubyString(rubyString);
+  const segments = useMemo(() => parseRubyString(rubyString), [rubyString]);
 
   return (
-    <span
-      className="inline-flex flex-wrap items-baseline"
-      style={{ lineHeight: "calc(1em + 0.8em)" }}
-    >
+    <span className="inline-flex flex-wrap items-end">
       {segments.map((segment, index) => {
         if (segment.type === "okurigana") {
           return <RubyItem key={index} base={segment.base} rt={segment.rt} />;

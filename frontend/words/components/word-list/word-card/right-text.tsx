@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { getTextSize } from "./utils";
-import RubyText from "@/frontend/core/components/okurigana-text";
+import RubyText from "@/frontend/core/components/ruby-text";
 
 type RightTextProps = {
   text: string;
