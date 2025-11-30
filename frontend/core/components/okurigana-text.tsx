@@ -1,20 +1,19 @@
 import React from "react";
 
 type RubySegment =
-  | { type: "ruby"; base: string; rt: string }
+  | { type: "okurigana"; base: string; rt: string }
   | { type: "text"; text: string };
 
 function parseRubyString(input: string): RubySegment[] {
   const segments: RubySegment[] = [];
   let currentIndex = 0;
 
-  // ruby 태그 패턴: <ruby>base<rp>(</rp><rt>rt</rt><rp>)</rp></ruby>
-  const rubyRegex =
-    /<ruby>([^<]+)<rp>\(<\/rp><rt>([^<]+)<\/rt><rp>\)<\/rp><\/ruby>/g;
+  // okurigana 패턴: 한자{발음}
+  const rubyRegex = /([\u4E00-\u9FFF]+)\{([^}]+)\}/g;
   let match;
 
   while ((match = rubyRegex.exec(input)) !== null) {
-    // ruby 태그 이전의 일반 텍스트
+    // okurigana 패턴 이전의 일반 텍스트
     if (match.index > currentIndex) {
       const text = input.slice(currentIndex, match.index);
       if (text) {
@@ -22,9 +21,9 @@ function parseRubyString(input: string): RubySegment[] {
       }
     }
 
-    // ruby 태그 내용
+    // okurigana 패턴 내용
     segments.push({
-      type: "ruby",
+      type: "okurigana",
       base: match[1],
       rt: match[2],
     });
@@ -60,7 +59,7 @@ export default function RubyText({ rubyString }: { rubyString: string }) {
   return (
     <span className="inline-flex flex-wrap items-baseline">
       {segments.map((segment, index) => {
-        if (segment.type === "ruby") {
+        if (segment.type === "okurigana") {
           return <RubyItem key={index} base={segment.base} rt={segment.rt} />;
         }
         return (

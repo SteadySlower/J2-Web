@@ -8,7 +8,7 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/frontend/core/components/ui/item";
-import RubyText from "@/frontend/core/components/ruby-text";
+import RubyText from "@/frontend/core/components/okurigana-text";
 
 type SearchResultsProps = {
   results: DictionaryEntryResponse[];
