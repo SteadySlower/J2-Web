@@ -44,9 +44,9 @@ function parseRubyString(input: string): RubySegment[] {
 
 function RubyItem({ base, rt }: { base: string; rt: string }) {
   return (
-    <span className="relative inline-block">
+    <span className="relative inline-block text-center">
       <span className="inline-block">{base}</span>
-      <span className="absolute -top-[0.8em] left-0 right-0 text-[0.5em] leading-none text-center whitespace-nowrap pointer-events-none">
+      <span className="absolute -top-[0.3em] left-1/2 -translate-x-1/2 text-[0.5em] leading-none whitespace-nowrap pointer-events-none">
         {rt}
       </span>
     </span>
@@ -57,7 +57,10 @@ export default function RubyText({ rubyString }: { rubyString: string }) {
   const segments = parseRubyString(rubyString);
 
   return (
-    <span className="inline-flex flex-wrap items-baseline">
+    <span
+      className="inline-flex flex-wrap items-baseline"
+      style={{ lineHeight: "calc(1em + 0.8em)" }}
+    >
       {segments.map((segment, index) => {
         if (segment.type === "okurigana") {
           return <RubyItem key={index} base={segment.base} rt={segment.rt} />;
