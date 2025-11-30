@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { getTextSize } from "./utils";
+import RubyText from "@/frontend/core/components/okurigana-text";
 
 type RightTextProps = {
   text: string;
@@ -12,6 +13,8 @@ export default function RightText({
   isRevealed,
   onReveal,
 }: RightTextProps) {
+  const hasOkurigana = text.includes("{");
+
   return (
     <div className="flex-1 p-6">
       <div
@@ -31,7 +34,7 @@ export default function RightText({
               : undefined
           }
         >
-          {text}
+          {hasOkurigana ? <RubyText rubyString={text} /> : text}
         </span>
         {!isRevealed && (
           <div className="absolute inset-0 bg-gray-300 rounded-md" />

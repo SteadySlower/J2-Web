@@ -47,9 +47,17 @@ export default function WordCard({
   return (
     <Card className="w-full hover:shadow-md transition-shadow">
       <div className="flex pr-6 items-stretch">
-        <LeftText text={showFront ? word.japanese : word.meaning} />
+        <LeftText
+          text={
+            showFront
+              ? isRevealed
+                ? word.pronunciation
+                : word.japanese
+              : word.meaning
+          }
+        />
         <RightText
-          text={showFront ? word.meaning : word.japanese}
+          text={showFront ? word.meaning : word.pronunciation}
           isRevealed={isRevealed}
           onReveal={handleReveal}
         />
