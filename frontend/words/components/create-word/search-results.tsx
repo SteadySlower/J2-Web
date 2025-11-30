@@ -8,13 +8,17 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/frontend/core/components/ui/item";
+import RubyText from "@/frontend/core/components/ruby-text";
 
 type SearchResultsProps = {
   results: DictionaryEntryResponse[];
   onSelected: (result: DictionaryEntryResponse) => void;
 };
 
-export default function SearchResults({ results, onSelected }: SearchResultsProps) {
+export default function SearchResults({
+  results,
+  onSelected,
+}: SearchResultsProps) {
   if (results.length === 0) {
     return null;
   }
@@ -32,9 +36,7 @@ export default function SearchResults({ results, onSelected }: SearchResultsProp
           >
             <ItemContent>
               <ItemTitle>
-                <div
-                  dangerouslySetInnerHTML={{ __html: result.pronunciation }}
-                />
+                <RubyText rubyString={result.pronunciation} />
               </ItemTitle>
               <ItemDescription>{result.meaning}</ItemDescription>
             </ItemContent>
