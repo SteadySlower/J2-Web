@@ -3,10 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import Input from "@/frontend/core/components/form/input";
 import RubyText from "@/frontend/core/components/ruby-text";
+import { parseToEmptyOkurigana } from "@/lib/utils";
 import type {
+  PathValue,
   FieldErrors,
   UseFormRegister,
   UseFormWatch,
+  UseFormSetValue,
   FieldValues,
   Path,
   FieldError,
@@ -16,27 +19,34 @@ type WordFormFieldsProps<T extends FieldValues> = {
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
   watch: UseFormWatch<T>;
+  setValue: UseFormSetValue<T>;
 };
 
 export default function WordFormFields<T extends FieldValues>({
   register,
   errors,
   watch,
+  setValue,
 }: WordFormFieldsProps<T>) {
   const [isJapaneseFocused, setIsJapaneseFocused] = useState(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
   const japaneseValue = watch("japanese" as Path<T>) as string | undefined;
+  const pronunciationValue = watch("pronunciation" as Path<T>) as
+    | string
+    | undefined;
   const showRubyText =
     !isJapaneseFocused && japaneseValue && japaneseValue.trim() !== "";
 
   const japaneseRegister = register("japanese" as Path<T>);
-  const originalOnBlur = japaneseRegister.onBlur;
 
-  useEffect(() => {
-    if (!showRubyText && japaneseInputRef.current) {
-      japaneseInputRef.current.focus();
-    }
-  }, [showRubyText]);
+  const onRubyTextClick = () => {
+    setTimeout(() => {
+      if (japaneseInputRef.current) {
+        japaneseInputRef.current.focus();
+      }
+    }, 0);
+    setIsJapaneseFocused(true);
+  };
 
   return (
     <>
@@ -47,9 +57,9 @@ export default function WordFormFields<T extends FieldValues>({
         {showRubyText ? (
           <div
             className="min-h-10 text-3xl flex items-center cursor-text"
-            onClick={() => setIsJapaneseFocused(true)}
+            onClick={onRubyTextClick}
           >
-            <RubyText rubyString={japaneseValue} />
+            <RubyText rubyString={pronunciationValue ?? ""} />
           </div>
         ) : (
           <Input
@@ -61,7 +71,20 @@ export default function WordFormFields<T extends FieldValues>({
                 japaneseInputRef.current = e;
               },
               onBlur: async (e) => {
-                originalOnBlur(e);
+                japaneseRegister.onBlur(e);
+                const japaneseValue = e.target.value;
+                if (japaneseValue) {
+                  const okurigana = parseToEmptyOkurigana(japaneseValue);
+                  setValue(
+                    "pronunciation" as Path<T>,
+                    okurigana as PathValue<T, Path<T>>
+                  );
+                } else {
+                  setValue(
+                    "pronunciation" as Path<T>,
+                    "" as PathValue<T, Path<T>>
+                  );
+                }
                 setTimeout(() => {
                   setIsJapaneseFocused(false);
                 }, 0);
@@ -82,12 +105,6 @@ export default function WordFormFields<T extends FieldValues>({
         label="의미"
         register={register("meaning" as Path<T>)}
         error={errors.meaning as FieldError | undefined}
-        type="text"
-      />
-      <Input
-        label="발음"
-        register={register("pronunciation" as Path<T>)}
-        error={errors.pronunciation as FieldError | undefined}
         type="text"
       />
     </>

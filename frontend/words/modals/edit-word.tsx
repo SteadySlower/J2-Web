@@ -45,6 +45,7 @@ export default function EditWordModal({
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isDirty },
     reset,
   } = useForm<WordFormData>({
@@ -98,7 +99,12 @@ export default function EditWordModal({
             <DialogTitle>단어 수정</DialogTitle>
           </DialogHeader>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <WordFormFields register={register} errors={errors} watch={watch} />
+            <WordFormFields
+              register={register}
+              errors={errors}
+              watch={watch}
+              setValue={setValue}
+            />
             {updateMutation.isError && (
               <div className="text-destructive mb-4">
                 {(updateMutation.error as Error).message}
