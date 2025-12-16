@@ -1,12 +1,10 @@
 import { z } from "zod";
 import { getAuthToken } from "@/lib/api/utils/auth";
 import type { KanjiResponse } from "@/lib/api/types/kanji";
+import { wordFieldsSchema } from "./word-fields";
 
-export const createWordSchema = z.object({
+export const createWordSchema = wordFieldsSchema.extend({
   bookId: z.string().uuid("단어장 ID는 유효한 UUID 형식이어야 합니다"),
-  japanese: z.string().min(1, "일본어 단어는 필수입니다"),
-  meaning: z.string().min(1, "의미는 필수입니다"),
-  pronunciation: z.string().optional(),
 });
 
 export type CreateWordRequest = z.infer<typeof createWordSchema>;
