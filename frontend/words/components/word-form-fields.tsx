@@ -62,7 +62,9 @@ export default function WordFormFields<T extends FieldValues>({
               },
               onBlur: async (e) => {
                 originalOnBlur(e);
-                setIsJapaneseFocused(false);
+                setTimeout(() => {
+                  setIsJapaneseFocused(false);
+                }, 0);
               },
             }}
             error={errors.japanese as FieldError | undefined}
