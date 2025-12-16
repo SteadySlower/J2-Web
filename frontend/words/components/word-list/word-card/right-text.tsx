@@ -20,7 +20,7 @@ export default function RightText({
       <div
         className={cn(
           getTextSize(text),
-          "h-full text-black flex items-center relative cursor-pointer"
+          "h-full flex items-center relative cursor-pointer"
         )}
         onClick={onReveal}
       >
