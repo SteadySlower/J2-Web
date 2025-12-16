@@ -7,12 +7,13 @@ type LeftTextProps = {
 };
 
 export default function LeftText({ text }: LeftTextProps) {
-  const hasOkurigana = text.includes("{");
+  const safeText = text ?? "";
+  const hasOkurigana = safeText.includes("{");
 
   return (
     <div className="flex-1 p-6 flex items-center justify-center">
-      <p className={cn(getTextSize(text), "font-semibold")}>
-        {hasOkurigana ? <RubyText rubyString={text} /> : text}
+      <p className={cn(getTextSize(safeText), "font-semibold")}>
+        {hasOkurigana ? <RubyText rubyString={safeText} /> : safeText}
       </p>
     </div>
   );
