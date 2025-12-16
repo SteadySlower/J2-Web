@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { Edit } from "lucide-react";
 import Input from "@/frontend/core/components/form/input";
-import RubyText from "@/frontend/core/components/ruby-text";
+import EditableRubyText from "@/frontend/ruby/components/editable-ruby-text";
 import { parseToEmptyOkurigana } from "@/lib/utils";
 import type {
   PathValue,
@@ -36,7 +37,7 @@ export default function WordFormFields<T extends FieldValues>({
 
   const japaneseRegister = register("japanese" as Path<T>);
 
-  const onRubyTextClick = () => {
+  const onRubyEditButtonClick = () => {
     setTimeout(() => {
       if (japaneseInputRef.current) {
         japaneseInputRef.current.focus();
@@ -48,15 +49,29 @@ export default function WordFormFields<T extends FieldValues>({
   return (
     <>
       <div className="mb-4 flex flex-col gap-2">
-        <label htmlFor="japanese" className="text-sm font-medium">
-          일본어
-        </label>
+        <div className="flex items-center gap-2">
+          <label htmlFor="japanese" className="text-sm font-medium">
+            일본어
+          </label>
+          {showRubyText && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onRubyEditButtonClick();
+              }}
+              className="w-4 h-4 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer text-gray-400 hover:text-gray-600"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+          )}
+        </div>
         {showRubyText ? (
-          <div
-            className="min-h-10 text-3xl flex items-center cursor-text"
-            onClick={onRubyTextClick}
-          >
-            <RubyText rubyString={pronunciationValue ?? ""} />
+          <div className="min-h-10 text-3xl flex items-center cursor-text">
+            <EditableRubyText
+              rubyString={pronunciationValue ?? ""}
+              onRtChange={console.log}
+            />
           </div>
         ) : (
           <Input

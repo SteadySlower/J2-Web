@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { getTextSize } from "./utils";
-import RubyText from "@/frontend/core/components/ruby-text";
+import RubyText from "@/frontend/ruby/components/ruby-text";
 
 type LeftTextProps = {
   text: string;
