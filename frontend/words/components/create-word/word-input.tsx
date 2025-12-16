@@ -34,6 +34,7 @@ export default function WordInput({
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = form;
 
@@ -43,7 +44,7 @@ export default function WordInput({
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <WordFormFields register={register} errors={errors} />
+      <WordFormFields register={register} errors={errors} watch={watch} />
       {createMutation.isError && (
         <div className="text-destructive mb-4">
           {(createMutation.error as Error).message}
