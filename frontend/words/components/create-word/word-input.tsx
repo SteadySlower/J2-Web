@@ -31,26 +31,13 @@ export default function WordInput({
   onSubmit,
   onClose,
 }: WordInputProps) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = form;
-
   const handleClose = () => {
     onClose();
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <WordFormFields
-        register={register}
-        errors={errors}
-        watch={watch}
-        setValue={setValue}
-      />
+    <Form onSubmit={form.handleSubmit(onSubmit)}>
+      <WordFormFields form={form} />
       {createMutation.isError && (
         <div className="text-destructive mb-4">
           {(createMutation.error as Error).message}

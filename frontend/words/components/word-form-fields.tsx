@@ -1,33 +1,30 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Input from "@/frontend/core/components/form/input";
 import RubyText from "@/frontend/core/components/ruby-text";
 import { parseToEmptyOkurigana } from "@/lib/utils";
 import type {
   PathValue,
-  FieldErrors,
-  UseFormRegister,
-  UseFormWatch,
-  UseFormSetValue,
+  UseFormReturn,
   FieldValues,
   Path,
   FieldError,
 } from "react-hook-form";
 
 type WordFormFieldsProps<T extends FieldValues> = {
-  register: UseFormRegister<T>;
-  errors: FieldErrors<T>;
-  watch: UseFormWatch<T>;
-  setValue: UseFormSetValue<T>;
+  form: UseFormReturn<T>;
 };
 
 export default function WordFormFields<T extends FieldValues>({
-  register,
-  errors,
-  watch,
-  setValue,
+  form,
 }: WordFormFieldsProps<T>) {
+  const {
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
   const [isJapaneseFocused, setIsJapaneseFocused] = useState(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
   const japaneseValue = watch("japanese" as Path<T>) as string | undefined;
