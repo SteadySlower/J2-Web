@@ -67,7 +67,7 @@ export default function WordFormFields<T extends FieldValues>({
           )}
         </div>
         {showRubyText ? (
-          <div className="min-h-10 text-3xl flex items-center cursor-text">
+          <div className="text-3xl flex items-center cursor-text">
             <EditableRubyText
               rubyString={pronunciationValue ?? ""}
               onRtChange={(newRt) => {
@@ -108,13 +108,12 @@ export default function WordFormFields<T extends FieldValues>({
                 }, 0);
               },
             }}
-            error={errors.japanese as FieldError | undefined}
             type="text"
             onFocus={() => setIsJapaneseFocused(true)}
           />
         )}
-        {errors.japanese && showRubyText && (
-          <div className="text-sm text-destructive mt-1">
+        {errors.japanese && (
+          <div className="text-sm text-destructive">
             {(errors.japanese as FieldError).message}
           </div>
         )}
