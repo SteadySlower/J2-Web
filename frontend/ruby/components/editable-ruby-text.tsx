@@ -1,6 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipArrow,
+} from "@/frontend/core/components/ui/tooltip";
 import { parseRubyString, segmentsToRubyString } from "../utils";
 import type { RubySegment } from "../types";
 
@@ -90,7 +96,7 @@ export default function EditableRubyText({
             );
           }
 
-          return (
+          const rubyItem = (
             <span
               key={index}
               onClick={() => handleRubyItemClick(index, segment.rt)}
@@ -101,6 +107,16 @@ export default function EditableRubyText({
               </span>
               <span className="whitespace-nowrap">{segment.base}</span>
             </span>
+          );
+
+          return (
+            <Tooltip key={index}>
+              <TooltipTrigger asChild>{rubyItem}</TooltipTrigger>
+              <TooltipContent side="top">
+                <p>{`${segment.base} 발음 수정`}</p>
+                <TooltipArrow />
+              </TooltipContent>
+            </Tooltip>
           );
         }
 
