@@ -70,7 +70,13 @@ export default function WordFormFields<T extends FieldValues>({
           <div className="min-h-10 text-3xl flex items-center cursor-text">
             <EditableRubyText
               rubyString={pronunciationValue ?? ""}
-              onRtChange={console.log}
+              onRtChange={(newRt) => {
+                setValue(
+                  "pronunciation" as Path<T>,
+                  newRt as PathValue<T, Path<T>>,
+                  { shouldDirty: true }
+                );
+              }}
             />
           </div>
         ) : (
