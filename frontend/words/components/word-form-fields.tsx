@@ -55,6 +55,7 @@ export default function WordFormFields<T extends FieldValues>({
           </label>
           {showRubyText && (
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
