@@ -67,6 +67,34 @@ export default function EditableRubyText({
     } else if (e.key === "Escape") {
       e.preventDefault();
       handleCancel();
+    } else if (e.key === "{" || e.key === "}") {
+      e.preventDefault();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const filteredValue = e.target.value.replace(/[{}]/g, "");
+    setTempRt(filteredValue);
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = e.clipboardData.getData("text");
+    if (pastedText.includes("{") || pastedText.includes("}")) {
+      e.preventDefault();
+      const filteredText = pastedText.replace(/[{}]/g, "");
+      const input = e.currentTarget;
+      const start = input.selectionStart || 0;
+      const end = input.selectionEnd || 0;
+      const currentValue = tempRt;
+      const newValue =
+        currentValue.slice(0, start) + filteredText + currentValue.slice(end);
+      setTempRt(newValue);
+      setTimeout(() => {
+        input.setSelectionRange(
+          start + filteredText.length,
+          start + filteredText.length
+        );
+      }, 0);
     }
   };
 
@@ -86,9 +114,10 @@ export default function EditableRubyText({
                   ref={inputRef}
                   type="text"
                   value={tempRt}
-                  onChange={(e) => setTempRt(e.target.value)}
+                  onChange={handleChange}
                   onBlur={handleSave}
                   onKeyDown={handleKeyDown}
+                  onPaste={handlePaste}
                   className="text-[0.5em] leading-none whitespace-nowrap w-16 px-1 py-0.5 border border-primary rounded bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
                 />
                 <span className="whitespace-nowrap">{segment.base}</span>
