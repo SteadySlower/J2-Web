@@ -24,6 +24,7 @@ export default function WordFormFields<T extends FieldValues>({
     register,
     watch,
     setValue,
+    trigger,
     formState: { errors },
   } = form;
   const [isJapaneseFocused, setIsJapaneseFocused] = useState(false);
@@ -42,6 +43,7 @@ export default function WordFormFields<T extends FieldValues>({
   const updatePronunciation = (value: string) => {
     setValue("pronunciation" as Path<T>, value as PathValue<T, Path<T>>, {
       shouldDirty: true,
+      shouldValidate: true,
     });
   };
 
@@ -113,16 +115,18 @@ export default function WordFormFields<T extends FieldValues>({
                 japaneseInputRef.current = e;
               },
               onBlur: async (e) => {
-                japaneseRegister.onBlur(e);
+                await japaneseRegister.onBlur(e);
                 onJapaneseEditEnded(e.target.value);
+                await trigger("japanese" as Path<T>);
               },
             }}
             type="text"
             onFocus={() => setIsJapaneseFocused(true)}
-            onKeyDown={(e) => {
+            onKeyDown={async (e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 onJapaneseEditEnded(e.currentTarget.value);
+                await trigger("japanese" as Path<T>);
               }
             }}
           />
