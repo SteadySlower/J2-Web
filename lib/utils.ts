@@ -11,3 +11,8 @@ export function parseToEmptyOkurigana(input: string): string {
     return `${match}{???}`;
   });
 }
+
+export function containsKanji(input: string): boolean {
+  const kanjiRegex = /[\u4E00-\u9FFF]/;
+  return kanjiRegex.test(input);
+}

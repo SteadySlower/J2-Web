@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Edit } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Edit, Loader2 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 import Input from "@/frontend/core/components/form/input";
 import EditableRubyText from "@/frontend/ruby/components/editable-ruby-text";
-import { parseToEmptyOkurigana } from "@/lib/utils";
+import { getPronunciation } from "@/lib/api/dictionary/get-pronunciation";
+import { containsKanji, parseToEmptyOkurigana } from "@/lib/utils";
 import type {
   PathValue,
   UseFormReturn,
@@ -29,7 +32,9 @@ export default function WordFormFields<T extends FieldValues>({
     trigger,
     formState: { errors },
   } = form;
+  const queryClient = useQueryClient();
   const [isJapaneseFocused, setIsJapaneseFocused] = useState(false);
+  const [isLoadingPronunciation, setIsLoadingPronunciation] = useState(false);
   const isComposingRef = useRef(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
   const meaningInputRef = useRef<HTMLInputElement>(null);
@@ -40,19 +45,22 @@ export default function WordFormFields<T extends FieldValues>({
   const showRubyText =
     !isJapaneseFocused && japaneseValue && japaneseValue.trim() !== "";
 
+  const updatePronunciation = useCallback(
+    (value: string) => {
+      setValue("pronunciation" as Path<T>, value as PathValue<T, Path<T>>, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    },
+    [setValue]
+  );
+
   useEffect(() => {
     onJapaneseEditingChanged?.(isJapaneseFocused);
   }, [isJapaneseFocused, onJapaneseEditingChanged]);
 
   const japaneseRegister = register("japanese" as Path<T>);
   const meaningRegister = register("meaning" as Path<T>);
-
-  const updatePronunciation = (value: string) => {
-    setValue("pronunciation" as Path<T>, value as PathValue<T, Path<T>>, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-  };
 
   const toEditJapanese = () => {
     setTimeout(() => {
@@ -72,12 +80,27 @@ export default function WordFormFields<T extends FieldValues>({
     }, 0);
   };
 
-  const onJapaneseEditEnded = (value: string) => {
-    if (value) {
-      const okurigana = parseToEmptyOkurigana(value);
-      updatePronunciation(okurigana);
-    } else {
+  const onJapaneseEditEnded = async (value: string) => {
+    if (!value) {
       updatePronunciation("");
+    } else if (containsKanji(value)) {
+      setIsLoadingPronunciation(true);
+      try {
+        const pronunciation = await queryClient.fetchQuery({
+          queryKey: ["dictionary", "pronunciation", value],
+          queryFn: () => getPronunciation(value),
+        });
+        updatePronunciation(pronunciation);
+      } catch {
+        // 에러 발생 시 parseToEmptyOkurigana 사용
+        const fallbackPronunciation = parseToEmptyOkurigana(value);
+        updatePronunciation(fallbackPronunciation);
+        toast.error("발음 조회에 실패했습니다. 기본 발음으로 설정되었습니다.");
+      } finally {
+        setIsLoadingPronunciation(false);
+      }
+    } else {
+      updatePronunciation(value);
     }
     setTimeout(() => {
       setIsJapaneseFocused(false);
@@ -85,7 +108,12 @@ export default function WordFormFields<T extends FieldValues>({
   };
 
   return (
-    <>
+    <div className="relative">
+      {isLoadingPronunciation && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      )}
       <div className="mb-4 flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <label htmlFor="japanese" className="text-sm font-medium">
@@ -168,6 +196,6 @@ export default function WordFormFields<T extends FieldValues>({
           }
         }}
       />
-    </>
+    </div>
   );
 }
