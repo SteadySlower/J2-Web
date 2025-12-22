@@ -28,6 +28,7 @@ export default function WordFormFields<T extends FieldValues>({
   } = form;
   const [isJapaneseFocused, setIsJapaneseFocused] = useState(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
+  const meaningInputRef = useRef<HTMLInputElement>(null);
   const japaneseValue = watch("japanese" as Path<T>) as string | undefined;
   const pronunciationValue = watch("pronunciation" as Path<T>) as
     | string
@@ -36,14 +37,42 @@ export default function WordFormFields<T extends FieldValues>({
     !isJapaneseFocused && japaneseValue && japaneseValue.trim() !== "";
 
   const japaneseRegister = register("japanese" as Path<T>);
+  const meaningRegister = register("meaning" as Path<T>);
 
-  const onRubyEditButtonClick = () => {
+  const updatePronunciation = (value: string) => {
+    setValue("pronunciation" as Path<T>, value as PathValue<T, Path<T>>, {
+      shouldDirty: true,
+    });
+  };
+
+  const toEditJapanese = () => {
     setTimeout(() => {
       if (japaneseInputRef.current) {
         japaneseInputRef.current.focus();
       }
     }, 0);
     setIsJapaneseFocused(true);
+  };
+
+  const onRubyTextChanged = (newRt: string) => {
+    updatePronunciation(newRt);
+    setTimeout(() => {
+      if (meaningInputRef.current) {
+        meaningInputRef.current.focus();
+      }
+    }, 0);
+  };
+
+  const onJapaneseEditEnded = (value: string) => {
+    if (value) {
+      const okurigana = parseToEmptyOkurigana(value);
+      updatePronunciation(okurigana);
+    } else {
+      updatePronunciation("");
+    }
+    setTimeout(() => {
+      setIsJapaneseFocused(false);
+    }, 0);
   };
 
   return (
@@ -59,7 +88,7 @@ export default function WordFormFields<T extends FieldValues>({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                onRubyEditButtonClick();
+                toEditJapanese();
               }}
               className="w-4 h-4 flex items-center justify-center hover:scale-110 transition-transform cursor-pointer text-gray-400 hover:text-gray-600"
             >
@@ -71,13 +100,7 @@ export default function WordFormFields<T extends FieldValues>({
           <div className="text-3xl flex items-center cursor-text">
             <EditableRubyText
               rubyString={pronunciationValue ?? ""}
-              onRtChange={(newRt) => {
-                setValue(
-                  "pronunciation" as Path<T>,
-                  newRt as PathValue<T, Path<T>>,
-                  { shouldDirty: true }
-                );
-              }}
+              onRtChange={onRubyTextChanged}
             />
           </div>
         ) : (
@@ -91,26 +114,17 @@ export default function WordFormFields<T extends FieldValues>({
               },
               onBlur: async (e) => {
                 japaneseRegister.onBlur(e);
-                const japaneseValue = e.target.value;
-                if (japaneseValue) {
-                  const okurigana = parseToEmptyOkurigana(japaneseValue);
-                  setValue(
-                    "pronunciation" as Path<T>,
-                    okurigana as PathValue<T, Path<T>>
-                  );
-                } else {
-                  setValue(
-                    "pronunciation" as Path<T>,
-                    "" as PathValue<T, Path<T>>
-                  );
-                }
-                setTimeout(() => {
-                  setIsJapaneseFocused(false);
-                }, 0);
+                onJapaneseEditEnded(e.target.value);
               },
             }}
             type="text"
             onFocus={() => setIsJapaneseFocused(true)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                onJapaneseEditEnded(e.currentTarget.value);
+              }
+            }}
           />
         )}
         {errors.japanese && (
@@ -121,9 +135,21 @@ export default function WordFormFields<T extends FieldValues>({
       </div>
       <Input
         label="의미"
-        register={register("meaning" as Path<T>)}
+        register={{
+          ...meaningRegister,
+          ref: (e: HTMLInputElement | null) => {
+            meaningRegister.ref(e);
+            meaningInputRef.current = e;
+          },
+        }}
         error={errors.meaning as FieldError | undefined}
         type="text"
+        onKeyDown={(e) => {
+          if (e.key === "Tab" && e.shiftKey) {
+            e.preventDefault();
+            toEditJapanese();
+          }
+        }}
       />
     </>
   );
