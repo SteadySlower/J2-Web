@@ -23,6 +23,7 @@ export default function EditableRubyText({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [tempRt, setTempRt] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const isComposingRef = useRef(false);
 
   useEffect(() => {
     if (editingIndex !== null && inputRef.current) {
@@ -61,7 +62,7 @@ export default function EditableRubyText({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !isComposingRef.current) {
       e.preventDefault();
       handleSave();
     } else if (e.key === "Escape") {
@@ -116,6 +117,12 @@ export default function EditableRubyText({
                   value={tempRt}
                   onChange={handleChange}
                   onBlur={handleSave}
+                  onCompositionStart={() => {
+                    isComposingRef.current = true;
+                  }}
+                  onCompositionEnd={() => {
+                    isComposingRef.current = false;
+                  }}
                   onKeyDown={handleKeyDown}
                   onPaste={handlePaste}
                   className="text-[0.5em] leading-none whitespace-nowrap w-16 px-1 py-0.5 border border-primary rounded bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1"
