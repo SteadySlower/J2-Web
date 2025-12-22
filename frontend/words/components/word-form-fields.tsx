@@ -28,6 +28,7 @@ export default function WordFormFields<T extends FieldValues>({
     formState: { errors },
   } = form;
   const [isJapaneseFocused, setIsJapaneseFocused] = useState(false);
+  const isComposingRef = useRef(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
   const meaningInputRef = useRef<HTMLInputElement>(null);
   const japaneseValue = watch("japanese" as Path<T>) as string | undefined;
@@ -122,8 +123,14 @@ export default function WordFormFields<T extends FieldValues>({
             }}
             type="text"
             onFocus={() => setIsJapaneseFocused(true)}
+            onCompositionStart={() => {
+              isComposingRef.current = true;
+            }}
+            onCompositionEnd={() => {
+              isComposingRef.current = false;
+            }}
             onKeyDown={async (e) => {
-              if (e.key === "Enter") {
+              if (e.key === "Enter" && !isComposingRef.current) {
                 e.preventDefault();
                 onJapaneseEditEnded(e.currentTarget.value);
                 await trigger("japanese" as Path<T>);
