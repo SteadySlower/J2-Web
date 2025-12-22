@@ -50,6 +50,8 @@ export default function EditWordModal({
     },
   });
 
+  const [isJapaneseEditing, setIsJapaneseEditing] = useState(false);
+
   const {
     handleSubmit,
     formState: { isDirty },
@@ -98,7 +100,10 @@ export default function EditWordModal({
             <DialogTitle>단어 수정</DialogTitle>
           </DialogHeader>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <WordFormFields form={form} />
+            <WordFormFields
+              form={form}
+              onJapaneseEditingChanged={setIsJapaneseEditing}
+            />
             {updateMutation.isError && (
               <div className="text-destructive mb-4">
                 {(updateMutation.error as Error).message}
@@ -108,7 +113,7 @@ export default function EditWordModal({
               <CancelButton onClick={handleClose} />
               <SubmitButton
                 isLoading={updateMutation.isPending}
-                disabled={!isDirty}
+                disabled={!isDirty || isJapaneseEditing}
                 loadingText="수정 중..."
               >
                 수정

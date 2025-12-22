@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Edit } from "lucide-react";
 import Input from "@/frontend/core/components/form/input";
 import EditableRubyText from "@/frontend/ruby/components/editable-ruby-text";
@@ -15,10 +15,12 @@ import type {
 
 type WordFormFieldsProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
+  onJapaneseEditingChanged?: (isEditing: boolean) => void;
 };
 
 export default function WordFormFields<T extends FieldValues>({
   form,
+  onJapaneseEditingChanged,
 }: WordFormFieldsProps<T>) {
   const {
     register,
@@ -37,6 +39,10 @@ export default function WordFormFields<T extends FieldValues>({
     | undefined;
   const showRubyText =
     !isJapaneseFocused && japaneseValue && japaneseValue.trim() !== "";
+
+  useEffect(() => {
+    onJapaneseEditingChanged?.(isJapaneseFocused);
+  }, [isJapaneseFocused, onJapaneseEditingChanged]);
 
   const japaneseRegister = register("japanese" as Path<T>);
   const meaningRegister = register("meaning" as Path<T>);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import Form from "@/frontend/core/components/form/form";
 import SubmitButton from "@/frontend/core/components/form/submit-button";
@@ -31,13 +32,18 @@ export default function WordInput({
   onSubmit,
   onClose,
 }: WordInputProps) {
+  const [isJapaneseEditing, setIsJapaneseEditing] = useState(false);
+
   const handleClose = () => {
     onClose();
   };
 
   return (
     <Form onSubmit={form.handleSubmit(onSubmit)}>
-      <WordFormFields form={form} />
+      <WordFormFields
+        form={form}
+        onJapaneseEditingChanged={setIsJapaneseEditing}
+      />
       {createMutation.isError && (
         <div className="text-destructive mb-4">
           {(createMutation.error as Error).message}
@@ -47,6 +53,7 @@ export default function WordInput({
         <CancelButton onClick={handleClose} />
         <SubmitButton
           isLoading={createMutation.isPending}
+          disabled={isJapaneseEditing}
           loadingText="생성 중..."
         >
           생성
