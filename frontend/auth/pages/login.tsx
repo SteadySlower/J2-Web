@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/frontend/auth/hooks/useAuth";
 
 export default function LoginPage() {
   const { signInWithOAuth, isLoading } = useAuth();

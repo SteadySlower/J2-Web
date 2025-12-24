@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/frontend/auth/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import WordBookCard from "./card";
 import EditWordBookModal from "@/frontend/word-book/modals/edit-wordbook";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 
 type WordBookListProps = {
   wordbooks: WordBook[];

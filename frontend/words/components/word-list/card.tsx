@@ -1,6 +1,6 @@
 "use client";
 
-import type { Word } from "@/lib/types/word";
+import type { Word } from "@/frontend/core/types/word";
 import { Card } from "@/frontend/core/components/ui/card";
 import LeftText from "./word-card/left-text";
 import CheckButton from "./word-card/check-button";

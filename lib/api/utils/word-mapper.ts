@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import type { KanjiResponse } from "@/lib/api/types/kanji";
-import type { Kanji } from "@/lib/types/kanji";
-import type { Word } from "@/lib/types/word";
+import type { Kanji } from "@/frontend/core/types/kanji";
+import type { Word } from "@/frontend/core/types/word";
 
 export function mapKanjiResponseToKanji(kanji: KanjiResponse): Kanji {
   return {

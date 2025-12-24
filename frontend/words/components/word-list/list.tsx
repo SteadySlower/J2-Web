@@ -3,7 +3,7 @@
 import { useState } from "react";
 import WordCard from "./card";
 import EditWordModal from "@/frontend/words/modals/edit-word";
-import type { Word } from "@/lib/types/word";
+import type { Word } from "@/frontend/core/types/word";
 import KanjisModal from "@/frontend/words/modals/kanjis";
 
 type WordListProps = {

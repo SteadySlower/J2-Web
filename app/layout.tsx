@@ -1,4 +1,4 @@
-import QueryProvider from "@/frontend/providers/QueryProvider";
+import QueryProvider from "@/frontend/core/providers/QueryProvider";
 import { TooltipProvider } from "@/frontend/core/components/ui/tooltip";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";

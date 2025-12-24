@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/frontend/core/components/ui/card";
 import EditButton from "@/frontend/core/components/edit-button";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 

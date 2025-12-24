@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toggleWordStatus } from "@/lib/api/words/toggle-status";
-import type { WordBookDetail } from "@/lib/types/word-books";
+import type { WordBookDetail } from "@/frontend/core/types/word-books";
 
 type UseToggleWordStatusOptions = {
   wordId: string;
@@ -44,4 +44,3 @@ export function useToggleWordStatus({
     },
   });
 }
-

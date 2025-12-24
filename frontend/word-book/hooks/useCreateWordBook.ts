@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 import { createWordBook } from "@/lib/api/word-books/create-book";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 
 type UseCreateWordBookOptions = {
   onSuccess?: () => void;

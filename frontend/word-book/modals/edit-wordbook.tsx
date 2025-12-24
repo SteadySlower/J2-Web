@@ -21,7 +21,7 @@ import {
 } from "@/lib/api/word-books/update-book";
 import { useUpdateWordBook } from "@/frontend/word-book/hooks/useUpdateWordBook";
 import { useDeleteWordBook } from "@/frontend/word-book/hooks/useDeleteWordBook";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 
 type WordBookFormData = UpdateWordBookRequest;
 

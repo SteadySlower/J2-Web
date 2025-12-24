@@ -7,7 +7,7 @@ import {
   updateWordBook,
   type UpdateWordBookRequest,
 } from "@/lib/api/word-books/update-book";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 
 type UseUpdateWordBookOptions = {
   wordbookId: string;

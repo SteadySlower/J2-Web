@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 
 type WordBookResponse = {
   id: string;

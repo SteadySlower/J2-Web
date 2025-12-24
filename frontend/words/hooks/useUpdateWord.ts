@@ -7,7 +7,7 @@ import {
   updateWord,
   type UpdateWordRequest,
 } from "@/lib/api/words/update-word";
-import type { WordBookDetail } from "@/lib/types/word-books";
+import type { WordBookDetail } from "@/frontend/core/types/word-books";
 import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
 
 type UseUpdateWordOptions = {

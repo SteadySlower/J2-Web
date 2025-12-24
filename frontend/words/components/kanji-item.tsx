@@ -1,4 +1,4 @@
-import type { Kanji } from "@/lib/types/kanji";
+import type { Kanji } from "@/frontend/core/types/kanji";
 
 type KanjiItemProps = {
   kanji: Kanji;

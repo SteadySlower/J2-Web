@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { deleteWordBook } from "@/lib/api/word-books/delete-book";
-import type { WordBook } from "@/lib/types/word-books";
+import type { WordBook } from "@/frontend/core/types/word-books";
 
 type UseDeleteWordBookOptions = {
   wordbookId: string;

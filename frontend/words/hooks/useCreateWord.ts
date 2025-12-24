@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 import { createWord } from "@/lib/api/words/create-word";
-import type { WordBookDetail } from "@/lib/types/word-books";
-import type { Word } from "@/lib/types/word";
+import type { WordBookDetail } from "@/frontend/core/types/word-books";
+import type { Word } from "@/frontend/core/types/word";
 import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
 
 type UseCreateWordOptions = {

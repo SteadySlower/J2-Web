@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/frontend/core/components/ui/dialog";
 import KanjiList from "@/frontend/words/components/kanji-list";
-import type { Word } from "@/lib/types/word";
+import type { Word } from "@/frontend/core/types/word";
 
 type KanjisModalProps = {
   isOpen: boolean;
