@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Edit, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -38,10 +38,14 @@ export default function WordFormFields<T extends FieldValues>({
   const isComposingRef = useRef(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
   const meaningInputRef = useRef<HTMLInputElement>(null);
-  const japaneseValue = watch("japanese" as Path<T>) as string | undefined;
-  const pronunciationValue = watch("pronunciation" as Path<T>) as
-    | string
-    | undefined;
+  const japaneseValue = useMemo(
+    () => watch("japanese" as Path<T>) as string | undefined,
+    [watch]
+  );
+  const pronunciationValue = useMemo(
+    () => watch("pronunciation" as Path<T>) as string | undefined,
+    [watch]
+  );
   const showRubyText =
     !isJapaneseFocused && japaneseValue && japaneseValue.trim() !== "";
 
@@ -59,8 +63,14 @@ export default function WordFormFields<T extends FieldValues>({
     onJapaneseEditingChanged?.(isJapaneseFocused);
   }, [isJapaneseFocused, onJapaneseEditingChanged]);
 
-  const japaneseRegister = register("japanese" as Path<T>);
-  const meaningRegister = register("meaning" as Path<T>);
+  const japaneseRegister = useMemo(
+    () => register("japanese" as Path<T>),
+    [register]
+  );
+  const meaningRegister = useMemo(
+    () => register("meaning" as Path<T>),
+    [register]
+  );
 
   const toEditJapanese = () => {
     setTimeout(() => {
@@ -156,6 +166,7 @@ export default function WordFormFields<T extends FieldValues>({
               },
             }}
             type="text"
+            maxLength={100}
             onFocus={() => setIsJapaneseFocused(true)}
             onCompositionStart={() => {
               isComposingRef.current = true;
@@ -189,6 +200,7 @@ export default function WordFormFields<T extends FieldValues>({
         }}
         error={errors.meaning as FieldError | undefined}
         type="text"
+        maxLength={100}
         onKeyDown={(e) => {
           if (e.key === "Tab" && e.shiftKey) {
             e.preventDefault();
