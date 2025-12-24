@@ -151,7 +151,7 @@ export default function WordFormFields<T extends FieldValues>({
               },
               onBlur: async (e) => {
                 await japaneseRegister.onBlur(e);
-                onJapaneseEditEnded(e.target.value);
+                await onJapaneseEditEnded(e.target.value);
                 await trigger("japanese" as Path<T>);
               },
             }}
@@ -166,7 +166,7 @@ export default function WordFormFields<T extends FieldValues>({
             onKeyDown={async (e) => {
               if (e.key === "Enter" && !isComposingRef.current) {
                 e.preventDefault();
-                onJapaneseEditEnded(e.currentTarget.value);
+                await onJapaneseEditEnded(e.currentTarget.value);
                 await trigger("japanese" as Path<T>);
               }
             }}
