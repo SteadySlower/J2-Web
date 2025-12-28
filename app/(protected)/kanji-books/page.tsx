@@ -1,4 +1,5 @@
-export default function KanjiBooksPage() {
-  return <div>한자장 목록</div>;
-}
+import KanjiBookList from "@/frontend/kanji-book/pages/kanjibook-list";
 
+export default function KanjiBooksPage() {
+  return <KanjiBookList />;
+}
