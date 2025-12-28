@@ -42,54 +42,56 @@ export default function KanjiCard({
       className="hover:shadow-md transition-shadow cursor-pointer"
       onClick={handleReveal}
     >
-      <div className="flex flex-col items-center justify-center p-6 gap-4 relative">
-        <div className="relative w-fit mx-auto">
-          <div
-            className={cn(
-              "text-6xl font-bold text-center transition-opacity inline-block",
-              showFront ? "" : isRevealed && "fade-in-up"
-            )}
-            style={
-              !showFront && isRevealed
-                ? {
-                    animation: "fadeInUp 0.5s ease-out",
-                  }
-                : undefined
-            }
-          >
-            {kanji.character}
-          </div>
-          {showFront === false && !isRevealed && (
-            <div className="absolute -inset-1 bg-gray-300 rounded-md" />
-          )}
-        </div>
-        <div className="relative w-full">
-          <div
-            className={cn(
-              "text-lg text-center transition-opacity",
-              showFront ? isRevealed && "fade-in-up" : ""
-            )}
-            style={
-              showFront && isRevealed
-                ? {
-                    animation: "fadeInUp 0.5s ease-out",
-                  }
-                : undefined
-            }
-          >
-            <div>{kanji.meaning}</div>
-            {(kanji.onReading || kanji.kunReading) && (
-              <div className="mt-2 text-sm text-muted-foreground space-y-1">
-                {kanji.onReading && <div>음독: {kanji.onReading}</div>}
-                {kanji.kunReading && <div>훈독: {kanji.kunReading}</div>}
-              </div>
+      <div className="h-full flex flex-col justify-between">
+        <div className="flex flex-col items-center justify-center p-6 gap-4 relative">
+          <div className="relative w-fit mx-auto">
+            <div
+              className={cn(
+                "text-6xl font-bold text-center transition-opacity inline-block",
+                showFront ? "" : isRevealed && "fade-in-up"
+              )}
+              style={
+                !showFront && isRevealed
+                  ? {
+                      animation: "fadeInUp 0.5s ease-out",
+                    }
+                  : undefined
+              }
+            >
+              {kanji.character}
+            </div>
+            {showFront === false && !isRevealed && (
+              <div className="absolute -inset-1 bg-gray-300 rounded-md" />
             )}
           </div>
-          {showFront === true && !isRevealed && (
-            <div className="absolute inset-0 bg-gray-300 rounded-md" />
-          )}
+          <div className="relative w-full">
+            <div
+              className={cn(
+                "text-lg text-center transition-opacity",
+                showFront ? isRevealed && "fade-in-up" : ""
+              )}
+              style={
+                showFront && isRevealed
+                  ? {
+                      animation: "fadeInUp 0.5s ease-out",
+                    }
+                  : undefined
+              }
+            >
+              <div>{kanji.meaning}</div>
+              {(kanji.onReading || kanji.kunReading) && (
+                <div className="mt-2 text-sm text-muted-foreground space-y-1">
+                  {kanji.onReading && <div>음독: {kanji.onReading}</div>}
+                  {kanji.kunReading && <div>훈독: {kanji.kunReading}</div>}
+                </div>
+              )}
+            </div>
+            {showFront === true && !isRevealed && (
+              <div className="absolute inset-0 bg-gray-300 rounded-md" />
+            )}
+          </div>
         </div>
-        <div className="flex gap-2 justify-center items-center">
+        <div className="flex gap-2 justify-center items-center pb-3">
           <CheckButton
             tooptipText={
               kanji.status === "learning" ? "완료 체크" : "체크 취소"
