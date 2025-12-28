@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import KanjiList from "@/frontend/kanjis/components/list";
+import CreateKanjiModal from "@/frontend/kanjis/modals/create-kanji";
 import FloatingButtons from "@/frontend/core/components/units/floating-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { getKanjiBookDetail } from "@/lib/api/kanji-books/get-book-detail";
@@ -13,6 +14,7 @@ type KanjiBookDetailProps = {
 };
 
 export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [shuffledKanjiIds, setShuffledKanjiIds] = useState<string[]>([]);
   const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({});
   const searchParams = useSearchParams();
@@ -42,6 +44,13 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
       ...prev,
       [kanjiId]: !prev[kanjiId],
     }));
+  };
+
+  const handleKanjiCreated = (id: string) => {
+    setShuffledKanjiIds((prev) => {
+      if (prev.length === 0) return prev;
+      return [id, ...prev];
+    });
   };
 
   const handleFilterChange = () => {
@@ -96,7 +105,12 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
         onToggleShowFront={handleToggleShowFront}
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
-        onAddWord={() => {}}
+        onAddWord={() => setIsModalOpen(true)}
+      />
+      <CreateKanjiModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreated={handleKanjiCreated}
       />
     </div>
   );

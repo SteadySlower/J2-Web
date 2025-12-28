@@ -2,11 +2,26 @@ import { z } from "zod";
 import { getAuthToken } from "@/lib/api/utils/auth";
 
 export const createKanjiSchema = z.object({
-  kanji_book_id: z.string().uuid("한자장 ID는 유효한 UUID 형식이어야 합니다").optional(),
-  character: z.string().min(1, "한자 문자는 필수입니다"),
-  meaning: z.string().min(1, "의미는 필수입니다"),
-  on_reading: z.string().nullable().optional(),
-  kun_reading: z.string().nullable().optional(),
+  kanji_book_id: z
+    .string()
+    .uuid("한자장 ID는 유효한 UUID 형식이어야 합니다")
+    .optional(),
+  character: z
+    .string()
+    .min(1, "한자 문자는 필수입니다")
+    .max(1, "한자 문자는 최대 1자까지 입력 가능합니다"),
+  meaning: z
+    .string()
+    .min(1, "의미는 필수입니다")
+    .max(100, "의미는 최대 100자까지 입력 가능합니다"),
+  on_reading: z
+    .string()
+    .max(50, "음독은 최대 50자까지 입력 가능합니다")
+    .optional(),
+  kun_reading: z
+    .string()
+    .max(50, "훈독은 최대 50자까지 입력 가능합니다")
+    .optional(),
 });
 
 export type CreateKanjiRequest = z.infer<typeof createKanjiSchema>;
@@ -66,4 +81,3 @@ export async function createKanji(
   const result: { data: CreateKanjiResponse } = await response.json();
   return result.data;
 }
-
