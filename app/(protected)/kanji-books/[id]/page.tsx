@@ -1,8 +1,10 @@
-export default function KanjiBookDetailPage({
+import KanjiBookDetail from "@/frontend/kanjis/pages/kanjibook-detail";
+
+export default async function KanjiBookDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  return <div>한자장 상세</div>;
+  const { id } = await params;
+  return <KanjiBookDetail id={id} />;
 }
-
