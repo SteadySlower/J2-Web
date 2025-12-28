@@ -3,6 +3,10 @@
 import type { Kanji } from "@/frontend/core/types/kanji";
 import { Card } from "@/frontend/core/components/ui/card";
 import { cn } from "@/lib/utils";
+import CheckButton from "@/frontend/words/components/word-list/word-card/check-button";
+import EditButton from "@/frontend/core/components/edit-button";
+import { useParams } from "next/navigation";
+import { useToggleKanjiStatus } from "@/frontend/kanjis/hooks/useToggleKanjiStatus";
 
 type KanjiCardProps = {
   showFront: boolean;
@@ -17,8 +21,20 @@ export default function KanjiCard({
   kanji,
   onToggleReveal,
 }: KanjiCardProps) {
+  const params = useParams();
+  const kanjibookId = params.id as string;
+
+  const toggleMutation = useToggleKanjiStatus({
+    kanjiId: kanji.id,
+    bookId: kanjibookId,
+  });
+
   const handleReveal = () => {
     onToggleReveal(kanji.id);
+  };
+
+  const handleToggleStatus = () => {
+    toggleMutation.mutate(kanji.status === "learning" ? "learned" : "learning");
   };
 
   return (
@@ -72,6 +88,24 @@ export default function KanjiCard({
           {showFront === true && !isRevealed && (
             <div className="absolute inset-0 bg-gray-300 rounded-md" />
           )}
+        </div>
+        <div className="flex gap-2 justify-center items-center">
+          <CheckButton
+            tooptipText={
+              kanji.status === "learning" ? "완료 체크" : "체크 취소"
+            }
+            onClick={handleToggleStatus}
+            className={cn(
+              kanji.status === "learned" ? "text-green-500" : "text-gray-300"
+            )}
+          />
+          <EditButton
+            className={cn(
+              isRevealed ? "opacity-100" : "opacity-0 pointer-events-none",
+              "hover:text-yellow-500"
+            )}
+            onClick={() => {}}
+          />
         </div>
       </div>
     </Card>
