@@ -1,13 +1,10 @@
 "use client";
 
-import Input from "@/frontend/core/components/form/input";
-import Checkbox from "@/frontend/core/components/form/checkbox";
+import BookFormFields from "@/frontend/core/components/books/form-fields";
 import type {
   FieldErrors,
   UseFormRegister,
   FieldValues,
-  Path,
-  FieldError,
   Control,
 } from "react-hook-form";
 
@@ -23,19 +20,11 @@ export default function WordBookFormFields<T extends FieldValues>({
   errors,
 }: WordBookFormFieldsProps<T>) {
   return (
-    <>
-      <Input
-        label="제목"
-        register={register("title" as Path<T>)}
-        error={errors.title as FieldError | undefined}
-        type="text"
-      />
-      <Checkbox
-        label="일본어 앞면"
-        name={"showFront" as Path<T>}
-        control={control}
-        error={errors.showFront as FieldError | undefined}
-      />
-    </>
+    <BookFormFields
+      register={register}
+      control={control}
+      errors={errors}
+      showFrontLabel="일본어 앞면"
+    />
   );
 }
