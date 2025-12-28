@@ -1,7 +1,7 @@
 import PlusButton from "@/frontend/core/components/plus-button";
-import CheckFilterButton from "@/frontend/words/components/check-filter-button";
-import ShuffleButton from "@/frontend/words/components/shuffle-button";
-import ShowFrontButton from "@/frontend/words/components/showFront-button";
+import CheckFilterButton from "@/frontend/core/components/units/check-filter-button";
+import ShuffleButton from "@/frontend/core/components/units/shuffle-button";
+import ShowFrontButton from "@/frontend/core/components/units/showFront-button";
 import { cn } from "@/lib/utils";
 
 type FloatingButtonsProps = {

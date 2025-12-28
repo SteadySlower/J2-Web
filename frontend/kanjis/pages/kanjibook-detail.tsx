@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import KanjiList from "@/frontend/kanjis/components/list";
-import FloatingButtons from "@/frontend/words/components/floating-buttons";
+import FloatingButtons from "@/frontend/core/components/units/floating-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { getKanjiBookDetail } from "@/lib/api/kanji-books/get-book-detail";
 import { useToggleShowFront } from "@/frontend/kanjis/hooks/useToggleShowFront";

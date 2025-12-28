@@ -6,7 +6,7 @@ import WordList from "@/frontend/words/components/word-list/list";
 import CreateWordModal from "@/frontend/words/modals/create-word";
 import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
-import FloatingButtons from "@/frontend/words/components/floating-buttons";
+import FloatingButtons from "@/frontend/core/components/units/floating-buttons";
 import { useToggleShowFront } from "@/frontend/words/hooks/useToggleShowFront";
 
 type WordBookDetailProps = {
