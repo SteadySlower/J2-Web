@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
-import type { KanjiResponse } from "@/lib/api/types/kanji";
 import { mapKanjiResponseToKanji } from "@/lib/api/utils/word-mapper";
 import type { Kanji } from "@/frontend/core/types/kanji";
 
