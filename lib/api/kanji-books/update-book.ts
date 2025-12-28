@@ -61,4 +61,3 @@ export async function updateKanjiBook(
   const result: { data: UpdateKanjiBookResponse } = await response.json();
   return result.data;
 }
-

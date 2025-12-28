@@ -1,19 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import KanjiList from "@/frontend/kanjis/components/list";
+import FloatingButtons from "@/frontend/words/components/floating-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { getKanjiBookDetail } from "@/lib/api/kanji-books/get-book-detail";
+import { useToggleShowFront } from "@/frontend/kanjis/hooks/useToggleShowFront";
 
 type KanjiBookDetailProps = {
   id: string;
 };
 
 export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
-  const [shuffledKanjiIds] = useState<string[]>([]);
+  const [shuffledKanjiIds, setShuffledKanjiIds] = useState<string[]>([]);
   const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({});
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const isFilterGraduated = searchParams.get("filterGraduated") === "true";
 
@@ -22,11 +25,46 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
     queryFn: () => getKanjiBookDetail(id),
   });
 
+  const toggleShowFrontMutation = useToggleShowFront({
+    kanjibookId: id,
+    onSuccess: () => {
+      setRevealedMap({});
+    },
+  });
+
+  const handleToggleShowFront = () => {
+    if (!data) return;
+    toggleShowFrontMutation.mutate(!data.showFront);
+  };
+
   const handleToggleReveal = (kanjiId: string) => {
     setRevealedMap((prev) => ({
       ...prev,
       [kanjiId]: !prev[kanjiId],
     }));
+  };
+
+  const handleFilterChange = () => {
+    const params = new URLSearchParams(searchParams);
+    const changedFilter = !isFilterGraduated;
+    if (changedFilter) {
+      params.set("filterGraduated", "true");
+    } else {
+      params.delete("filterGraduated");
+    }
+    setRevealedMap({});
+    router.replace(`/kanji-books/${id}?${params.toString()}`, {
+      scroll: false,
+    });
+  };
+
+  const handleShuffle = () => {
+    if (!data) return;
+    const kanjisToShuffle = isFilterGraduated
+      ? data.kanjis.filter((kanji) => kanji.status !== "learned")
+      : data.kanjis;
+    const shuffled = [...kanjisToShuffle].sort(() => Math.random() - 0.5);
+    setShuffledKanjiIds(shuffled.map((kanji) => kanji.id));
   };
 
   if (isLoading) {
@@ -51,6 +89,14 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
         shuffledKanjiIds={shuffledKanjiIds}
         isFilterGraduated={isFilterGraduated}
         onToggleReveal={handleToggleReveal}
+      />
+      <FloatingButtons
+        isFilterGraduated={isFilterGraduated}
+        showFront={data.showFront}
+        onToggleShowFront={handleToggleShowFront}
+        onFilterChange={handleFilterChange}
+        onShuffle={handleShuffle}
+        onAddWord={() => {}}
       />
     </div>
   );

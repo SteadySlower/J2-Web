@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import KanjiCard from "./card";
 import type { Kanji } from "@/frontend/core/types/kanji";
 
@@ -63,4 +62,3 @@ export default function KanjiList({
     </div>
   );
 }
-
