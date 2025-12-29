@@ -10,10 +10,12 @@ import Input from "@/frontend/core/components/form/input";
 
 type KanjiFormFieldsProps<T extends FieldValues> = {
   form: UseFormReturn<T>;
+  disabledCharacter?: boolean;
 };
 
 export default function KanjiFormFields<T extends FieldValues>({
   form,
+  disabledCharacter = false,
 }: KanjiFormFieldsProps<T>) {
   const {
     register,
@@ -27,12 +29,14 @@ export default function KanjiFormFields<T extends FieldValues>({
 
   return (
     <div className="flex flex-col gap-4">
-      <Input
-        label="한자"
-        register={characterRegister}
-        error={errors.character as FieldError | undefined}
-        type="text"
-      />
+      {!disabledCharacter && (
+        <Input
+          label="한자"
+          register={characterRegister}
+          error={errors.character as FieldError | undefined}
+          type="text"
+        />
+      )}
       <Input
         label="의미"
         register={meaningRegister}

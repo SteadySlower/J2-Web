@@ -12,6 +12,7 @@ type KanjiCardProps = {
   showFront: boolean;
   kanji: Kanji;
   isRevealed: boolean;
+  onEdit: (kanji: Kanji) => void;
   onToggleReveal: (kanjiId: string) => void;
 };
 
@@ -19,6 +20,7 @@ export default function KanjiCard({
   showFront,
   isRevealed,
   kanji,
+  onEdit,
   onToggleReveal,
 }: KanjiCardProps) {
   const params = useParams();
@@ -106,7 +108,9 @@ export default function KanjiCard({
               isRevealed ? "opacity-100" : "opacity-0 pointer-events-none",
               "hover:text-yellow-500"
             )}
-            onClick={() => {}}
+            onClick={() => {
+              onEdit(kanji);
+            }}
           />
         </div>
       </div>

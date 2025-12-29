@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import KanjiCard from "./card";
 import type { Kanji } from "@/frontend/core/types/kanji";
+import EditKanjiModal from "@/frontend/kanjis/modals/edit-kanji";
 
 type KanjiListProps = {
   showFront: boolean;
@@ -20,6 +22,15 @@ export default function KanjiList({
   isFilterGraduated,
   onToggleReveal,
 }: KanjiListProps) {
+  const [toEditKanji, setToEditKanji] = useState<Kanji | null>(null);
+
+  const handleEdit = (kanji: Kanji) => {
+    setToEditKanji(kanji);
+  };
+
+  const handleCloseModal = () => {
+    setToEditKanji(null);
+  };
   // 필터링 적용
   const filteredKanjis = isFilterGraduated
     ? kanjis.filter((kanji) => kanji.status !== "learned")
@@ -49,16 +60,26 @@ export default function KanjiList({
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-4 px-16">
-      {displayKanjis.map((kanji) => (
-        <KanjiCard
-          key={kanji.id}
-          showFront={showFront}
-          isRevealed={revealedMap[kanji.id] || false}
-          kanji={kanji}
-          onToggleReveal={onToggleReveal}
+    <>
+      <div className="grid grid-cols-3 gap-4 p-4 px-16">
+        {displayKanjis.map((kanji) => (
+          <KanjiCard
+            key={kanji.id}
+            showFront={showFront}
+            isRevealed={revealedMap[kanji.id] || false}
+            kanji={kanji}
+            onEdit={handleEdit}
+            onToggleReveal={onToggleReveal}
+          />
+        ))}
+      </div>
+      {toEditKanji && (
+        <EditKanjiModal
+          isOpen={toEditKanji !== null}
+          onClose={handleCloseModal}
+          kanji={toEditKanji}
         />
-      ))}
-    </div>
+      )}
+    </>
   );
 }
