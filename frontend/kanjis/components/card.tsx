@@ -81,17 +81,34 @@ export default function KanjiCard({
               }
             >
               <div>{kanji.meaning}</div>
-              {(kanji.onReading || kanji.kunReading) && (
-                <div className="mt-2 text-sm text-muted-foreground space-y-1">
-                  {kanji.onReading && <div>음독: {kanji.onReading}</div>}
-                  {kanji.kunReading && <div>훈독: {kanji.kunReading}</div>}
-                </div>
-              )}
             </div>
             {showFront === true && !isRevealed && (
               <div className="absolute inset-0 bg-gray-300 rounded-md" />
             )}
           </div>
+          {(kanji.onReading || kanji.kunReading) && (
+            <div className="relative w-full">
+              <div
+                className={cn(
+                  "text-sm text-foreground space-y-1 text-center transition-opacity",
+                  !showFront ? isRevealed && "fade-in-up" : ""
+                )}
+                style={
+                  !showFront && isRevealed
+                    ? {
+                        animation: "fadeInUp 0.5s ease-out",
+                      }
+                    : undefined
+                }
+              >
+                {kanji.onReading && <div>음독: {kanji.onReading}</div>}
+                {kanji.kunReading && <div>훈독: {kanji.kunReading}</div>}
+              </div>
+              {showFront === false && !isRevealed && (
+                <div className="absolute inset-0 bg-gray-300 rounded-md" />
+              )}
+            </div>
+          )}
         </div>
         <div className="flex gap-2 justify-center items-center pb-3">
           <CheckButton
