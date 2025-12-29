@@ -19,8 +19,9 @@ import {
   type UpdateKanjiRequest,
 } from "@/lib/api/kanjis/update-kanji";
 import type { Kanji } from "@/frontend/core/types/kanji";
-import KanjiFormFields from "@/frontend/kanjis/components/kanji-form-fields";
 import { useParams } from "next/navigation";
+import type { Path, FieldError } from "react-hook-form";
+import Input from "@/frontend/core/components/form/input";
 import { useUpdateKanji } from "@/frontend/kanjis/hooks/useUpdateKanji";
 import { useDeleteKanji } from "@/frontend/kanjis/hooks/useDeleteKanji";
 import {
@@ -57,10 +58,15 @@ export default function EditKanjiModal({
   });
 
   const {
+    register,
     handleSubmit,
-    formState: { isDirty },
+    formState: { isDirty, errors },
     reset,
   } = form;
+
+  const meaningRegister = register("meaning" as Path<KanjiFormData>);
+  const onReadingRegister = register("on_reading" as Path<KanjiFormData>);
+  const kunReadingRegister = register("kun_reading" as Path<KanjiFormData>);
 
   const updateMutation = useUpdateKanji({
     kanjiId: kanji.id,
@@ -118,7 +124,29 @@ export default function EditKanjiModal({
                 </TooltipContent>
               </Tooltip>
             </div>
-            <KanjiFormFields form={form} disabledCharacter={true} />
+            <div className="flex flex-col gap-4">
+              <Input
+                label="의미"
+                register={meaningRegister}
+                error={errors.meaning as FieldError | undefined}
+                type="text"
+                maxLength={100}
+              />
+              <Input
+                label="음독"
+                register={onReadingRegister}
+                error={errors.on_reading as FieldError | undefined}
+                type="text"
+                maxLength={50}
+              />
+              <Input
+                label="훈독"
+                register={kunReadingRegister}
+                error={errors.kun_reading as FieldError | undefined}
+                type="text"
+                maxLength={50}
+              />
+            </div>
             {updateMutation.isError && (
               <div className="text-destructive mb-4">
                 {(updateMutation.error as Error).message}
