@@ -23,7 +23,7 @@ import { useParams } from "next/navigation";
 import type { Path, FieldError } from "react-hook-form";
 import Input from "@/frontend/core/components/form/input";
 import { useUpdateKanji } from "@/frontend/kanjis/hooks/useUpdateKanji";
-import { useDeleteKanji } from "@/frontend/kanjis/hooks/useDeleteKanji";
+import { useRemoveKanjiFromBook } from "@/frontend/kanjis/hooks/useRemoveKanjiFromBook";
 import {
   Tooltip,
   TooltipTrigger,
@@ -77,9 +77,9 @@ export default function EditKanjiModal({
     },
   });
 
-  const deleteMutation = useDeleteKanji({
-    kanjiId: kanji.id,
+  const deleteMutation = useRemoveKanjiFromBook({
     bookId,
+    kanjiId: kanji.id,
     onMutate: () => {
       onClose();
     },
@@ -169,8 +169,8 @@ export default function EditKanjiModal({
         </DialogContent>
       </Dialog>
       <ConfirmAlertDialog
-        title="한자 삭제"
-        description="이 한자가 삭제 됩니다. 이 작업은 되돌릴 수 없습니다."
+        title="한자 노트에서 삭제"
+        description="이 한자가 한자 노트에서 삭제 됩니다. 이 작업은 되돌릴 수 없습니다."
         actionButtonLabel="삭제"
         open={showDeleteConfirm}
         onOpenChange={setShowDeleteConfirm}
