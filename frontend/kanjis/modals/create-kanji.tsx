@@ -48,6 +48,8 @@ export default function CreateKanjiModal({
     handleSubmit,
     formState: { errors },
     reset,
+    setError,
+    trigger,
   } = form;
 
   const createMutation = useCreateKanji({
@@ -69,7 +71,18 @@ export default function CreateKanjiModal({
     createMutation.reset();
   };
 
-  const characterRegister = register("character" as Path<KanjiFormData>);
+  const characterRegister = register("character" as Path<KanjiFormData>, {
+    onChange: (e) => {
+      const value = e.target.value;
+      if (value.length > 1) {
+        setError("character" as Path<KanjiFormData>, {
+          type: "maxLength",
+          message: "한자 문자는 최대 1자까지 입력 가능합니다",
+        });
+        trigger("character" as Path<KanjiFormData>);
+      }
+    },
+  });
   const meaningRegister = register("meaning" as Path<KanjiFormData>);
   const onReadingRegister = register("on_reading" as Path<KanjiFormData>);
   const kunReadingRegister = register("kun_reading" as Path<KanjiFormData>);
@@ -87,6 +100,7 @@ export default function CreateKanjiModal({
               register={characterRegister}
               error={errors.character as FieldError | undefined}
               type="text"
+              maxLength={1}
             />
             <Input
               label="의미"

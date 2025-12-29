@@ -9,7 +9,8 @@ export const createKanjiSchema = z.object({
   character: z
     .string()
     .min(1, "한자 문자는 필수입니다")
-    .max(1, "한자 문자는 최대 1자까지 입력 가능합니다"),
+    .max(1, "한자 문자는 최대 1자까지 입력 가능합니다")
+    .regex(/^[\u4E00-\u9FFF]$/, "한자만 입력 가능합니다"),
   meaning: z
     .string()
     .min(1, "의미는 필수입니다")
