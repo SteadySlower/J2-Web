@@ -91,10 +91,10 @@ export default function KanjiCard({
               <div
                 className={cn(
                   "text-sm text-foreground space-y-1 text-center transition-opacity",
-                  !showFront ? isRevealed && "fade-in-up" : ""
+                  isRevealed && "fade-in-up"
                 )}
                 style={
-                  !showFront && isRevealed
+                  isRevealed
                     ? {
                         animation: "fadeInUp 0.5s ease-out",
                       }
@@ -104,7 +104,7 @@ export default function KanjiCard({
                 {kanji.onReading && <div>음독: {kanji.onReading}</div>}
                 {kanji.kunReading && <div>훈독: {kanji.kunReading}</div>}
               </div>
-              {showFront === false && !isRevealed && (
+              {!isRevealed && (
                 <div className="absolute inset-0 bg-gray-300 rounded-md" />
               )}
             </div>
