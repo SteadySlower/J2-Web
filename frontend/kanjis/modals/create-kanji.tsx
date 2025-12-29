@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Path, FieldError } from "react-hook-form";
@@ -32,6 +32,8 @@ import {
 
 type KanjiFormData = CreateKanjiRequest;
 
+const KANJI_REGEX = /^[\u4E00-\u9FFF]$/;
+
 type CreateKanjiModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -47,6 +49,7 @@ export default function CreateKanjiModal({
   const kanjibookId = params.id as string;
   const [step, setStep] = useState<"search" | "input">("search");
   const [character, setCharacter] = useState<string>("");
+  const [inputCharacter, setInputCharacter] = useState<string>("");
   const isComposingRef = useRef(false);
 
   const form = useForm<KanjiFormData>({
@@ -63,11 +66,15 @@ export default function CreateKanjiModal({
     reset,
     setError,
     setValue,
-    getValues,
     trigger,
   } = form;
 
-  const isKanji = /^[\u4E00-\u9FFF]$/.test(character);
+  const isValidKanji = useMemo(
+    () => inputCharacter.length === 1 && KANJI_REGEX.test(inputCharacter),
+    [inputCharacter]
+  );
+
+  const isKanji = KANJI_REGEX.test(character);
 
   const dictionaryQuery = useSearchDictionaryByKanji(
     character,
@@ -100,6 +107,7 @@ export default function CreateKanjiModal({
       reset();
       setStep("search");
       setCharacter("");
+      setInputCharacter("");
     },
   });
 
@@ -113,45 +121,28 @@ export default function CreateKanjiModal({
     createMutation.reset();
     setStep("search");
     setCharacter("");
+    setInputCharacter("");
   };
 
-  const handleSearch = (value: string) => {
-    const trimmedValue = value.trim();
-    if (trimmedValue.length === 1) {
-      const isValueKanji = /^[\u4E00-\u9FFF]$/.test(trimmedValue);
-      if (isValueKanji) {
-        setCharacter(trimmedValue);
-      } else {
-        setError("character" as Path<KanjiFormData>, {
-          type: "pattern",
-          message: "한자만 입력 가능합니다",
-        });
-      }
-    } else if (trimmedValue.length > 1) {
-      setError("character" as Path<KanjiFormData>, {
-        type: "maxLength",
-        message: "한자 문자는 최대 1자까지 입력 가능합니다",
-      });
+  const handleSearch = () => {
+    if (isValidKanji && inputCharacter) {
+      setCharacter(inputCharacter);
     }
   };
 
   const handleCharacterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isComposingRef.current) {
       e.preventDefault();
-      handleSearch(e.currentTarget.value);
+      if (isValidKanji) {
+        handleSearch();
+      }
     }
-  };
-
-  const handleSearchButtonClick = () => {
-    const currentValue = getValues(
-      "character" as Path<KanjiFormData>
-    ) as string;
-    handleSearch(currentValue || "");
   };
 
   const handleCharacterClick = () => {
     setStep("search");
     setCharacter("");
+    setInputCharacter("");
     setValue("character" as Path<KanjiFormData>, "");
     setValue("meaning" as Path<KanjiFormData>, "");
     setValue("on_reading" as Path<KanjiFormData>, "");
@@ -162,6 +153,8 @@ export default function CreateKanjiModal({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = e.target.value;
+    setInputCharacter(value);
+    setValue("character" as Path<KanjiFormData>, value);
     await trigger("character" as Path<KanjiFormData>);
     if (value.length > 1) {
       setError("character" as Path<KanjiFormData>, {
@@ -215,11 +208,8 @@ export default function CreateKanjiModal({
                 <CancelButton onClick={handleClose} />
                 <Button
                   type="button"
-                  onClick={handleSearchButtonClick}
-                  disabled={
-                    dictionaryQuery.isLoading ||
-                    !getValues("character" as Path<KanjiFormData>)
-                  }
+                  onClick={handleSearch}
+                  disabled={dictionaryQuery.isLoading || !isValidKanji}
                 >
                   {dictionaryQuery.isLoading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
