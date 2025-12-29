@@ -100,6 +100,10 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
       <FloatingButtons
         isFilterGraduated={isFilterGraduated}
         showFront={data.showFront}
+        showFrontTooltipText={
+          data.showFront ? "한국어 제시어 보기" : "일본어 제시어 보기"
+        }
+        plusButtonTooltipText="단어 추가"
         onToggleShowFront={handleToggleShowFront}
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
