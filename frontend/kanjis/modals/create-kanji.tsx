@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Path, FieldError } from "react-hook-form";
@@ -32,8 +32,6 @@ import {
 
 type KanjiFormData = CreateKanjiRequest;
 
-const KANJI_REGEX = /^[\u4E00-\u9FFF]$/;
-
 type CreateKanjiModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -49,7 +47,6 @@ export default function CreateKanjiModal({
   const kanjibookId = params.id as string;
   const [step, setStep] = useState<"search" | "input">("search");
   const [character, setCharacter] = useState<string>("");
-  const [inputCharacter, setInputCharacter] = useState<string>("");
   const isComposingRef = useRef(false);
 
   const form = useForm<KanjiFormData>({
@@ -64,29 +61,34 @@ export default function CreateKanjiModal({
     handleSubmit,
     formState: { errors },
     reset,
-    setError,
     setValue,
     trigger,
+    getValues,
   } = form;
-
-  const isValidKanji = useMemo(
-    () => inputCharacter.length === 1 && KANJI_REGEX.test(inputCharacter),
-    [inputCharacter]
-  );
-
-  const isKanji = KANJI_REGEX.test(character);
 
   const dictionaryQuery = useSearchDictionaryByKanji(
     character,
-    step === "search" && character.length === 1 && isKanji
+    step === "search" && character.length === 1 && !errors.character
   );
+
+  const resetToSearch = () => {
+    setStep("search");
+    setCharacter("");
+    reset({
+      kanji_book_id: kanjibookId,
+      character: "",
+      meaning: "",
+      on_reading: "",
+      kun_reading: "",
+    });
+  };
 
   useEffect(() => {
     if (
       dictionaryQuery.data &&
       step === "search" &&
       character.length === 1 &&
-      isKanji
+      !errors.character
     ) {
       const data = dictionaryQuery.data;
       setValue("character" as Path<KanjiFormData>, character);
@@ -97,17 +99,14 @@ export default function CreateKanjiModal({
         setStep("input");
       }, 0);
     }
-  }, [dictionaryQuery.data, character, step, setValue, isKanji]);
+  }, [dictionaryQuery.data, character, step, setValue, errors.character]);
 
   const createMutation = useCreateKanji({
     bookId: kanjibookId,
     onSuccess: (kanjiId) => {
       onCreated(kanjiId);
       onClose();
-      reset();
-      setStep("search");
-      setCharacter("");
-      setInputCharacter("");
+      resetToSearch();
     },
   });
 
@@ -117,51 +116,34 @@ export default function CreateKanjiModal({
 
   const handleClose = () => {
     onClose();
-    reset();
     createMutation.reset();
-    setStep("search");
-    setCharacter("");
-    setInputCharacter("");
+    resetToSearch();
   };
 
   const handleSearch = () => {
-    if (isValidKanji && inputCharacter) {
-      setCharacter(inputCharacter);
+    const currentValue = getValues(
+      "character" as Path<KanjiFormData>
+    ) as string;
+    if (currentValue && currentValue.length === 1 && !errors.character) {
+      setCharacter(currentValue);
     }
   };
 
   const handleCharacterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isComposingRef.current) {
       e.preventDefault();
-      if (isValidKanji) {
-        handleSearch();
-      }
+      handleSearch();
     }
   };
 
   const handleCharacterClick = () => {
-    setStep("search");
-    setCharacter("");
-    setInputCharacter("");
-    setValue("character" as Path<KanjiFormData>, "");
-    setValue("meaning" as Path<KanjiFormData>, "");
-    setValue("on_reading" as Path<KanjiFormData>, "");
-    setValue("kun_reading" as Path<KanjiFormData>, "");
+    resetToSearch();
   };
 
-  const handleCharacterChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleCharacterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setInputCharacter(value);
     setValue("character" as Path<KanjiFormData>, value);
-    await trigger("character" as Path<KanjiFormData>);
-    if (value.length > 1) {
-      setError("character" as Path<KanjiFormData>, {
-        type: "maxLength",
-        message: "한자 문자는 최대 1자까지 입력 가능합니다",
-      });
-    }
+    trigger("character" as Path<KanjiFormData>);
   };
 
   const meaningRegister = register("meaning" as Path<KanjiFormData>);
@@ -209,7 +191,11 @@ export default function CreateKanjiModal({
                 <Button
                   type="button"
                   onClick={handleSearch}
-                  disabled={dictionaryQuery.isLoading || !isValidKanji}
+                  disabled={
+                    dictionaryQuery.isLoading ||
+                    !getValues("character") ||
+                    !!errors.character
+                  }
                 >
                   {dictionaryQuery.isLoading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
