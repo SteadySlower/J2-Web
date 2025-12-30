@@ -119,6 +119,7 @@ export default function KanjiCard({
             className={cn(
               kanji.status === "learned" ? "text-green-500" : "text-gray-300"
             )}
+            tooltipSide="top"
           />
           <EditButton
             className={cn(
@@ -128,6 +129,7 @@ export default function KanjiCard({
             onClick={() => {
               onEdit(kanji);
             }}
+            tooltipSide="top"
           />
         </div>
       </div>

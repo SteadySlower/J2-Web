@@ -12,9 +12,14 @@ import {
 type EditButtonProps = {
   onClick: () => void;
   className?: string;
+  tooltipSide?: "top" | "right" | "bottom" | "left";
 };
 
-export default function EditButton({ onClick, className }: EditButtonProps) {
+export default function EditButton({
+  onClick,
+  className,
+  tooltipSide = "right",
+}: EditButtonProps) {
   const button = (
     <button
       onClick={(e) => {
@@ -34,7 +39,7 @@ export default function EditButton({ onClick, className }: EditButtonProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side={tooltipSide}>
         <p>수정 하기</p>
         <TooltipArrow />
       </TooltipContent>

@@ -13,12 +13,14 @@ type CheckButtonProps = {
   tooptipText: string;
   onClick: () => void;
   className?: string;
+  tooltipSide?: "top" | "right" | "bottom" | "left";
 };
 
 export default function CheckButton({
   tooptipText,
   onClick,
   className,
+  tooltipSide = "right",
 }: CheckButtonProps) {
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -41,7 +43,7 @@ export default function CheckButton({
   return (
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side={tooltipSide}>
         <p>{tooptipText}</p>
         <TooltipArrow />
       </TooltipContent>
