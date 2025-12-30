@@ -8,6 +8,7 @@ type FloatingButtonsProps = {
   isFilterGraduated: boolean;
   showFront: boolean;
   showFrontTooltipText: string;
+  showFrontButtonText: string;
   plusButtonTooltipText: string;
   onToggleShowFront: () => void;
   onFilterChange: () => void;
@@ -19,6 +20,7 @@ export default function FloatingButtons({
   isFilterGraduated,
   showFront,
   showFrontTooltipText,
+  showFrontButtonText,
   plusButtonTooltipText,
   onToggleShowFront,
   onFilterChange,
@@ -39,6 +41,7 @@ export default function FloatingButtons({
       <ShowFrontButton
         showFront={showFront}
         tooltipText={showFrontTooltipText}
+        buttonText={showFrontButtonText}
         onClick={onToggleShowFront}
       />
       <ShuffleButton onClick={onShuffle} />

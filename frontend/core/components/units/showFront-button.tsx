@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 type ShowFrontButtonProps = {
   showFront: boolean;
   tooltipText: string;
+  buttonText: string;
   onClick: () => void;
   className?: string;
 };
@@ -17,6 +18,7 @@ type ShowFrontButtonProps = {
 export default function ShowFrontButton({
   showFront,
   tooltipText,
+  buttonText,
   onClick,
   className,
 }: ShowFrontButtonProps) {
@@ -43,7 +45,7 @@ export default function ShowFrontButton({
             : undefined
         }
       >
-        {showFront ? "韓" : "日"}
+        {buttonText}
       </span>
     </Button>
   );

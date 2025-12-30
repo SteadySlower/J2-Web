@@ -103,6 +103,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         showFrontTooltipText={
           data.showFront ? "한국어 제시어 보기" : "일본어 제시어 보기"
         }
+        showFrontButtonText={data.showFront ? "韓" : "日"}
         plusButtonTooltipText="단어 추가"
         onToggleShowFront={handleToggleShowFront}
         onFilterChange={handleFilterChange}

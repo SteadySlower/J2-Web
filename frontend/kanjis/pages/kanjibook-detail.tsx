@@ -105,6 +105,7 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
         showFrontTooltipText={
           data.showFront ? "의미 보기 모드" : "한자 보기 모드"
         }
+        showFrontButtonText={data.showFront ? "한" : "漢"}
         plusButtonTooltipText="한자 추가"
         onToggleShowFront={handleToggleShowFront}
         onFilterChange={handleFilterChange}
