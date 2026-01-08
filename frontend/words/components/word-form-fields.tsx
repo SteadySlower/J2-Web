@@ -38,16 +38,11 @@ export default function WordFormFields<T extends FieldValues>({
   const isComposingRef = useRef(false);
   const japaneseInputRef = useRef<HTMLInputElement>(null);
   const meaningInputRef = useRef<HTMLInputElement>(null);
-  const japaneseValue = useMemo(
-    () => watch("japanese" as Path<T>) as string | undefined,
-    [watch]
-  );
-  const pronunciationValue = useMemo(
-    () => watch("pronunciation" as Path<T>) as string | undefined,
-    [watch]
-  );
-  const showRubyText =
-    !isJapaneseFocused && japaneseValue && japaneseValue.trim() !== "";
+  const japaneseValue = watch("japanese" as Path<T>) as string | undefined;
+  const pronunciationValue = watch("pronunciation" as Path<T>) as
+    | string
+    | undefined;
+  const showRubyText = !isJapaneseFocused && Boolean(japaneseValue?.trim());
 
   const updatePronunciation = useCallback(
     (value: string) => {

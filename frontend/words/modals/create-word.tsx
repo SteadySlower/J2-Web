@@ -46,6 +46,9 @@ export default function CreateWordModal({
     resolver: zodResolver(createWordSchema),
     defaultValues: {
       bookId,
+      japanese: "",
+      meaning: "",
+      pronunciation: "",
     },
   });
 
