@@ -4,6 +4,7 @@ import { useState } from "react";
 import KanjiCard from "./card";
 import type { Kanji } from "@/frontend/core/types/kanji";
 import EditKanjiModal from "@/frontend/kanjis/modals/edit-kanji";
+import WordsModal from "@/frontend/kanjis/modals/words";
 
 type KanjiListProps = {
   showFront: boolean;
@@ -23,6 +24,7 @@ export default function KanjiList({
   onToggleReveal,
 }: KanjiListProps) {
   const [toEditKanji, setToEditKanji] = useState<Kanji | null>(null);
+  const [kanjiToShowWords, setKanjiToShowWords] = useState<Kanji | null>(null);
 
   const handleEdit = (kanji: Kanji) => {
     setToEditKanji(kanji);
@@ -30,6 +32,14 @@ export default function KanjiList({
 
   const handleCloseModal = () => {
     setToEditKanji(null);
+  };
+
+  const handleShowWords = (kanji: Kanji) => {
+    setKanjiToShowWords(kanji);
+  };
+
+  const handleCloseWords = () => {
+    setKanjiToShowWords(null);
   };
   // 필터링 적용
   const filteredKanjis = isFilterGraduated
@@ -70,6 +80,7 @@ export default function KanjiList({
             kanji={kanji}
             onEdit={handleEdit}
             onToggleReveal={onToggleReveal}
+            onShowWords={handleShowWords}
           />
         ))}
       </div>
@@ -78,6 +89,13 @@ export default function KanjiList({
           isOpen={toEditKanji !== null}
           onClose={handleCloseModal}
           kanji={toEditKanji}
+        />
+      )}
+      {kanjiToShowWords && (
+        <WordsModal
+          isOpen={kanjiToShowWords !== null}
+          onClose={handleCloseWords}
+          kanji={kanjiToShowWords}
         />
       )}
     </>

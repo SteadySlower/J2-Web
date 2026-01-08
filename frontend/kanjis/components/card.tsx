@@ -5,6 +5,7 @@ import { Card } from "@/frontend/core/components/ui/card";
 import { cn } from "@/lib/utils";
 import CheckButton from "@/frontend/words/components/word-list/word-card/check-button";
 import EditButton from "@/frontend/core/components/edit-button";
+import WordButton from "./word-button";
 import { useParams } from "next/navigation";
 import { useToggleKanjiStatus } from "@/frontend/kanjis/hooks/useToggleKanjiStatus";
 
@@ -14,6 +15,7 @@ type KanjiCardProps = {
   isRevealed: boolean;
   onEdit: (kanji: Kanji) => void;
   onToggleReveal: (kanjiId: string) => void;
+  onShowWords: (kanji: Kanji) => void;
 };
 
 export default function KanjiCard({
@@ -22,6 +24,7 @@ export default function KanjiCard({
   kanji,
   onEdit,
   onToggleReveal,
+  onShowWords,
 }: KanjiCardProps) {
   const params = useParams();
   const kanjibookId = params.id as string;
@@ -130,6 +133,11 @@ export default function KanjiCard({
               onEdit(kanji);
             }}
             tooltipSide="top"
+          />
+          <WordButton
+            showButton={isRevealed}
+            kanji={kanji.character}
+            onClick={() => onShowWords(kanji)}
           />
         </div>
       </div>

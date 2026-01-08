@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { parseRubyString } from "../utils";
+import { cn } from "@/lib/utils";
 
 export function RubyItem({ base, rt }: { base: string; rt: string }) {
   return (
@@ -10,11 +11,16 @@ export function RubyItem({ base, rt }: { base: string; rt: string }) {
   );
 }
 
-export default function RubyText({ rubyString }: { rubyString: string }) {
+interface RubyTextProps {
+  rubyString: string;
+  className?: string;
+}
+
+export default function RubyText({ rubyString, className }: RubyTextProps) {
   const segments = useMemo(() => parseRubyString(rubyString), [rubyString]);
 
   return (
-    <span className="inline-flex flex-wrap items-end">
+    <span className={cn("inline-flex flex-wrap items-end", className)}>
       {segments.map((segment, index) => {
         if (segment.type === "okurigana") {
           return <RubyItem key={index} base={segment.base} rt={segment.rt} />;
