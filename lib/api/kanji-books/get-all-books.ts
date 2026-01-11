@@ -1,14 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
-
-export type KanjiBook = {
-  id: string;
-  title: string;
-  status: "studying" | "studied";
-  showFront: boolean;
-  createdAt: DateTime;
-  updatedAt: DateTime;
-};
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 
 type KanjiBookResponse = {
   id: string;

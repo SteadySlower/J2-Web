@@ -7,7 +7,7 @@ import {
   updateKanjiBook,
   type UpdateKanjiBookRequest,
 } from "@/lib/api/kanji-books/update-book";
-import type { KanjiBook } from "@/lib/api/kanji-books/get-all-books";
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 
 type UseUpdateKanjiBookOptions = {
   kanjibookId: string;
@@ -80,4 +80,3 @@ export function useUpdateKanjiBook({
     },
   });
 }
-

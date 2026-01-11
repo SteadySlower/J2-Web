@@ -2,7 +2,7 @@
 
 import BookList from "@/frontend/core/components/books/list";
 import EditKanjiBookModal from "@/frontend/kanji-book/modals/edit-kanjibook";
-import type { KanjiBook } from "@/lib/api/kanji-books/get-all-books";
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 
 type KanjiBookListProps = {
   kanjibooks: KanjiBook[];

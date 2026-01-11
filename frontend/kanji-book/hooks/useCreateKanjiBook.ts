@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 import { createKanjiBook } from "@/lib/api/kanji-books/create-book";
-import type { KanjiBook } from "@/lib/api/kanji-books/get-all-books";
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 
 type UseCreateKanjiBookOptions = {
   onSuccess?: () => void;
@@ -71,4 +71,3 @@ export function useCreateKanjiBook({ onSuccess }: UseCreateKanjiBookOptions) {
     },
   });
 }
-

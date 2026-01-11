@@ -4,7 +4,7 @@ import {
   updateKanjiBook,
   type UpdateKanjiBookRequest,
 } from "@/lib/api/kanji-books/update-book";
-import type { KanjiBook } from "@/lib/api/kanji-books/get-all-books";
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 import type { KanjiBookDetail } from "@/lib/api/kanji-books/get-book-detail";
 
 type UseToggleShowFrontOptions = {

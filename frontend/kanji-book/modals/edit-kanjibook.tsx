@@ -21,7 +21,7 @@ import {
 } from "@/lib/api/kanji-books/update-book";
 import { useUpdateKanjiBook } from "@/frontend/kanji-book/hooks/useUpdateKanjiBook";
 import { useDeleteKanjiBook } from "@/frontend/kanji-book/hooks/useDeleteKanjiBook";
-import type { KanjiBook } from "@/lib/api/kanji-books/get-all-books";
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 
 type KanjiBookFormData = UpdateKanjiBookRequest;
 
@@ -128,4 +128,3 @@ export default function EditKanjiBookModal({
     </>
   );
 }
-

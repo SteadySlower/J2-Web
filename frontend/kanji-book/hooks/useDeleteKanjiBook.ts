@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { deleteKanjiBook } from "@/lib/api/kanji-books/delete-book";
-import type { KanjiBook } from "@/lib/api/kanji-books/get-all-books";
+import type { KanjiBook } from "@/frontend/core/types/kanji-book";
 
 type UseDeleteKanjiBookOptions = {
   kanjibookId: string;
@@ -54,4 +54,3 @@ export function useDeleteKanjiBook({
     },
   });
 }
-
