@@ -1,4 +1,4 @@
-import DashBoard from "@/frontend/schedule/pages/dash-board";
+import Schedule from "@/frontend/schedule/pages/schedule";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -9,7 +9,7 @@ export default async function Home() {
   } = await supabase.auth.getSession();
 
   if (session?.user) {
-    return <DashBoard />;
+    return <Schedule />;
   }
 
   redirect("/landing");
