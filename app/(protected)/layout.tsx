@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import SideBar from "@/frontend/dashBoard/components/SideBar";
+import SideBar from "@/frontend/core/components/SideBar";
 
 export default async function ProtectedLayout({
   children,
