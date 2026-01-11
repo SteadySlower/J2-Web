@@ -251,18 +251,18 @@ export default function EditScheduleModal({
 
           {errors.studyDays && (
             <div className="text-sm text-destructive mt-2">
-              studyDays: {errors.studyDays.message}
+              {errors.studyDays.message}
             </div>
           )}
           {errors.reviewDays && (
             <div className="text-sm text-destructive mt-2">
-              reviewDays: {errors.reviewDays.message}
+              {errors.reviewDays.message}
             </div>
           )}
 
           {mutation.isError && (
             <div className="text-destructive mb-4">
-              error: {(mutation.error as Error).message}
+              {(mutation.error as Error).message}
             </div>
           )}
 
