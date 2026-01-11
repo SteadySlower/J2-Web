@@ -19,3 +19,18 @@ export type ScheduledKanjiBooks = {
   study: KanjiBook[];
   review: KanjiBook[];
 };
+
+export type ScheduleBook = {
+  id: string;
+  title: string;
+  type: "word" | "kanji";
+  status: "studying" | "studied";
+  showFront: boolean;
+  createdAt: DateTime;
+  updatedAt: DateTime;
+};
+
+export type ScheduleBooks = {
+  study: ScheduleBook[];
+  review: ScheduleBook[];
+};
