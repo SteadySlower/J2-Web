@@ -26,6 +26,7 @@ export default function ReviewDaysSelector({
         onSelect={(dates) => onSelect(dates || undefined)}
         disabled={disabledDates}
         numberOfMonths={2}
+        className="mx-auto w-full max-w-5xl [--cell-size:3rem] text-base"
       />
       {reviewDates.length > 0 && (
         <div className="mt-4 p-3 bg-muted rounded-md">

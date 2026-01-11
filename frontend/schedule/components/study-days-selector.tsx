@@ -27,6 +27,7 @@ export default function StudyDaysSelector({
         onSelect={onSelect}
         disabled={disabledDates}
         numberOfMonths={2}
+        className="mx-auto w-full max-w-5xl [--cell-size:3rem] text-base"
       />
       {studyRange?.from && studyRange?.to && (
         <div className="mt-4 p-3 bg-muted rounded-md">
