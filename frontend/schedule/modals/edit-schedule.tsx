@@ -118,6 +118,7 @@ export default function EditScheduleModal({
   // 모달이 열릴 때마다 초기값으로 리셋 및 form에 초기값 설정
   useEffect(() => {
     if (isOpen && currentSchedule) {
+      setActiveTab("study");
       setStudyRange(initialStudyRange);
       setReviewDates(initialReviewDates);
       // form에 초기값 설정
