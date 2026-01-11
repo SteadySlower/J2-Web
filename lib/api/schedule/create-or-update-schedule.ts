@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getAuthToken } from "@/lib/api/utils/auth";
 import { DateTime } from "luxon";
+import type { Schedule } from "@/frontend/core/types/schedule";
 
 export const createOrUpdateScheduleSchema = z.object({
   studyDays: z.number().int().positive("study_days는 양의 정수여야 합니다"),
@@ -15,18 +16,8 @@ export type CreateOrUpdateScheduleRequest = z.infer<
   typeof createOrUpdateScheduleSchema
 >;
 
-export type Schedule = {
-  id: string;
-  userId: string;
-  studyDays: number;
-  reviewDays: number[];
-  createdAt: DateTime;
-  updatedAt: DateTime;
-};
-
 type ScheduleResponse = {
   id: string;
-  user_id: string;
   study_days: number;
   review_days: number[];
   created_at: string;
@@ -64,7 +55,6 @@ export async function createOrUpdateSchedule(
 
   return {
     id: result.data.id,
-    userId: result.data.user_id,
     studyDays: result.data.study_days,
     reviewDays: result.data.review_days,
     createdAt: DateTime.fromISO(result.data.created_at),
