@@ -1,13 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
-
-export type Schedule = {
-  id: string;
-  studyDays: number;
-  reviewDays: number[];
-  createdAt: DateTime;
-  updatedAt: DateTime;
-};
+import type { Schedule } from "@/frontend/core/types/schedule";
 
 type ScheduleResponse = {
   id: string;

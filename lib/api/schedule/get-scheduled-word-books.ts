@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
-import type { WordBook } from "@/frontend/core/types/word-books";
+import type { ScheduledWordBooks } from "@/frontend/core/types/schedule";
 
 type ScheduledWordBookResponse = {
   study: {
@@ -19,11 +19,6 @@ type ScheduledWordBookResponse = {
     created_at: string;
     updated_at: string;
   }[];
-};
-
-export type ScheduledWordBooks = {
-  study: WordBook[];
-  review: WordBook[];
 };
 
 export async function getScheduledWordBooks(): Promise<ScheduledWordBooks> {

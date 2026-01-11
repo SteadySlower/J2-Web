@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
-import type { KanjiBook } from "@/frontend/core/types/kanji-book";
+import type { ScheduledKanjiBooks } from "@/frontend/core/types/schedule";
 
 type ScheduledKanjiBookResponse = {
   study: {
@@ -19,11 +19,6 @@ type ScheduledKanjiBookResponse = {
     created_at: string;
     updated_at: string;
   }[];
-};
-
-export type ScheduledKanjiBooks = {
-  study: KanjiBook[];
-  review: KanjiBook[];
 };
 
 export async function getScheduledKanjiBooks(): Promise<ScheduledKanjiBooks> {
