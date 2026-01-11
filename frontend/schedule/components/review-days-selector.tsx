@@ -1,31 +1,20 @@
 "use client";
 
-import { DateTime } from "luxon";
 import { Calendar } from "@/frontend/core/components/ui/calendar";
+import {
+  disabledDates,
+  calculateReviewDays,
+} from "@/frontend/schedule/util/date";
 
 type ReviewDaysSelectorProps = {
   reviewDates: Date[];
   onSelect: (dates: Date[] | undefined) => void;
-  disabledDates: (date: Date) => boolean;
 };
 
 export default function ReviewDaysSelector({
   reviewDates,
   onSelect,
-  disabledDates,
 }: ReviewDaysSelectorProps) {
-  // 선택된 날짜들을 일수 배열로 변환 (미래 날짜 기준)
-  const calculateReviewDays = (dates: Date[]): number[] => {
-    const today = DateTime.now().startOf("day");
-    return dates
-      .map((date) => {
-        const dateTime = DateTime.fromJSDate(date).startOf("day");
-        return Math.floor(dateTime.diff(today, "days").days);
-      })
-      .filter((days) => days > 0)
-      .sort((a, b) => a - b);
-  };
-
   return (
     <div>
       <p className="text-sm text-muted-foreground mb-4">

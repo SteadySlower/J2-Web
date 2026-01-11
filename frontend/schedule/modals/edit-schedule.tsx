@@ -7,6 +7,10 @@ import React, { useState, useMemo, useEffect } from "react";
 import { DateTime } from "luxon";
 import type { DateRange } from "react-day-picker";
 import {
+  calculateStudyDays,
+  calculateReviewDays,
+} from "@/frontend/schedule/util/date";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -68,20 +72,12 @@ export default function EditScheduleModal({
     initialStudyRange
   );
 
-  // 날짜 범위를 일수로 변환 (미래 날짜 기준)
-  const calculateStudyDays = (range: DateRange | undefined): number => {
-    if (!range?.from || !range?.to) return 2;
-    const from = DateTime.fromJSDate(range.from).startOf("day");
-    const to = DateTime.fromJSDate(range.to).startOf("day");
-    const days = Math.floor(to.diff(from, "days").days);
-    return Math.max(0, days);
-  };
-
   const handleStudyRangeChange = (range: DateRange | undefined) => {
     if (!range) {
       return;
     }
 
+    // 오늘은 무조건 선택 고정!
     const today = DateTime.now().startOf("day").toJSDate();
     const fixedRange: DateRange = {
       from: today,
@@ -97,18 +93,6 @@ export default function EditScheduleModal({
   };
 
   const [reviewDates, setReviewDates] = useState<Date[]>(initialReviewDates);
-
-  // 선택된 날짜들을 일수 배열로 변환 (미래 날짜 기준)
-  const calculateReviewDays = (dates: Date[]): number[] => {
-    const today = DateTime.now().startOf("day");
-    return dates
-      .map((date) => {
-        const dateTime = DateTime.fromJSDate(date).startOf("day");
-        return Math.floor(dateTime.diff(today, "days").days);
-      })
-      .filter((days) => days > 0)
-      .sort((a, b) => a - b);
-  };
 
   const handleReviewDatesChange = (dates: Date[] | undefined) => {
     if (!dates) {
@@ -168,29 +152,14 @@ export default function EditScheduleModal({
     const studyDays = calculateStudyDays(studyRange);
     const reviewDays = calculateReviewDays(reviewDates);
 
-    // zod 스키마로 검증
-    const validatedData = createOrUpdateScheduleSchema.parse({
+    mutation.mutate({
       studyDays,
       reviewDays,
     });
-
-    mutation.mutate(validatedData);
   };
 
   const handleClose = () => {
     onClose();
-    if (currentSchedule) {
-      const today = DateTime.now().startOf("day");
-      const studyEnd = today.plus({ days: currentSchedule.studyDays });
-      setStudyRange({
-        from: today.toJSDate(),
-        to: studyEnd.toJSDate(),
-      });
-      const dates = currentSchedule.reviewDays.map((days) =>
-        today.plus({ days }).toJSDate()
-      );
-      setReviewDates(dates);
-    }
     reset();
     mutation.reset();
   };
@@ -207,14 +176,6 @@ export default function EditScheduleModal({
       </Dialog>
     );
   }
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const disabledDates = (date: Date) => {
-    const dateToCheck = new Date(date);
-    dateToCheck.setHours(0, 0, 0, 0);
-    return dateToCheck < today;
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
@@ -236,7 +197,6 @@ export default function EditScheduleModal({
               <StudyDaysSelector
                 studyRange={studyRange}
                 onSelect={handleStudyRangeChange}
-                disabledDates={disabledDates}
               />
             </TabsContent>
 
@@ -244,7 +204,6 @@ export default function EditScheduleModal({
               <ReviewDaysSelector
                 reviewDates={reviewDates}
                 onSelect={handleReviewDatesChange}
-                disabledDates={disabledDates}
               />
             </TabsContent>
           </Tabs>

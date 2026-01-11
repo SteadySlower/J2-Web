@@ -1,29 +1,21 @@
 "use client";
 
-import { DateTime } from "luxon";
 import type { DateRange } from "react-day-picker";
 import { Calendar } from "@/frontend/core/components/ui/calendar";
+import {
+  disabledDates,
+  calculateStudyDays,
+} from "@/frontend/schedule/util/date";
 
 type StudyDaysSelectorProps = {
   studyRange: DateRange | undefined;
   onSelect: (range: DateRange | undefined) => void;
-  disabledDates: (date: Date) => boolean;
 };
 
 export default function StudyDaysSelector({
   studyRange,
   onSelect,
-  disabledDates,
 }: StudyDaysSelectorProps) {
-  // 날짜 범위를 일수로 변환 (미래 날짜 기준)
-  const calculateStudyDays = (range: DateRange | undefined): number => {
-    if (!range?.from || !range?.to) return 2;
-    const from = DateTime.fromJSDate(range.from).startOf("day");
-    const to = DateTime.fromJSDate(range.to).startOf("day");
-    const days = Math.floor(to.diff(from, "days").days);
-    return Math.max(0, days);
-  };
-
   return (
     <div>
       <p className="text-base text-foreground mb-4">
