@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { DateTime } from "luxon";
 import type { DateRange } from "react-day-picker";
 import {
@@ -68,6 +68,15 @@ export default function EditScheduleModal({
     initialStudyRange
   );
 
+  // 날짜 범위를 일수로 변환 (미래 날짜 기준)
+  const calculateStudyDays = (range: DateRange | undefined): number => {
+    if (!range?.from || !range?.to) return 2;
+    const from = DateTime.fromJSDate(range.from).startOf("day");
+    const to = DateTime.fromJSDate(range.to).startOf("day");
+    const days = Math.floor(to.diff(from, "days").days);
+    return Math.max(0, days);
+  };
+
   const handleStudyRangeChange = (range: DateRange | undefined) => {
     if (!range) {
       return;
@@ -79,13 +88,32 @@ export default function EditScheduleModal({
       to: range.to || range.from,
     };
     setStudyRange(fixedRange);
+
+    // form에 값 업데이트
+    if (fixedRange.from && fixedRange.to) {
+      const studyDays = calculateStudyDays(fixedRange);
+      setValue("studyDays", studyDays);
+    }
   };
 
   const [reviewDates, setReviewDates] = useState<Date[]>(initialReviewDates);
 
+  // 선택된 날짜들을 일수 배열로 변환 (미래 날짜 기준)
+  const calculateReviewDays = (dates: Date[]): number[] => {
+    const today = DateTime.now().startOf("day");
+    return dates
+      .map((date) => {
+        const dateTime = DateTime.fromJSDate(date).startOf("day");
+        return Math.floor(dateTime.diff(today, "days").days);
+      })
+      .filter((days) => days > 0)
+      .sort((a, b) => a - b);
+  };
+
   const handleReviewDatesChange = (dates: Date[] | undefined) => {
     if (!dates) {
       setReviewDates([]);
+      setValue("reviewDays", []);
       return;
     }
     const today = DateTime.now().startOf("day").toJSDate();
@@ -95,6 +123,14 @@ export default function EditScheduleModal({
       return dateToCheck.getTime() !== today.getTime();
     });
     setReviewDates(filteredDates);
+
+    // form에 값 업데이트
+    if (filteredDates.length > 0) {
+      const reviewDays = calculateReviewDays(filteredDates);
+      setValue("reviewDays", reviewDays);
+    } else {
+      setValue("reviewDays", []);
+    }
   };
 
   const [activeTab, setActiveTab] = useState<"study" | "review">("study");
@@ -117,57 +153,16 @@ export default function EditScheduleModal({
 
   // 모달이 열릴 때마다 초기값으로 리셋 및 form에 초기값 설정
   useEffect(() => {
-    if (isOpen && currentSchedule) {
-      setActiveTab("study");
-      setStudyRange(initialStudyRange);
-      setReviewDates(initialReviewDates);
-      // form에 초기값 설정
-      setValue("studyDays", currentSchedule.studyDays);
-      setValue("reviewDays", currentSchedule.reviewDays);
-    }
+    if (!isOpen || !currentSchedule) return;
+
+    setActiveTab("study");
+    setStudyRange(initialStudyRange);
+    setReviewDates(initialReviewDates);
+    setValue("studyDays", currentSchedule.studyDays);
+    setValue("reviewDays", currentSchedule.reviewDays);
+    // 모달 초기화는 일반적인 패턴이므로 허용
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, currentSchedule]);
-
-  // studyRange가 변경될 때마다 form에 값 업데이트
-  useEffect(() => {
-    if (studyRange?.from && studyRange?.to) {
-      const studyDays = calculateStudyDays(studyRange);
-      setValue("studyDays", studyDays);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studyRange]);
-
-  // reviewDates가 변경될 때마다 form에 값 업데이트
-  useEffect(() => {
-    if (reviewDates.length > 0) {
-      const reviewDays = calculateReviewDays(reviewDates);
-      setValue("reviewDays", reviewDays);
-    } else {
-      setValue("reviewDays", []);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reviewDates]);
-
-  // 날짜 범위를 일수로 변환 (미래 날짜 기준)
-  const calculateStudyDays = (range: DateRange | undefined): number => {
-    if (!range?.from || !range?.to) return 2;
-    const from = DateTime.fromJSDate(range.from).startOf("day");
-    const to = DateTime.fromJSDate(range.to).startOf("day");
-    const days = Math.floor(to.diff(from, "days").days);
-    return Math.max(0, days);
-  };
-
-  // 선택된 날짜들을 일수 배열로 변환 (미래 날짜 기준)
-  const calculateReviewDays = (dates: Date[]): number[] => {
-    const today = DateTime.now().startOf("day");
-    return dates
-      .map((date) => {
-        const dateTime = DateTime.fromJSDate(date).startOf("day");
-        return Math.floor(dateTime.diff(today, "days").days);
-      })
-      .filter((days) => days > 0)
-      .sort((a, b) => a - b);
-  };
 
   const onSubmit = () => {
     const studyDays = calculateStudyDays(studyRange);
