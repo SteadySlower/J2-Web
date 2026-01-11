@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 type BookCardProps<T extends Book> = {
   book: T;
   onEdit: (book: T) => void;
-  href: (id: string) => string;
+  href: (book: T) => string;
 };
 
 export default function BookCard<T extends Book>({
@@ -29,7 +29,7 @@ export default function BookCard<T extends Book>({
 
   return (
     <Link
-      href={href(book.id)}
+      href={href(book)}
       className="block group"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

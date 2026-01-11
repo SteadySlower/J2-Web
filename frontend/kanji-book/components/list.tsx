@@ -13,7 +13,7 @@ export default function KanjiBookList({ kanjibooks }: KanjiBookListProps) {
     <BookList
       books={kanjibooks}
       emptyMessage="첫번째 한자장을 추가해주세요"
-      href={(id) => `/kanji-books/${id}`}
+      href={(book) => `/kanji-books/${book.id}`}
       editModal={(book, isOpen, onClose) =>
         book ? (
           <EditKanjiBookModal

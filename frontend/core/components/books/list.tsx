@@ -7,7 +7,7 @@ import type { Book } from "./types";
 type BookListProps<T extends Book> = {
   books: T[];
   emptyMessage: string;
-  href: (id: string) => string;
+  href: (book: T) => string;
   editModal: (
     book: T | null,
     isOpen: boolean,

@@ -13,7 +13,7 @@ export default function WordBookList({ wordbooks }: WordBookListProps) {
     <BookList
       books={wordbooks}
       emptyMessage="첫번째 단어장을 추가해주세요"
-      href={(id) => `/word-books/${id}`}
+      href={(book) => `/word-books/${book.id}`}
       editModal={(book, isOpen, onClose) =>
         book ? (
           <EditWordBookModal
