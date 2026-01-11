@@ -2,10 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import {
-  createOrUpdateSchedule,
-  type CreateOrUpdateScheduleRequest,
-} from "@/lib/api/schedule/create-or-update-schedule";
+import { createOrUpdateSchedule } from "@/lib/api/schedule/create-or-update-schedule";
 
 type UseCreateOrUpdateScheduleOptions = {
   onSuccess?: () => void;

@@ -4,12 +4,13 @@ import { DateTime } from "luxon";
 import type { Schedule } from "@/frontend/core/types/schedule";
 
 export const createOrUpdateScheduleSchema = z.object({
-  studyDays: z.number().int().positive("study_days는 양의 정수여야 합니다"),
-  reviewDays: z
-    .array(
-      z.number().int().positive("review_days의 각 요소는 양의 정수여야 합니다")
-    )
-    .min(1, "review_days는 최소 하나의 값이 필요합니다"),
+  studyDays: z
+    .number()
+    .int()
+    .nonnegative("study_days는 0 이상의 정수여야 합니다"),
+  reviewDays: z.array(
+    z.number().int().positive("review_days의 각 요소는 양의 정수여야 합니다")
+  ),
 });
 
 export type CreateOrUpdateScheduleRequest = z.infer<

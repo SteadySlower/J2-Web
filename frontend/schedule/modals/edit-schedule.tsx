@@ -275,9 +275,7 @@ export default function EditScheduleModal({
             <SubmitButton
               isLoading={mutation.isPending}
               loadingText="저장 중..."
-              disabled={
-                !studyRange?.from || !studyRange?.to || reviewDates.length === 0
-              }
+              disabled={!studyRange?.from || !studyRange?.to}
             >
               저장
             </SubmitButton>
