@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getKanjiBookDetail } from "@/lib/api/kanji-books/get-book-detail";
 import { useToggleShowFront } from "@/frontend/kanjis/hooks/useToggleShowFront";
 import EndReviewModal from "@/frontend/core/modals/end-review";
+import { useEndReview } from "@/frontend/core/hooks/useEndReview";
 
 type KanjiBookDetailProps = {
   id: string;
@@ -34,6 +35,13 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
     kanjibookId: id,
     onSuccess: () => {
       setRevealedMap({});
+    },
+  });
+
+  const endReviewMutation = useEndReview({
+    onSuccess: () => {
+      setIsEndReviewModalOpen(false);
+      router.push("/");
     },
   });
 
@@ -127,7 +135,9 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
         <EndReviewModal
           isOpen={isEndReviewModalOpen}
           onClose={() => setIsEndReviewModalOpen(false)}
-          onConfirm={() => alert("복습 완료")}
+          onConfirm={() => {
+            endReviewMutation.mutate({ bookId: id, type: "kanji" });
+          }}
           message="한자장의 복습을 마치시겠습니까?"
         />
       )}

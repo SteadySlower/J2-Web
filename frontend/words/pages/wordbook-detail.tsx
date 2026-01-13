@@ -9,6 +9,7 @@ import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
 import FloatingButtons from "@/frontend/core/components/units/floating-buttons";
 import { useToggleShowFront } from "@/frontend/words/hooks/useToggleShowFront";
 import EndReviewModal from "@/frontend/core/modals/end-review";
+import { useEndReview } from "@/frontend/core/hooks/useEndReview";
 
 type WordBookDetailProps = {
   id: string;
@@ -34,6 +35,13 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     wordbookId: id,
     onSuccess: () => {
       setRevealedMap({});
+    },
+  });
+
+  const endReviewMutation = useEndReview({
+    onSuccess: () => {
+      setIsEndReviewModalOpen(false);
+      router.push("/");
     },
   });
 
@@ -125,7 +133,9 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         <EndReviewModal
           isOpen={isEndReviewModalOpen}
           onClose={() => setIsEndReviewModalOpen(false)}
-          onConfirm={() => alert("복습 완료")}
+          onConfirm={() => {
+            endReviewMutation.mutate({ bookId: id, type: "word" });
+          }}
           message="단어장의 복습을 마치시겠습니까?"
         />
       )}
