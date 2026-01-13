@@ -21,10 +21,18 @@ export default function ScheduleList() {
     );
   }
 
-  const getHref = (book: ScheduleBook) => {
+  const getStudyHref = (book: ScheduleBook) => {
     return book.type === "word"
       ? `/word-books/${book.id}`
       : `/kanji-books/${book.id}`;
+  };
+
+  const getReviewHref = (book: ScheduleBook) => {
+    const baseUrl =
+      book.type === "word"
+        ? `/word-books/${book.id}`
+        : `/kanji-books/${book.id}`;
+    return `${baseUrl}?mode=review`;
   };
 
   return (
@@ -34,7 +42,7 @@ export default function ScheduleList() {
         <BookList<ScheduleBook>
           books={data?.study ?? []}
           emptyMessage="학습할 단어장이나 한자장이 없습니다"
-          href={getHref}
+          href={getStudyHref}
           editModal={() => null}
         />
       </div>
@@ -43,7 +51,7 @@ export default function ScheduleList() {
         <BookList<ScheduleBook>
           books={data?.review ?? []}
           emptyMessage="복습할 단어장이나 한자장이 없습니다"
-          href={getHref}
+          href={getReviewHref}
           editModal={() => null}
         />
       </div>
