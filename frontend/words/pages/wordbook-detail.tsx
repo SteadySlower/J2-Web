@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getBookDetail } from "@/lib/api/word-books/get-book-detail";
 import FloatingButtons from "@/frontend/core/components/units/floating-buttons";
 import { useToggleShowFront } from "@/frontend/words/hooks/useToggleShowFront";
+import EndReviewModal from "@/frontend/core/modals/end-review";
 
 type WordBookDetailProps = {
   id: string;
@@ -15,6 +16,7 @@ type WordBookDetailProps = {
 
 export default function WordBookDetail({ id }: WordBookDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEndReviewModalOpen, setIsEndReviewModalOpen] = useState(false);
   const [shuffledWordIds, setShuffledWordIds] = useState<string[]>([]);
   const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({});
   const searchParams = useSearchParams();
@@ -110,13 +112,23 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
         onAddWord={() => setIsModalOpen(true)}
-        onReviewEnded={isReviewMode ? () => alert("복습 완료") : undefined}
+        onReviewEnded={
+          isReviewMode ? () => setIsEndReviewModalOpen(true) : undefined
+        }
       />
       <CreateWordModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreated={handleWordCreated}
       />
+      {isReviewMode && (
+        <EndReviewModal
+          isOpen={isEndReviewModalOpen}
+          onClose={() => setIsEndReviewModalOpen(false)}
+          onConfirm={() => alert("복습 완료")}
+          message="단어장의 복습을 마치시겠습니까?"
+        />
+      )}
     </div>
   );
 }

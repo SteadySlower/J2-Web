@@ -8,6 +8,7 @@ import FloatingButtons from "@/frontend/core/components/units/floating-buttons";
 import { useQuery } from "@tanstack/react-query";
 import { getKanjiBookDetail } from "@/lib/api/kanji-books/get-book-detail";
 import { useToggleShowFront } from "@/frontend/kanjis/hooks/useToggleShowFront";
+import EndReviewModal from "@/frontend/core/modals/end-review";
 
 type KanjiBookDetailProps = {
   id: string;
@@ -15,6 +16,7 @@ type KanjiBookDetailProps = {
 
 export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEndReviewModalOpen, setIsEndReviewModalOpen] = useState(false);
   const [shuffledKanjiIds, setShuffledKanjiIds] = useState<string[]>([]);
   const [revealedMap, setRevealedMap] = useState<Record<string, boolean>>({});
   const searchParams = useSearchParams();
@@ -112,13 +114,23 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
         onAddWord={() => setIsModalOpen(true)}
-        onReviewEnded={isReviewMode ? () => alert("복습 완료") : undefined}
+        onReviewEnded={
+          isReviewMode ? () => setIsEndReviewModalOpen(true) : undefined
+        }
       />
       <CreateKanjiModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreated={handleKanjiCreated}
       />
+      {isReviewMode && (
+        <EndReviewModal
+          isOpen={isEndReviewModalOpen}
+          onClose={() => setIsEndReviewModalOpen(false)}
+          onConfirm={() => alert("복습 완료")}
+          message="한자장의 복습을 마치시겠습니까?"
+        />
+      )}
     </div>
   );
 }
