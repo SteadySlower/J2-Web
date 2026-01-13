@@ -21,6 +21,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
   const router = useRouter();
 
   const isFilterGraduated = searchParams.get("filterGraduated") === "true";
+  const isReviewMode = searchParams.get("mode") === "review";
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["word-books", id],
@@ -109,6 +110,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
         onAddWord={() => setIsModalOpen(true)}
+        onReviewEnded={isReviewMode ? () => alert("복습 완료") : undefined}
       />
       <CreateWordModal
         isOpen={isModalOpen}

@@ -21,6 +21,7 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
   const router = useRouter();
 
   const isFilterGraduated = searchParams.get("filterGraduated") === "true";
+  const isReviewMode = searchParams.get("mode") === "review";
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["kanji-books", id],
@@ -111,6 +112,7 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
         onFilterChange={handleFilterChange}
         onShuffle={handleShuffle}
         onAddWord={() => setIsModalOpen(true)}
+        onReviewEnded={isReviewMode ? () => alert("복습 완료") : undefined}
       />
       <CreateKanjiModal
         isOpen={isModalOpen}

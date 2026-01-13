@@ -2,6 +2,7 @@ import PlusButton from "@/frontend/core/components/plus-button";
 import CheckFilterButton from "@/frontend/core/components/units/check-filter-button";
 import ShuffleButton from "@/frontend/core/components/units/shuffle-button";
 import ShowFrontButton from "@/frontend/core/components/units/showFront-button";
+import ReviewDoneButton from "@/frontend/core/components/units/review-done-button";
 import { cn } from "@/lib/utils";
 
 type FloatingButtonsProps = {
@@ -14,6 +15,7 @@ type FloatingButtonsProps = {
   onFilterChange: () => void;
   onShuffle: () => void;
   onAddWord: () => void;
+  onReviewEnded?: () => void;
 };
 
 export default function FloatingButtons({
@@ -26,6 +28,7 @@ export default function FloatingButtons({
   onFilterChange,
   onShuffle,
   onAddWord,
+  onReviewEnded,
 }: FloatingButtonsProps) {
   return (
     <div className="fixed top-20 z-50 flex flex-col items-end justify-end gap-2">
@@ -46,6 +49,7 @@ export default function FloatingButtons({
       />
       <ShuffleButton onClick={onShuffle} />
       <PlusButton tooltipText={plusButtonTooltipText} onClick={onAddWord} />
+      {onReviewEnded && <ReviewDoneButton onClick={onReviewEnded} />}
     </div>
   );
 }
