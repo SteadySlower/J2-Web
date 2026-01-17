@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
+import { getCurrentLocalDate } from "@/lib/api/utils/date";
 import type {
   ScheduleBooks,
   ScheduleBook,
@@ -72,12 +73,7 @@ export async function getScheduledBooks(): Promise<ScheduleBooks> {
   }
 
   const token = await getAuthToken();
-  // 클라이언트의 로컬 타임존 기준 현재 날짜를 YYYY-MM-DD 형식으로 가져옵니다
-  // 이 함수는 클라이언트 컴포넌트에서만 호출되므로 브라우저의 로컬 타임존을 사용합니다
-  const currentDate = DateTime.now().toISODate();
-  if (!currentDate) {
-    throw new Error("현재 날짜를 가져올 수 없습니다.");
-  }
+  const currentDate = getCurrentLocalDate();
 
   const [wordBooksResponse, kanjiBooksResponse] = await Promise.all([
     fetch(`${apiBaseUrl}/schedules/word-books?current_date=${currentDate}`, {
