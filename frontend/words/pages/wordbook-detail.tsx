@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import WordList from "@/frontend/words/components/word-list/list";
 import CreateWordModal from "@/frontend/words/modals/create-word";
@@ -85,6 +85,11 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
     setShuffledWordIds(shuffled.map((word) => word.id));
   };
 
+  const learningWordIds = useMemo(() => {
+    if (!data) return [];
+    return data.words.filter((word) => word.status === "learning").map((word) => word.id);
+  }, [data]);
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -136,7 +141,8 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
           onConfirm={() => {
             endReviewMutation.mutate({ bookId: id, type: "word" });
           }}
-          message="단어장의 복습을 마치시겠습니까?"
+          learningWordIds={learningWordIds}
+          type="word"
         />
       )}
     </div>

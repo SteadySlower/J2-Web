@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import KanjiList from "@/frontend/kanjis/components/list";
 import CreateKanjiModal from "@/frontend/kanjis/modals/create-kanji";
@@ -87,6 +87,11 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
     setShuffledKanjiIds(shuffled.map((kanji) => kanji.id));
   };
 
+  const learningKanjiIds = useMemo(() => {
+    if (!data) return [];
+    return data.kanjis.filter((kanji) => kanji.status === "learning").map((kanji) => kanji.id);
+  }, [data]);
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -138,7 +143,8 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
           onConfirm={() => {
             endReviewMutation.mutate({ bookId: id, type: "kanji" });
           }}
-          message="한자장의 복습을 마치시겠습니까?"
+          learningWordIds={learningKanjiIds}
+          type="kanji"
         />
       )}
     </div>
