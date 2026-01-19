@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -58,7 +58,9 @@ export default function EndReviewModal({
 
   const books = type === "word" ? wordBooks : kanjiBooks;
   const isLoading = type === "word" ? isLoadingWordBooks : isLoadingKanjiBooks;
-  const availableBooks = books?.filter((book) => book.id !== sourceBookId) ?? [];
+  const availableBooks = useMemo(() => {
+    return books?.filter((book) => book.id !== sourceBookId) ?? [];
+  }, [books, sourceBookId]);
 
   const moveMutation = useMutation({
     mutationFn: async (targetBookId: string) => {
@@ -102,9 +104,15 @@ export default function EndReviewModal({
     onClose();
   };
 
+  // onClose를 래핑하여 상태 초기화 포함
+  const handleClose = () => {
+    setSelectedBookId("");
+    onClose();
+  };
+
   if (learningWordIds.length === 0) {
     return (
-      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{type === "word" ? "단어장" : "한자장"} 마치기</DialogTitle>
@@ -114,7 +122,7 @@ export default function EndReviewModal({
           </DialogDescription>
           <div className="flex gap-2 justify-end mt-6">
             <CancelButton onClick={handleCancel} />
-            <Button onClick={handleConfirm}>확인</Button>
+            <Button onClick={handleConfirmWithoutMove}>확인</Button>
           </div>
         </DialogContent>
       </Dialog>
