@@ -145,6 +145,7 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
           }}
           learningWordIds={learningKanjiIds}
           type="kanji"
+          sourceBookId={id}
         />
       )}
     </div>

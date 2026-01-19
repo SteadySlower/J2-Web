@@ -143,6 +143,7 @@ export default function WordBookDetail({ id }: WordBookDetailProps) {
           }}
           learningWordIds={learningWordIds}
           type="word"
+          sourceBookId={id}
         />
       )}
     </div>
