@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import BookList from "@/frontend/core/components/books/list";
 import { getScheduledBooks } from "@/lib/api/schedule/get-scheduled-books";
 import type { ScheduleBook } from "@/frontend/core/types/schedule";
-
+import StatisticsBoard from "./statistics-board";
 export default function ScheduleList() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["scheduled-books"],
@@ -19,6 +19,10 @@ export default function ScheduleList() {
     return (
       <div>스케줄 목록을 불러오지 못했습니다. {(error as Error).message}</div>
     );
+  }
+
+  if (!data) {
+    return <div>스케줄 목록을 불러오지 못했습니다.</div>;
   }
 
   const getStudyHref = (book: ScheduleBook) => {
@@ -36,8 +40,13 @@ export default function ScheduleList() {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 px-16">
       <div>
+        <StatisticsBoard
+          total={data.statistics.total}
+          learning={data.statistics.learning}
+          learned={data.statistics.learned}
+        />
         <h2 className="text-4xl font-semibold mb-4 px-16">학습</h2>
         <BookList<ScheduleBook>
           books={data?.study ?? []}

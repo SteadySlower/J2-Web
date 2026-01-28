@@ -33,4 +33,9 @@ export type ScheduleBook = {
 export type ScheduleBooks = {
   study: ScheduleBook[];
   review: ScheduleBook[];
+  statistics: {
+    total: number;
+    learning: number;
+    learned: number;
+  };
 };

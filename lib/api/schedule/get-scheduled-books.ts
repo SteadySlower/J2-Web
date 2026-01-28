@@ -23,6 +23,10 @@ type ScheduledWordBookResponse = {
     created_at: string;
     updated_at: string;
   }[];
+  study_statistics: {
+    total: number;
+    learning: number;
+  };
 };
 
 type ScheduledKanjiBookResponse = {
@@ -42,6 +46,10 @@ type ScheduledKanjiBookResponse = {
     created_at: string;
     updated_at: string;
   }[];
+  study_statistics: {
+    total: number;
+    learning: number;
+  };
 };
 
 function parseToScheduleBook(
@@ -122,8 +130,19 @@ export async function getScheduledBooks(): Promise<ScheduleBooks> {
   study.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
   review.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
 
+  const wordStatistics = wordBooksResult.data.study_statistics;
+  const kanjiStatistics = kanjiBooksResult.data.study_statistics;
+  const total = wordStatistics.total + kanjiStatistics.total;
+  const learning = wordStatistics.learning + kanjiStatistics.learning;
+  const learned = total - learning;
+
   return {
     study,
     review,
+    statistics: {
+      total,
+      learning,
+      learned,
+    },
   };
 }
