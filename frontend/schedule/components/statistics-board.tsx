@@ -1,17 +1,23 @@
 "use client";
 
 import { VictoryPie } from "victory";
+import SettingButton from "./setting-button";
+import ResetReviewButton from "./reset-review-button";
 
 type StatisticsBoardProps = {
   total: number;
   learning: number;
   learned: number;
+  onSettingClick: () => void;
+  onResetClick: () => void;
 };
 
 export default function StatisticsBoard({
   total,
   learning,
   learned,
+  onSettingClick,
+  onResetClick,
 }: StatisticsBoardProps) {
   const chartData = [
     { x: "학습 중", y: learning },
@@ -21,8 +27,8 @@ export default function StatisticsBoard({
   const learningRate = total > 0 ? Math.round((learned / total) * 100) : 0;
 
   return (
-    <div className="flex gap-8 items-center bg-white rounded-lg shadow-md py-6 px-4 mx-16 mb-8">
-      <div className="shrink-0 relative">
+    <div className="grid grid-cols-[1fr_1.5fr] gap-8 bg-white rounded-lg shadow-md px-4 mx-16 mb-8">
+      <div className="relative">
         <VictoryPie
           data={chartData}
           colorScale={["#ef4444", "#10b981"]}
@@ -40,7 +46,7 @@ export default function StatisticsBoard({
           </div>
         </div>
       </div>
-      <div className="flex-1 space-y-4">
+      <div className="flex flex-col justify-center gap-4">
         <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
           <span className="text-sm font-medium text-gray-700">
             📚 전체 단어
@@ -53,6 +59,14 @@ export default function StatisticsBoard({
           </span>
           <span className="text-lg font-semibold text-red-600">{learning}</span>
         </div>
+      </div>
+      <div></div>
+      <div className="flex flex-row gap-2 justify-end items-end pb-4">
+        <SettingButton tooltipText="스케줄 설정" onClick={onSettingClick} />
+        <ResetReviewButton
+          tooltipText="복습 스케줄 리셋"
+          onClick={onResetClick}
+        />
       </div>
     </div>
   );

@@ -5,7 +5,16 @@ import BookList from "@/frontend/core/components/books/list";
 import { getScheduledBooks } from "@/lib/api/schedule/get-scheduled-books";
 import type { ScheduleBook } from "@/frontend/core/types/schedule";
 import StatisticsBoard from "./statistics-board";
-export default function ScheduleList() {
+
+type ScheduleListProps = {
+  onSettingClick: () => void;
+  onResetClick: () => void;
+};
+
+export default function ScheduleList({
+  onSettingClick,
+  onResetClick,
+}: ScheduleListProps) {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["scheduled-books"],
     queryFn: getScheduledBooks,
@@ -46,6 +55,8 @@ export default function ScheduleList() {
           total={data.statistics.total}
           learning={data.statistics.learning}
           learned={data.statistics.learned}
+          onSettingClick={onSettingClick}
+          onResetClick={onResetClick}
         />
         <h2 className="text-4xl font-semibold mb-4 px-16">학습</h2>
         <BookList<ScheduleBook>

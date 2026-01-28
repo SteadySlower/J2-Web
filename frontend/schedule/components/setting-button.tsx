@@ -30,7 +30,7 @@ export default function SettingButton({
     return (
       <Tooltip>
         <TooltipTrigger asChild>{button}</TooltipTrigger>
-        <TooltipContent side="right">
+        <TooltipContent side="top">
           <p>{tooltipText}</p>
           <TooltipArrow />
         </TooltipContent>
