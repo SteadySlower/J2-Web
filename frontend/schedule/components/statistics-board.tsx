@@ -62,11 +62,12 @@ export default function StatisticsBoard({
       </div>
       <div></div>
       <div className="flex flex-row gap-2 justify-end items-end pb-4">
-        <SettingButton tooltipText="스케줄 설정" onClick={onSettingClick} />
-        <ResetReviewButton
-          tooltipText="복습 스케줄 리셋"
+      <ResetReviewButton
+          tooltipText="스케줄 리셋"
           onClick={onResetClick}
         />
+        <SettingButton tooltipText="스케줄 설정" onClick={onSettingClick} />
+
       </div>
     </div>
   );

@@ -49,31 +49,33 @@ export default function ScheduleList({
   };
 
   return (
-    <div className="flex flex-col gap-8 px-16">
-      <div>
-        <StatisticsBoard
-          total={data.statistics.total}
-          learning={data.statistics.learning}
-          learned={data.statistics.learned}
-          onSettingClick={onSettingClick}
-          onResetClick={onResetClick}
-        />
-        <h2 className="text-4xl font-semibold mb-4 px-16">학습</h2>
-        <BookList<ScheduleBook>
-          books={data?.study ?? []}
-          emptyMessage="학습할 단어장이나 한자장이 없습니다"
-          href={getStudyHref}
-          editModal={() => null}
-        />
-      </div>
-      <div>
-        <h2 className="text-4xl font-semibold mb-4 px-16">복습</h2>
-        <BookList<ScheduleBook>
-          books={data?.review ?? []}
-          emptyMessage="복습할 단어장이나 한자장이 없습니다"
-          href={getReviewHref}
-          editModal={() => null}
-        />
+    <div className="flex flex-col gap-2">
+      <StatisticsBoard
+        total={data.statistics.total}
+        learning={data.statistics.learning}
+        learned={data.statistics.learned}
+        onSettingClick={onSettingClick}
+        onResetClick={onResetClick}
+      />
+      <div className="grid grid-cols-2">
+        <div>
+          <h2 className="text-4xl font-semibold mb-4 px-16">학습</h2>
+          <BookList<ScheduleBook>
+            books={data?.study ?? []}
+            emptyMessage="학습할 단어장이나 한자장이 없습니다"
+            href={getStudyHref}
+            editModal={() => null}
+          />
+        </div>
+        <div>
+          <h2 className="text-4xl font-semibold mb-4 px-16">복습</h2>
+          <BookList<ScheduleBook>
+            books={data?.review ?? []}
+            emptyMessage="복습할 단어장이나 한자장이 없습니다"
+            href={getReviewHref}
+            editModal={() => null}
+          />
+        </div>
       </div>
     </div>
   );

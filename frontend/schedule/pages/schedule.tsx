@@ -16,7 +16,7 @@ export default function Schedule() {
   });
 
   return (
-    <div className="max-w-[900px] mx-auto my-16">
+    <div className="max-w-6xl min-w-4xl mx-auto my-16">
       <ScheduleList
         onSettingClick={() => setIsEditModalOpen(true)}
         onResetClick={() => setIsResetConfirmOpen(true)}
