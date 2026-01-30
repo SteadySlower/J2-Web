@@ -3,11 +3,13 @@
 import { VictoryPie } from "victory";
 import SettingButton from "./setting-button";
 import ResetReviewButton from "./reset-review-button";
+import { DateTime } from "luxon";
 
 type StatisticsBoardProps = {
   total: number;
   learning: number;
   learned: number;
+  reviewDate: string;
   onSettingClick: () => void;
   onResetClick: () => void;
 };
@@ -16,6 +18,7 @@ export default function StatisticsBoard({
   total,
   learning,
   learned,
+  reviewDate,
   onSettingClick,
   onResetClick,
 }: StatisticsBoardProps) {
@@ -26,8 +29,22 @@ export default function StatisticsBoard({
 
   const learningRate = total > 0 ? Math.round((learned / total) * 100) : 0;
 
+  const reviewDateTime = DateTime.fromISO(reviewDate).startOf('day');
+  const today = DateTime.now().startOf('day');
+  const daysDiff = Math.floor(today.diff(reviewDateTime, 'days').days);
+  const isToday = daysDiff === 0;
+  
+  const getDaysAgoText = (days: number) => {
+    if (days === 1) return '어제';
+    return `${days}일 전`;
+  };
+
   return (
-    <div className="grid grid-cols-[1fr_1.5fr] gap-8 bg-white rounded-lg shadow-md px-4 mx-16 mb-8">
+    <div className="relative grid grid-cols-[1fr_1.5fr] gap-8 bg-white rounded-lg shadow-md px-4 mx-16 mb-8">
+      <div className={`absolute top-4 left-4 text-3xl font-bold ${isToday ? 'text-primary' : 'text-red-500'}`}>
+        {reviewDateTime.toFormat('M월 d일')}
+        {!isToday && ` (${getDaysAgoText(daysDiff)})`}
+      </div>
       <div className="relative">
         <VictoryPie
           data={chartData}

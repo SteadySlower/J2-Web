@@ -26,6 +26,7 @@ type ScheduledWordBookResponse = {
   study_statistics: {
     total: number;
     learning: number;
+    review_date: string;
   };
 };
 
@@ -49,6 +50,7 @@ type ScheduledKanjiBookResponse = {
   study_statistics: {
     total: number;
     learning: number;
+    review_date: string;
   };
 };
 
@@ -143,6 +145,7 @@ export async function getScheduledBooks(): Promise<ScheduleBooks> {
       total,
       learning,
       learned,
+      review_date: wordBooksResult.data.study_statistics.review_date,
     },
   };
 }

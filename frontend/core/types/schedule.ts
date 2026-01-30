@@ -37,5 +37,6 @@ export type ScheduleBooks = {
     total: number;
     learning: number;
     learned: number;
+    review_date: string;
   };
 };

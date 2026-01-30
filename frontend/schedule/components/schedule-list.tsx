@@ -54,6 +54,7 @@ export default function ScheduleList({
         total={data.statistics.total}
         learning={data.statistics.learning}
         learned={data.statistics.learned}
+        reviewDate={data.statistics.review_date}
         onSettingClick={onSettingClick}
         onResetClick={onResetClick}
       />
