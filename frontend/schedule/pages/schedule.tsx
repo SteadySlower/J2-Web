@@ -26,9 +26,9 @@ export default function Schedule() {
         onClose={() => setIsEditModalOpen(false)}
       />
       <ConfirmAlertDialog
-        title="복습 기록 초기화"
-        description="모든 복습 기록이 초기화됩니다. 이 작업은 되돌릴 수 없습니다."
-        actionButtonLabel="초기화"
+        title="스케줄 리셋"
+        description="오늘 스케줄로 리셋합니다."
+        actionButtonLabel="리셋"
         open={isResetConfirmOpen}
         onOpenChange={setIsResetConfirmOpen}
         onActionButtonClicked={() => resetReviewMutation.mutate()}
