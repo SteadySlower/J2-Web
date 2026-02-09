@@ -14,7 +14,7 @@ type FloatingButtonsProps = {
   onToggleShowFront: () => void;
   onFilterChange: () => void;
   onShuffle: () => void;
-  onAddWord: () => void;
+  onAddWord?: () => void;
   onReviewEnded?: () => void;
 };
 
@@ -38,7 +38,7 @@ export default function FloatingButtons({
         className={cn(
           isFilterGraduated
             ? "bg-green-500 hover:bg-green-600"
-            : "bg-gray-400 hover:bg-gray-500"
+            : "bg-gray-400 hover:bg-gray-500",
         )}
       />
       <ShowFrontButton
@@ -48,7 +48,9 @@ export default function FloatingButtons({
         onClick={onToggleShowFront}
       />
       <ShuffleButton onClick={onShuffle} />
-      <PlusButton tooltipText={plusButtonTooltipText} onClick={onAddWord} />
+      {onAddWord && (
+        <PlusButton tooltipText={plusButtonTooltipText} onClick={onAddWord} />
+      )}
       {onReviewEnded && <ReviewDoneButton onClick={onReviewEnded} />}
     </div>
   );
