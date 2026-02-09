@@ -3,13 +3,16 @@
 import { VictoryPie } from "victory";
 import SettingButton from "./setting-button";
 import ResetReviewButton from "./reset-review-button";
+import TodayWordsButton from "@/frontend/core/components/units/today-words-button";
 import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
 
 type StatisticsBoardProps = {
   total: number;
   learning: number;
   learned: number;
   reviewDate: string;
+  studyWordBookIds: string[];
   onSettingClick: () => void;
   onResetClick: () => void;
 };
@@ -19,9 +22,12 @@ export default function StatisticsBoard({
   learning,
   learned,
   reviewDate,
+  studyWordBookIds,
   onSettingClick,
   onResetClick,
 }: StatisticsBoardProps) {
+  const router = useRouter();
+
   const chartData = [
     { x: "학습 중", y: learning },
     { x: "학습 완료", y: learned },
@@ -37,6 +43,12 @@ export default function StatisticsBoard({
   const getDaysAgoText = (days: number) => {
     if (days === 1) return '어제';
     return `${days}일 전`;
+  };
+
+  const handleTodayWordsClick = () => {
+    if (studyWordBookIds.length === 0) return;
+    const idsParam = studyWordBookIds.join(",");
+    router.push(`/today?ids=${idsParam}`);
   };
 
   return (
@@ -79,12 +91,14 @@ export default function StatisticsBoard({
       </div>
       <div></div>
       <div className="flex flex-row gap-2 justify-end items-end pb-4">
-      <ResetReviewButton
+        {studyWordBookIds.length > 0 && (
+          <TodayWordsButton onClick={handleTodayWordsClick} />
+        )}
+        <ResetReviewButton
           tooltipText="스케줄 리셋"
           onClick={onResetClick}
         />
         <SettingButton tooltipText="스케줄 설정" onClick={onSettingClick} />
-
       </div>
     </div>
   );

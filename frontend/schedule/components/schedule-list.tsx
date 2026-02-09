@@ -48,6 +48,11 @@ export default function ScheduleList({
     return `${baseUrl}?mode=review`;
   };
 
+  // 학습할 단어장 ID 추출 (type이 "word"인 것만)
+  const studyWordBookIds = data.study
+    .filter((book) => book.type === "word")
+    .map((book) => book.id);
+
   return (
     <div className="flex flex-col gap-2">
       <StatisticsBoard
@@ -55,6 +60,7 @@ export default function ScheduleList({
         learning={data.statistics.learning}
         learned={data.statistics.learned}
         reviewDate={data.statistics.review_date}
+        studyWordBookIds={studyWordBookIds}
         onSettingClick={onSettingClick}
         onResetClick={onResetClick}
       />
