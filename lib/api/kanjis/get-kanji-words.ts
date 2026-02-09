@@ -1,17 +1,7 @@
 import { getAuthToken } from "@/lib/api/utils/auth";
 import type { Word } from "@/frontend/core/types/word";
 import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
-
-type WordResponse = {
-  id: string;
-  book_id: string;
-  japanese: string;
-  meaning: string;
-  pronunciation: string;
-  status: "learning" | "learned";
-  created_at: string;
-  updated_at: string;
-};
+import type { WordResponse } from "@/lib/api/types/word";
 
 export type GetKanjiWordsResponse = Word[];
 

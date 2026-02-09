@@ -1,19 +1,8 @@
 import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
 import type { WordBookDetail } from "@/frontend/core/types/word-books";
-import type { KanjiResponse } from "@/lib/api/types/kanji";
 import { mapWordResponseToWord } from "@/lib/api/utils/word-mapper";
-
-type WordResponse = {
-  id: string;
-  japanese: string;
-  meaning: string;
-  pronunciation: string;
-  status: "learning" | "learned";
-  created_at: string;
-  updated_at: string;
-  kanjis: KanjiResponse[];
-};
+import type { WordResponse } from "@/lib/api/types/word";
 
 type WordBookDetailResponse = {
   id: string;

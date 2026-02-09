@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import type { KanjiResponse } from "@/lib/api/types/kanji";
 import type { Kanji } from "@/frontend/core/types/kanji";
 import type { Word } from "@/frontend/core/types/word";
+import type { WordResponse } from "@/lib/api/types/word";
 
 export function mapKanjiResponseToKanji(kanji: KanjiResponse): Kanji {
   return {
@@ -14,18 +15,7 @@ export function mapKanjiResponseToKanji(kanji: KanjiResponse): Kanji {
   };
 }
 
-type WordResponseLike = {
-  id: string;
-  japanese: string;
-  meaning: string;
-  pronunciation: string;
-  status: "learning" | "learned";
-  created_at: string;
-  updated_at: string;
-  kanjis: KanjiResponse[];
-};
-
-export function mapWordResponseToWord(data: WordResponseLike): Word {
+export function mapWordResponseToWord(data: WordResponse): Word {
   return {
     id: data.id,
     japanese: data.japanese,
@@ -34,6 +24,6 @@ export function mapWordResponseToWord(data: WordResponseLike): Word {
     status: data.status,
     createdAt: DateTime.fromISO(data.created_at),
     updatedAt: DateTime.fromISO(data.updated_at),
-    kanjis: data.kanjis.map(mapKanjiResponseToKanji),
+    kanjis: (data.kanjis || []).map(mapKanjiResponseToKanji),
   };
 }
