@@ -6,7 +6,7 @@ import type { KanjiResponse } from "./kanji";
  */
 export type WordResponse = {
   id: string;
-  book_id?: string; // 일부 API에서는 포함되지 않을 수 있음
+  book_id: string;
   japanese: string;
   meaning: string;
   pronunciation: string;

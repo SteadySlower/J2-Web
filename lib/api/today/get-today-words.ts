@@ -61,7 +61,11 @@ export async function getTodayWords(
           words: WordResponse[];
         };
       } = await response.json();
-      return result.data.words;
+      // 각 단어에 bookId 추가
+      return result.data.words.map((word) => ({
+        ...word,
+        book_id: bookId,
+      }));
     }),
   );
 

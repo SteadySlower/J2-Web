@@ -18,6 +18,7 @@ export function mapKanjiResponseToKanji(kanji: KanjiResponse): Kanji {
 export function mapWordResponseToWord(data: WordResponse): Word {
   return {
     id: data.id,
+    bookId: data.book_id,
     japanese: data.japanese,
     meaning: data.meaning,
     pronunciation: data.pronunciation,

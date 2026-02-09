@@ -8,7 +8,6 @@ import RightText from "./word-card/right-text";
 import EditButton from "../../../core/components/edit-button";
 import KanjiButton from "./word-card/kanji-button";
 import { cn } from "@/lib/utils";
-import { useParams } from "next/navigation";
 import { useToggleWordStatus } from "@/frontend/words/hooks/useToggleWordStatus";
 
 type WordCardProps = {
@@ -28,12 +27,9 @@ export default function WordCard({
   onEdit,
   onShowKanjis,
 }: WordCardProps) {
-  const params = useParams();
-  const wordbookId = params.id as string;
-
   const toggleMutation = useToggleWordStatus({
     wordId: word.id,
-    bookId: wordbookId,
+    bookId: word.bookId,
   });
 
   const handleReveal = () => {
