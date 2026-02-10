@@ -68,6 +68,15 @@ export async function getTodayKanjis(
   // 모든 한자장의 한자를 합치기
   const allKanjis = responses.flat();
 
+  // kanji.id를 기준으로 중복 제거 (같은 한자가 여러 한자장에 속할 수 있음)
+  const uniqueKanjisMap = new Map<string, KanjiResponse>();
+  for (const kanji of allKanjis) {
+    if (!uniqueKanjisMap.has(kanji.id)) {
+      uniqueKanjisMap.set(kanji.id, kanji);
+    }
+  }
+  const uniqueKanjis = Array.from(uniqueKanjisMap.values());
+
   // KanjiResponse를 Kanji로 변환
-  return allKanjis.map(mapKanjiResponseToKanji);
+  return uniqueKanjis.map(mapKanjiResponseToKanji);
 }
