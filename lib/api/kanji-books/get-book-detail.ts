@@ -2,17 +2,7 @@ import { DateTime } from "luxon";
 import { getAuthToken } from "@/lib/api/utils/auth";
 import { mapKanjiResponseToKanji } from "@/lib/api/utils/word-mapper";
 import type { Kanji } from "@/frontend/core/types/kanji";
-
-type KanjiInBookResponse = {
-  id: string;
-  character: string;
-  meaning: string;
-  on_reading: string | null;
-  kun_reading: string | null;
-  status: "learning" | "learned";
-  created_at: string;
-  updated_at: string;
-};
+import type { KanjiResponse } from "@/lib/api/types/kanji";
 
 type KanjiBookDetailResponse = {
   id: string;
@@ -21,7 +11,7 @@ type KanjiBookDetailResponse = {
   showFront: boolean;
   created_at: string;
   updated_at: string;
-  kanjis: KanjiInBookResponse[];
+  kanjis: KanjiResponse[];
 };
 
 export type KanjiBookDetail = {
@@ -67,15 +57,6 @@ export async function getKanjiBookDetail(id: string): Promise<KanjiBookDetail> {
     showFront: result.data.showFront,
     createdAt: DateTime.fromISO(result.data.created_at),
     updatedAt: DateTime.fromISO(result.data.updated_at),
-    kanjis: result.data.kanjis.map((kanji) =>
-      mapKanjiResponseToKanji({
-        id: kanji.id,
-        character: kanji.character,
-        meaning: kanji.meaning,
-        on_reading: kanji.on_reading,
-        kun_reading: kanji.kun_reading,
-        status: kanji.status,
-      })
-    ),
+    kanjis: result.data.kanjis.map(mapKanjiResponseToKanji),
   };
 }

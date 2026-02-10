@@ -7,6 +7,7 @@ import type { WordResponse } from "@/lib/api/types/word";
 export function mapKanjiResponseToKanji(kanji: KanjiResponse): Kanji {
   return {
     id: kanji.id,
+    bookId: kanji.book_id,
     character: kanji.character,
     meaning: kanji.meaning,
     onReading: kanji.on_reading,

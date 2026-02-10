@@ -48,7 +48,7 @@ export function useUpdateKanji({
                     onReading: updatedData.on_reading ?? k.onReading,
                     kunReading: updatedData.kun_reading ?? k.kunReading,
                   }
-                : k
+                : k,
             ),
           });
         }
@@ -72,7 +72,7 @@ export function useUpdateKanji({
                       onReading: updatedData.on_reading ?? kanji.onReading,
                       kunReading: updatedData.kun_reading ?? kanji.kunReading,
                     }
-                  : kanji
+                  : kanji,
               );
             });
           }
@@ -81,44 +81,7 @@ export function useUpdateKanji({
       // 롤백을 위한 컨텍스트 반환
       return { previousDetail };
     },
-    onSuccess: (data) => {
-      const mappedKanji: Kanji = {
-        id: data.id,
-        character: data.character,
-        meaning: data.meaning,
-        onReading: data.on_reading,
-        kunReading: data.kun_reading,
-        status: data.status,
-      };
-
-      // 서버 응답으로 실제 데이터로 교체: kanji-books
-      if (bookId) {
-        queryClient.setQueryData<KanjiBookDetail>(
-          ["kanji-books", bookId],
-          (old) => {
-            if (!old) return old;
-            return {
-              ...old,
-              kanjis: old.kanjis.map((k) =>
-                k.id === kanjiId ? mappedKanji : k
-              ),
-            };
-          }
-        );
-      }
-
-      // 서버 응답으로 실제 데이터로 교체: today-kanjis
-      queryClient
-        .getQueriesData({ queryKey: ["today-kanjis"] })
-        .forEach(([queryKey]) => {
-          queryClient.setQueryData<Kanji[]>(queryKey, (old) => {
-            if (!old) return old;
-            return old.map((kanji) =>
-              kanji.id === kanjiId ? mappedKanji : kanji
-            );
-          });
-        });
-
+    onSuccess: () => {
       toast.success("한자가 수정되었습니다!");
       onSuccess?.();
     },
@@ -127,7 +90,7 @@ export function useUpdateKanji({
       if (bookId && context?.previousDetail) {
         queryClient.setQueryData(
           ["kanji-books", bookId],
-          context.previousDetail
+          context.previousDetail,
         );
       }
       // today-kanjis는 invalidate로 롤백 (서버에서 다시 가져옴)
@@ -136,4 +99,3 @@ export function useUpdateKanji({
     },
   });
 }
-

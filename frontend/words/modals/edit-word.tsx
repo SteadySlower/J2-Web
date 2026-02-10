@@ -20,7 +20,6 @@ import {
 } from "@/lib/api/words/update-word";
 import type { Word } from "@/frontend/core/types/word";
 import WordFormFields from "@/frontend/words/components/word-form-fields";
-import { useParams } from "next/navigation";
 import { useUpdateWord } from "@/frontend/words/hooks/useUpdateWord";
 import { useDeleteWord } from "@/frontend/words/hooks/useDeleteWord";
 
@@ -38,8 +37,7 @@ export default function EditWordModal({
   word,
 }: EditWordModalProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const params = useParams();
-  const bookId = params.id as string;
+  const bookId = word.bookId;
 
   const form = useForm<WordFormData>({
     resolver: zodResolver(updateWordSchema),

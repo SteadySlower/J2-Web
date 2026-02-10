@@ -31,6 +31,7 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
       // 낙관적 업데이트: 임시 데이터 추가
       const optimisticKanji: Kanji = {
         id: `temp-${Date.now()}`,
+        bookId: bookId,
         character: newKanji.character,
         meaning: newKanji.meaning,
         onReading: newKanji.on_reading ?? null,
@@ -49,6 +50,7 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
       return { previousDetail };
     },
     onSuccess: (data) => {
+      // 한자장이 없이 한자를 만드는 경우를 대비해서 넣은 코드
       if (!bookId) {
         toast.success("한자가 생성되었습니다!");
         onSuccess?.(data.id);
@@ -68,10 +70,11 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
             if (!old) return old;
             // 임시 데이터 제거하고 실제 데이터 추가
             const filtered = old.kanjis.filter(
-              (kanji) => !kanji.id.startsWith("temp-")
+              (kanji) => !kanji.id.startsWith("temp-"),
             );
             const mappedKanji: Kanji = {
               id: data.id,
+              bookId: bookId,
               character: data.character,
               meaning: data.meaning,
               onReading: data.on_reading,
@@ -82,7 +85,7 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
               ...old,
               kanjis: [mappedKanji, ...filtered],
             };
-          }
+          },
         );
       }
       toast.success("한자가 생성되었습니다!");
@@ -98,11 +101,10 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
       if (context?.previousDetail) {
         queryClient.setQueryData(
           ["kanji-books", bookId],
-          context.previousDetail
+          context.previousDetail,
         );
       }
       toast.error(error.message || "한자 생성에 실패했습니다.");
     },
   });
 }
-

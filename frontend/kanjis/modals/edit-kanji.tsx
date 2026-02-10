@@ -19,7 +19,6 @@ import {
   type UpdateKanjiRequest,
 } from "@/lib/api/kanjis/update-kanji";
 import type { Kanji } from "@/frontend/core/types/kanji";
-import { useParams } from "next/navigation";
 import type { Path, FieldError } from "react-hook-form";
 import Input from "@/frontend/core/components/form/input";
 import { useUpdateKanji } from "@/frontend/kanjis/hooks/useUpdateKanji";
@@ -45,8 +44,6 @@ export default function EditKanjiModal({
   kanji,
 }: EditKanjiModalProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const params = useParams();
-  const bookId = params.id as string;
 
   const form = useForm<KanjiFormData>({
     resolver: zodResolver(updateKanjiSchema),
@@ -68,9 +65,13 @@ export default function EditKanjiModal({
   const onReadingRegister = register("on_reading" as Path<KanjiFormData>);
   const kunReadingRegister = register("kun_reading" as Path<KanjiFormData>);
 
+  if (!kanji.bookId) {
+    throw new Error("한자에 bookId가 없습니다.");
+  }
+
   const updateMutation = useUpdateKanji({
     kanjiId: kanji.id,
-    bookId,
+    bookId: kanji.bookId,
     onSuccess: () => {
       onClose();
       reset();
@@ -78,7 +79,7 @@ export default function EditKanjiModal({
   });
 
   const deleteMutation = useRemoveKanjiFromBook({
-    bookId,
+    bookId: kanji.bookId,
     kanjiId: kanji.id,
     onMutate: () => {
       onClose();

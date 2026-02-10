@@ -69,6 +69,7 @@ export async function getTodayKanjis(
   const allKanjis = responses.flat();
 
   // kanji.id를 기준으로 중복 제거 (같은 한자가 여러 한자장에 속할 수 있음)
+  // 첫 번째로 발견된 한자의 book_id를 사용
   const uniqueKanjisMap = new Map<string, KanjiResponse>();
   for (const kanji of allKanjis) {
     if (!uniqueKanjisMap.has(kanji.id)) {
