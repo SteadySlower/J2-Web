@@ -53,6 +53,12 @@ export default function StatisticsBoard({
     router.push(`/today?ids=${idsParam}`);
   };
 
+  const handleTodayKanjisClick = () => {
+    if (studyKanjiBookIds.length === 0) return;
+    const idsParam = studyKanjiBookIds.join(",");
+    router.push(`/today/kanjis?ids=${idsParam}`);
+  };
+
   return (
     <div className="relative grid grid-cols-[1fr_1.5fr] gap-8 bg-white rounded-lg shadow-md px-4 mx-16 mb-8">
       <div
@@ -99,7 +105,7 @@ export default function StatisticsBoard({
           <TodayWordsButton onClick={handleTodayWordsClick} type="word" />
         )}
         {studyKanjiBookIds.length > 0 && (
-          <TodayWordsButton onClick={() => {}} type="kanji" />
+          <TodayWordsButton onClick={handleTodayKanjisClick} type="kanji" />
         )}
         <ResetReviewButton tooltipText="스케줄 리셋" onClick={onResetClick} />
         <SettingButton tooltipText="스케줄 설정" onClick={onSettingClick} />
