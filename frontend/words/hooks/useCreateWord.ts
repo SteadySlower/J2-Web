@@ -31,6 +31,7 @@ export function useCreateWord({ bookId, onSuccess }: UseCreateWordOptions) {
       // 낙관적 업데이트: 임시 데이터 추가
       const optimisticWord: Word = {
         id: `temp-${Date.now()}`,
+        bookId: bookId,
         japanese: newWord.japanese,
         meaning: newWord.meaning,
         pronunciation: newWord.pronunciation || "",
@@ -64,13 +65,13 @@ export function useCreateWord({ bookId, onSuccess }: UseCreateWordOptions) {
             if (!old) return old;
             // 임시 데이터 제거하고 실제 데이터 추가
             const filtered = old.words.filter(
-              (word) => !word.id.startsWith("temp-")
+              (word) => !word.id.startsWith("temp-"),
             );
             return {
               ...old,
               words: [mapWordResponseToWord(data), ...filtered],
             };
-          }
+          },
         );
       }
       toast.success("단어가 생성되었습니다!");
@@ -81,7 +82,7 @@ export function useCreateWord({ bookId, onSuccess }: UseCreateWordOptions) {
       if (context?.previousDetail) {
         queryClient.setQueryData(
           ["word-books", bookId],
-          context.previousDetail
+          context.previousDetail,
         );
       }
       toast.error(error.message || "단어 생성에 실패했습니다.");
