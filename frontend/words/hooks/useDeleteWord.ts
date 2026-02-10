@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { deleteWord } from "@/lib/api/words/delete-word";
 import type { WordBookDetail } from "@/frontend/core/types/word-books";
+import type { Word } from "@/frontend/core/types/word";
 
 type UseDeleteWordOptions = {
   wordId: string;
@@ -24,7 +25,7 @@ export function useDeleteWord({
     mutationFn: () => deleteWord(wordId),
     onMutate: async () => {
       onMutate?.();
-      // 진행 중인 쿼리 취소
+      // word-books queryKey 취소 및 업데이트
       await queryClient.cancelQueries({ queryKey: ["word-books", bookId] });
 
       // 이전 데이터 백업
@@ -41,6 +42,21 @@ export function useDeleteWord({
         });
       }
 
+      // today-words queryKey 취소 및 업데이트
+      await queryClient.cancelQueries({ queryKey: ["today-words"] });
+
+      // 모든 today-words 쿼리를 찾아서 업데이트
+      queryClient
+        .getQueriesData({ queryKey: ["today-words"] })
+        .forEach(([queryKey, data]) => {
+          if (data && Array.isArray(data)) {
+            queryClient.setQueryData<Word[]>(queryKey, (old) => {
+              if (!old) return old;
+              return old.filter((word) => word.id !== wordId);
+            });
+          }
+        });
+
       // 롤백을 위한 컨텍스트 반환
       return { previousDetail };
     },
@@ -49,13 +65,15 @@ export function useDeleteWord({
       onSuccess?.();
     },
     onError: (error: Error, _variables, context) => {
-      // 롤백: 이전 데이터로 복원
+      // 롤백: word-books
       if (context?.previousDetail) {
         queryClient.setQueryData(
           ["word-books", bookId],
           context.previousDetail
         );
       }
+      // today-words는 invalidate로 롤백 (서버에서 다시 가져옴)
+      queryClient.invalidateQueries({ queryKey: ["today-words"] });
       toast.error(error.message || "단어 삭제에 실패했습니다.");
     },
   });
