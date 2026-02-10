@@ -3,7 +3,7 @@
 import { VictoryPie } from "victory";
 import SettingButton from "./setting-button";
 import ResetReviewButton from "./reset-review-button";
-import TodayWordsButton from "@/frontend/core/components/units/today-words-button";
+import TodayWordsButton from "@/frontend/core/components/units/today-button";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 
@@ -13,6 +13,7 @@ type StatisticsBoardProps = {
   learned: number;
   reviewDate: string;
   studyWordBookIds: string[];
+  studyKanjiBookIds: string[];
   onSettingClick: () => void;
   onResetClick: () => void;
 };
@@ -23,6 +24,7 @@ export default function StatisticsBoard({
   learned,
   reviewDate,
   studyWordBookIds,
+  studyKanjiBookIds,
   onSettingClick,
   onResetClick,
 }: StatisticsBoardProps) {
@@ -35,13 +37,13 @@ export default function StatisticsBoard({
 
   const learningRate = total > 0 ? Math.round((learned / total) * 100) : 0;
 
-  const reviewDateTime = DateTime.fromISO(reviewDate).startOf('day');
-  const today = DateTime.now().startOf('day');
-  const daysDiff = Math.floor(today.diff(reviewDateTime, 'days').days);
+  const reviewDateTime = DateTime.fromISO(reviewDate).startOf("day");
+  const today = DateTime.now().startOf("day");
+  const daysDiff = Math.floor(today.diff(reviewDateTime, "days").days);
   const isToday = daysDiff === 0;
-  
+
   const getDaysAgoText = (days: number) => {
-    if (days === 1) return '어제';
+    if (days === 1) return "어제";
     return `${days}일 전`;
   };
 
@@ -53,8 +55,10 @@ export default function StatisticsBoard({
 
   return (
     <div className="relative grid grid-cols-[1fr_1.5fr] gap-8 bg-white rounded-lg shadow-md px-4 mx-16 mb-8">
-      <div className={`absolute top-4 left-4 text-3xl font-bold ${isToday ? 'text-primary' : 'text-red-500'}`}>
-        {reviewDateTime.toFormat('M월 d일')}
+      <div
+        className={`absolute top-4 left-4 text-3xl font-bold ${isToday ? "text-primary" : "text-red-500"}`}
+      >
+        {reviewDateTime.toFormat("M월 d일")}
         {!isToday && ` (${getDaysAgoText(daysDiff)})`}
       </div>
       <div className="relative">
@@ -92,12 +96,12 @@ export default function StatisticsBoard({
       <div></div>
       <div className="flex flex-row gap-2 justify-end items-end pb-4">
         {studyWordBookIds.length > 0 && (
-          <TodayWordsButton onClick={handleTodayWordsClick} />
+          <TodayWordsButton onClick={handleTodayWordsClick} type="word" />
         )}
-        <ResetReviewButton
-          tooltipText="스케줄 리셋"
-          onClick={onResetClick}
-        />
+        {studyKanjiBookIds.length > 0 && (
+          <TodayWordsButton onClick={() => {}} type="kanji" />
+        )}
+        <ResetReviewButton tooltipText="스케줄 리셋" onClick={onResetClick} />
         <SettingButton tooltipText="스케줄 설정" onClick={onSettingClick} />
       </div>
     </div>

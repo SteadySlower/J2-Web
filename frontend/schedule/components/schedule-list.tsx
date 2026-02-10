@@ -53,6 +53,10 @@ export default function ScheduleList({
     .filter((book) => book.type === "word")
     .map((book) => book.id);
 
+  const studyKanjiBookIds = data.study
+    .filter((book) => book.type === "kanji")
+    .map((book) => book.id);
+
   return (
     <div className="flex flex-col gap-2">
       <StatisticsBoard
@@ -61,6 +65,7 @@ export default function ScheduleList({
         learned={data.statistics.learned}
         reviewDate={data.statistics.review_date}
         studyWordBookIds={studyWordBookIds}
+        studyKanjiBookIds={studyKanjiBookIds}
         onSettingClick={onSettingClick}
         onResetClick={onResetClick}
       />
