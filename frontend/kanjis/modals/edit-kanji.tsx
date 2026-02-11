@@ -36,12 +36,14 @@ type EditKanjiModalProps = {
   isOpen: boolean;
   onClose: () => void;
   kanji: Kanji;
+  showDeleteButton?: boolean;
 };
 
 export default function EditKanjiModal({
   isOpen,
   onClose,
   kanji,
+  showDeleteButton = true,
 }: EditKanjiModalProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -164,9 +166,11 @@ export default function EditKanjiModal({
               </SubmitButton>
             </div>
           </Form>
-          <div className="absolute bottom-8 left-5">
-            <DeleteButton onClick={() => setShowDeleteConfirm(true)} />
-          </div>
+          {showDeleteButton && (
+            <div className="absolute bottom-8 left-5">
+              <DeleteButton onClick={() => setShowDeleteConfirm(true)} />
+            </div>
+          )}
         </DialogContent>
       </Dialog>
       <ConfirmAlertDialog

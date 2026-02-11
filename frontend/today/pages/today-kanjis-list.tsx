@@ -85,6 +85,7 @@ export default function TodayKanjisList({ ids }: TodayKanjisListProps) {
         shuffledKanjiIds={shuffledKanjiIds}
         isFilterGraduated={isFilterGraduated}
         onToggleReveal={handleToggleReveal}
+        showDeleteButton={false}
       />
       <FloatingButtons
         isFilterGraduated={isFilterGraduated}

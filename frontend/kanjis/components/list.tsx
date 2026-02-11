@@ -13,6 +13,7 @@ type KanjiListProps = {
   shuffledKanjiIds: string[];
   isFilterGraduated: boolean;
   onToggleReveal: (kanjiId: string) => void;
+  showDeleteButton?: boolean;
 };
 
 export default function KanjiList({
@@ -22,6 +23,7 @@ export default function KanjiList({
   shuffledKanjiIds,
   isFilterGraduated,
   onToggleReveal,
+  showDeleteButton = true,
 }: KanjiListProps) {
   const [toEditKanji, setToEditKanji] = useState<Kanji | null>(null);
   const [kanjiToShowWords, setKanjiToShowWords] = useState<Kanji | null>(null);
@@ -89,6 +91,7 @@ export default function KanjiList({
           isOpen={toEditKanji !== null}
           onClose={handleCloseModal}
           kanji={toEditKanji}
+          showDeleteButton={showDeleteButton}
         />
       )}
       {kanjiToShowWords && (
