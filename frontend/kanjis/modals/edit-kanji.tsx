@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,15 +37,15 @@ type EditKanjiModalProps = {
   isOpen: boolean;
   onClose: () => void;
   kanji: Kanji;
-  showDeleteButton?: boolean;
 };
 
 export default function EditKanjiModal({
   isOpen,
   onClose,
   kanji,
-  showDeleteButton = true,
 }: EditKanjiModalProps) {
+  const params = useParams();
+  const bookId = params.id as string | undefined;
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const form = useForm<KanjiFormData>({
@@ -67,13 +68,9 @@ export default function EditKanjiModal({
   const onReadingRegister = register("on_reading" as Path<KanjiFormData>);
   const kunReadingRegister = register("kun_reading" as Path<KanjiFormData>);
 
-  if (!kanji.bookId) {
-    throw new Error("한자에 bookId가 없습니다.");
-  }
-
   const updateMutation = useUpdateKanji({
     kanjiId: kanji.id,
-    bookId: kanji.bookId,
+    bookId,
     onSuccess: () => {
       onClose();
       reset();
@@ -81,7 +78,7 @@ export default function EditKanjiModal({
   });
 
   const deleteMutation = useRemoveKanjiFromBook({
-    bookId: kanji.bookId,
+    bookId: bookId ?? "",
     kanjiId: kanji.id,
     onMutate: () => {
       onClose();
@@ -166,7 +163,7 @@ export default function EditKanjiModal({
               </SubmitButton>
             </div>
           </Form>
-          {showDeleteButton && (
+          {bookId && (
             <div className="absolute bottom-8 left-5">
               <DeleteButton onClick={() => setShowDeleteConfirm(true)} />
             </div>

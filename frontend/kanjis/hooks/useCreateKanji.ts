@@ -31,7 +31,6 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
       // 낙관적 업데이트: 임시 데이터 추가
       const optimisticKanji: Kanji = {
         id: `temp-${Date.now()}`,
-        bookId: bookId,
         character: newKanji.character,
         meaning: newKanji.meaning,
         onReading: newKanji.on_reading ?? null,
@@ -74,7 +73,6 @@ export function useCreateKanji({ bookId, onSuccess }: UseCreateKanjiOptions) {
             );
             const mappedKanji: Kanji = {
               id: data.id,
-              bookId: bookId,
               character: data.character,
               meaning: data.meaning,
               onReading: data.on_reading,

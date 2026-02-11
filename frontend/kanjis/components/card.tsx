@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import type { Kanji } from "@/frontend/core/types/kanji";
 import { Card } from "@/frontend/core/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -25,9 +26,12 @@ export default function KanjiCard({
   onToggleReveal,
   onShowWords,
 }: KanjiCardProps) {
+  const params = useParams();
+  const bookId = params.id as string | undefined;
+
   const toggleMutation = useToggleKanjiStatus({
     kanjiId: kanji.id,
-    bookId: kanji.bookId,
+    bookId,
   });
 
   const handleReveal = () => {
