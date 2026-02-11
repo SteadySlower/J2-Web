@@ -45,8 +45,8 @@ export function useToggleShowFront({
           previousBooks.map((book) =>
             book.id === wordbookId
               ? { ...book, showFront: nextShowFront }
-              : book
-          )
+              : book,
+          ),
         );
       }
 
@@ -62,8 +62,10 @@ export function useToggleShowFront({
     onSuccess: (data, nextShowFront) => {
       queryClient.setQueryData<WordBook[]>(["word-books"], (old = []) =>
         old.map((book) =>
-          book.id === wordbookId ? { ...book, showFront: data.showFront } : book
-        )
+          book.id === wordbookId
+            ? { ...book, showFront: data.showFront }
+            : book,
+        ),
       );
 
       queryClient.setQueryData<WordBookDetail | undefined>(
@@ -74,13 +76,13 @@ export function useToggleShowFront({
                 ...old,
                 showFront: data.showFront,
               }
-            : old
+            : old,
       );
 
       toast.success(
         nextShowFront
           ? "일본어 제시어가 보이도록 설정했어요"
-          : "한국어 제시어가 보이도록 설정했어요"
+          : "한국어 제시어가 보이도록 설정했어요",
       );
       onSuccess?.();
     },
@@ -91,7 +93,7 @@ export function useToggleShowFront({
       if (context?.previousDetail) {
         queryClient.setQueryData(
           ["word-books", wordbookId],
-          context.previousDetail
+          context.previousDetail,
         );
       }
       toast.error(error.message || "showFront 설정에 실패했습니다.");

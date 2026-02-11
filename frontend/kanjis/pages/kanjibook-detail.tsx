@@ -89,7 +89,9 @@ export default function KanjiBookDetail({ id }: KanjiBookDetailProps) {
 
   const learningKanjiIds = useMemo(() => {
     if (!data) return [];
-    return data.kanjis.filter((kanji) => kanji.status === "learning").map((kanji) => kanji.id);
+    return data.kanjis
+      .filter((kanji) => kanji.status === "learning")
+      .map((kanji) => kanji.id);
   }, [data]);
 
   if (isLoading) {
