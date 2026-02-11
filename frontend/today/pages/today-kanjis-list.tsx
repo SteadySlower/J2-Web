@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import KanjiList from "@/frontend/kanjis/components/list";
 import { useQuery } from "@tanstack/react-query";
@@ -20,10 +20,21 @@ export default function TodayKanjisList({ ids }: TodayKanjisListProps) {
 
   const isFilterGraduated = searchParams.get("filterGraduated") === "true";
 
+  useEffect(() => {
+    if (ids.length === 0) {
+      router.replace("/");
+    }
+  }, [ids.length, router]);
+
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["today-kanjis", ids],
     queryFn: () => getTodayKanjis(ids, "learning"),
+    enabled: ids.length > 0,
   });
+
+  if (ids.length === 0) {
+    return null;
+  }
 
   const handleToggleShowFront = () => {
     setShowFront((prev) => !prev);
