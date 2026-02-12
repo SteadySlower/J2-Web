@@ -60,10 +60,11 @@ export default function ScheduleList({
   return (
     <div className="flex flex-col gap-2">
       <StatisticsBoard
-        total={data.statistics.total}
-        learning={data.statistics.learning}
-        learned={data.statistics.learned}
         reviewDate={data.statistics.review_date}
+        wordTotal={data.statistics.word_total}
+        wordLearning={data.statistics.word_learning}
+        kanjiTotal={data.statistics.kanji_total}
+        kanjiLearning={data.statistics.kanji_learning}
         studyWordBookIds={studyWordBookIds}
         studyKanjiBookIds={studyKanjiBookIds}
         onSettingClick={onSettingClick}

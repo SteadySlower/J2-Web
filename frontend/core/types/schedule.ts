@@ -34,9 +34,10 @@ export type ScheduleBooks = {
   study: ScheduleBook[];
   review: ScheduleBook[];
   statistics: {
-    total: number;
-    learning: number;
-    learned: number;
     review_date: string;
+    word_total: number;
+    word_learning: number;
+    kanji_total: number;
+    kanji_learning: number;
   };
 };

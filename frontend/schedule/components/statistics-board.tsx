@@ -8,10 +8,11 @@ import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 
 type StatisticsBoardProps = {
-  total: number;
-  learning: number;
-  learned: number;
   reviewDate: string;
+  wordTotal: number;
+  wordLearning: number;
+  kanjiTotal: number;
+  kanjiLearning: number;
   studyWordBookIds: string[];
   studyKanjiBookIds: string[];
   onSettingClick: () => void;
@@ -19,16 +20,21 @@ type StatisticsBoardProps = {
 };
 
 export default function StatisticsBoard({
-  total,
-  learning,
-  learned,
   reviewDate,
+  wordTotal,
+  wordLearning,
+  kanjiTotal,
+  kanjiLearning,
   studyWordBookIds,
   studyKanjiBookIds,
   onSettingClick,
   onResetClick,
 }: StatisticsBoardProps) {
   const router = useRouter();
+
+  const total = wordTotal + kanjiTotal;
+  const learning = wordLearning + kanjiLearning;
+  const learned = total - learning;
 
   const chartData = [
     { x: "학습 중", y: learning },
@@ -86,18 +92,46 @@ export default function StatisticsBoard({
         </div>
       </div>
       <div className="flex flex-col justify-center gap-4">
-        <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-          <span className="text-sm font-medium text-gray-700">
-            📚 전체 단어
-          </span>
-          <span className="text-lg font-semibold text-gray-900">{total}</span>
-        </div>
-        <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-          <span className="text-sm font-medium text-gray-700">
-            ⏳ 아직 못 외운 단어
-          </span>
-          <span className="text-lg font-semibold text-red-600">{learning}</span>
-        </div>
+        {wordTotal > 0 && (
+          <>
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">
+                📚 전체 단어
+              </span>
+              <span className="text-lg font-semibold text-gray-900">
+                {wordTotal}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">
+                ⏳ 아직 못 외운 단어
+              </span>
+              <span className="text-lg font-semibold text-red-600">
+                {wordLearning}
+              </span>
+            </div>
+          </>
+        )}
+        {kanjiTotal > 0 && (
+          <>
+            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">
+                📚 전체 한자
+              </span>
+              <span className="text-lg font-semibold text-gray-900">
+                {kanjiTotal}
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+              <span className="text-sm font-medium text-gray-700">
+                ⏳ 아직 못 외운 한자
+              </span>
+              <span className="text-lg font-semibold text-red-600">
+                {kanjiLearning}
+              </span>
+            </div>
+          </>
+        )}
       </div>
       <div></div>
       <div className="flex flex-row gap-2 justify-end items-end pb-4">

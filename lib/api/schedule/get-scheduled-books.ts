@@ -96,21 +96,21 @@ export async function getScheduledBooks(): Promise<ScheduleBooks> {
   study.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
   review.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
 
-  const total =
-    word_books.study_statistics.total + kanji_books.study_statistics.total;
-  const learning =
-    word_books.study_statistics.learning +
-    kanji_books.study_statistics.learning;
-  const learned = total - learning;
+  const wordTotal = word_books.study_statistics.total;
+  const wordLearning = word_books.study_statistics.learning;
+
+  const kanjiTotal = kanji_books.study_statistics.total;
+  const kanjiLearning = kanji_books.study_statistics.learning;
 
   return {
     study,
     review,
     statistics: {
-      total,
-      learning,
-      learned,
       review_date: word_books.study_statistics.review_date,
+      word_total: wordTotal,
+      word_learning: wordLearning,
+      kanji_total: kanjiTotal,
+      kanji_learning: kanjiLearning,
     },
   };
 }
