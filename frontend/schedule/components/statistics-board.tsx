@@ -92,45 +92,51 @@ export default function StatisticsBoard({
         </div>
       </div>
       <div className="flex flex-col justify-center gap-4">
-        {wordTotal > 0 && (
+        {total > 0 ? (
           <>
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-700">
-                📚 전체 단어
-              </span>
-              <span className="text-lg font-semibold text-gray-900">
-                {wordTotal}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-700">
-                ⏳ 아직 못 외운 단어
-              </span>
-              <span className="text-lg font-semibold text-red-600">
-                {wordLearning}
-              </span>
-            </div>
+            {wordTotal > 0 && (
+              <>
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                  <span className="text-sm font-medium text-gray-700">
+                    📚 전체 단어
+                  </span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    {wordTotal}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <span className="text-sm font-medium text-gray-700">
+                    ⏳ 아직 못 외운 단어
+                  </span>
+                  <span className="text-lg font-semibold text-red-600">
+                    {wordLearning}
+                  </span>
+                </div>
+              </>
+            )}
+            {kanjiTotal > 0 && (
+              <>
+                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                  <span className="text-sm font-medium text-gray-700">
+                    📚 전체 한자
+                  </span>
+                  <span className="text-lg font-semibold text-gray-900">
+                    {kanjiTotal}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                  <span className="text-sm font-medium text-gray-700">
+                    ⏳ 아직 못 외운 한자
+                  </span>
+                  <span className="text-lg font-semibold text-red-600">
+                    {kanjiLearning}
+                  </span>
+                </div>
+              </>
+            )}
           </>
-        )}
-        {kanjiTotal > 0 && (
-          <>
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-700">
-                📚 전체 한자
-              </span>
-              <span className="text-lg font-semibold text-gray-900">
-                {kanjiTotal}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-              <span className="text-sm font-medium text-gray-700">
-                ⏳ 아직 못 외운 한자
-              </span>
-              <span className="text-lg font-semibold text-red-600">
-                {kanjiLearning}
-              </span>
-            </div>
-          </>
+        ) : (
+          <span className="text-gray-500">오늘 스케줄인 단어장이 없습니다</span>
         )}
       </div>
       <div></div>
