@@ -4,7 +4,6 @@ const navItems = [
   { label: "대시보드", href: "/" },
   { label: "단어장", href: "/word-books" },
   { label: "한자", href: "/kanji-books" },
-  { label: "OCR", href: "/ocr" },
   { label: "프로필", href: "/profile" },
 ];
 
